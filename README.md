@@ -10,38 +10,20 @@ Autopilot Development（APD）は、AIエージェントが自律的にソフト
 
 | ファイル | 役割 |
 |---------|------|
-| `templates/CLAUDE.md` | **AIエージェント向け設定ファイル（ボイラープレート）**。フレームワークの実行ルール + プロジェクト固有設定のテンプレート。`init.sh` でプロジェクトルートに `CLAUDE.md` としてコピーされ、プロジェクトレベル設定をカスタマイズして使う |
+| `CLAUDE.template.md` | **AIエージェント向け設定ファイル（ボイラープレート）**。フレームワークの実行ルール + プロジェクト固有設定のテンプレート。`init.sh` でプロジェクトルートに `CLAUDE.md` としてコピーされ、プロジェクトレベル設定をカスタマイズして使う |
 | `APD-FRAMEWORK.md` | **フレームワークの原理原則**。APDの設計哲学、各フェーズの詳細な進め方、AI Checkpointのパターン、Decision Recordの形式などを網羅した理論書。フレームワークを深く理解したいときに参照する |
 | `QUICKREF.md` | **クイックリファレンス**。フェーズ早見表、Skills使用フロー、人間がやることの一覧、ファイル命名規則など、日常的に参照するチートシート |
 
-> **ドキュメント間の関係**: `templates/CLAUDE.md` が「何をするか」のルールブック、`APD-FRAMEWORK.md` が「なぜそうするのか」の理論書、`QUICKREF.md` が「今すぐ何をするか」の実行ガイドです。基本ルール（フェーズ定義、エスカレーションポリシー等）は意図的に複数ファイルで重複しており、それぞれの文脈で参照できるようにしています。
+> **ドキュメント間の関係**: `CLAUDE.template.md` が「何をするか」のルールブック、`APD-FRAMEWORK.md` が「なぜそうするのか」の理論書、`QUICKREF.md` が「今すぐ何をするか」の実行ガイドです。基本ルール（フェーズ定義、エスカレーションポリシー等）は意図的に複数ファイルで重複しており、それぞれの文脈で参照できるようにしています。
 
-### プロンプト (`prompts/`)
+### 参考資料 (`examples/`)
 
-各フェーズのプロンプト原文です。Skills（`.claude/skills/`）として組み込み済みのため、通常は直接使用する必要はありません。フレームワークの設計意図を理解したいときに参照してください。
+Skills として組み込み済みのため、通常は直接使用する必要はありません。フレームワークの設計意図やYAML成果物のフォーマットを理解したいときに参照してください。
 
-| ファイル | フェーズ | 用途 |
-|---------|---------|------|
-| `prompts/phase-0-design.md` | Phase 0: Design | 人間 + AI対話でDesign文書を作成 |
-| `prompts/phase-1-spec.md` | Phase 1: Spec | AIがSpecドラフトを生成 |
-| `prompts/phase-2-contract.md` | Phase 2: Contract | AIが自律でContract生成 |
-| `prompts/phase-3-execute.md` | Phase 3: Execute | AIが自律で実装・テスト |
-| `prompts/cycle-trigger.md` | サイクル開始 | トリガー種別に応じたサイクル定義 |
-| `prompts/ai-checkpoint.md` | AI Checkpoint | エージェント間レビュー |
-
-### テンプレート (`templates/`)
-
-YAML成果物のフォーマット定義です。Skillsが成果物を生成する際の構造の参考として使われます。
-
-| ファイル | 用途 |
-|---------|------|
-| `templates/design.yaml` | Design文書テンプレート |
-| `templates/spec.yaml` | Specテンプレート |
-| `templates/contract.yaml` | Contractテンプレート |
-| `templates/cycle.yaml` | サイクル定義テンプレート |
-| `templates/decision.yaml` | Decision Recordテンプレート |
-| `templates/amendment.yaml` | Amendment（差分）テンプレート |
-| `templates/cross-context-scenarios.yaml` | コンテキスト間シナリオテンプレート |
+| ディレクトリ | 内容 |
+|------------|------|
+| `examples/prompts/` | 各フェーズのプロンプト原文（`phase-0-design.md` 〜 `phase-3-execute.md`, `cycle-trigger.md`, `ai-checkpoint.md`） |
+| `examples/templates/` | YAML成果物のフォーマット定義（`design.yaml`, `spec.yaml`, `contract.yaml`, `cycle.yaml`, `decision.yaml`, `amendment.yaml`, `cross-context-scenarios.yaml`） |
 
 ### Claude Code Skills (`.claude/skills/`)
 
@@ -110,7 +92,7 @@ Claude Codeでスラッシュコマンドを使って各フェーズを進めま
 /apd-status      → 進行状況の確認
 ```
 
-詳細なフローは `QUICKREF.md` を参照してください。プロンプト（`prompts/`）やYAMLテンプレート（`templates/`）はボイラープレートリポジトリ上で参照できます。
+詳細なフローは `QUICKREF.md` を参照してください。プロンプト原文やYAMLテンプレートは `examples/` で参照できます。
 
 ### 4. 初期化後のプロジェクト構成
 
