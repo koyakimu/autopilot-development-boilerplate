@@ -9,27 +9,31 @@
 | **2: Contract** | AI自律 | 技術仕様を自動生成 | `contract/*.yaml` | AI CP → Human CP 2（軽量）|
 | **3: Execute** | AI自律 | 実装+テスト | `src/` + `tests/` | AI CP → Human CP 3（軽量）|
 
-## プロンプト使用フロー
+## Skills 使用フロー
 
 ```
 ① 変更が発生
-   └→ prompts/cycle-trigger.md でサイクル定義を作成
+   └→ /apd-cycle でサイクル定義を作成（トリガー種別を自動判定）
 
 ② Phase 0（new_product のみ）
-   └→ prompts/phase-0-design.md で Design 文書を対話的に作成
+   └→ /apd-design で Design 文書を対話的に作成
 
 ③ Phase 1
-   └→ prompts/phase-1-spec.md で Spec ドラフトを生成
+   └→ /apd-spec [full|add|bugfix] で Spec ドラフトを生成
    └→ 確認依頼リストだけレビュー → フィードバック → 承認
 
 ④ Phase 2
-   └→ prompts/phase-2-contract.md を AI に渡して自律実行
+   └→ /apd-contract で AI が自律実行 + AIチェックポイント自動実行
    └→ AI Checkpoint 結果のサマリーだけ確認 → 承認
 
 ⑤ Phase 3
-   └→ prompts/phase-3-execute.md を AI に渡して自律実行
+   └→ /apd-execute で AI が自律実行 + ピアレビュー + AIチェックポイント自動実行
    └→ AI Checkpoint 結果のサマリーだけ確認 → 承認
+
+💡 いつでも /apd-status で現在の進行状況を確認できます
 ```
+
+> プロンプトやYAMLテンプレートはボイラープレートリポジトリの `prompts/` / `templates/` で参照できます。
 
 ## 人間がやること（だけ）
 
