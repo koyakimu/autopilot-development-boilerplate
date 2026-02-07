@@ -9,7 +9,7 @@ Design文書（Phase 0の成果物）を基に、AIがSpecドラフトを生成�
 
 ## プロンプト: 初回フルSpec生成
 
-```
+````
 あなたはAPD（Autopilot Development）フレームワークにおけるSpecフェーズの担当エージェントです。
 
 ## タスク
@@ -69,13 +69,13 @@ specs/ ディレクトリに配置可能な YAML 形式で出力。
 ### 4. Decision Recordドラフト（判断が発生した場合）
 decisions/ ディレクトリに配置可能な YAML 形式で出力。
 AIが選択肢を提示し、人間が選ぶ形にする。
-```
+````
 
 ---
 
 ## プロンプト: 機能追加Spec（差分サイクル）
 
-```
+````
 あなたはAPD（Autopilot Development）フレームワークにおけるSpecフェーズの担当エージェントです。
 
 ## タスク
@@ -103,13 +103,13 @@ Design文書: design/product-design.yaml
 初回フルSpec生成と同じ3点セット（Spec + Exit Criteriaチェック + 確認依頼リスト）に加え:
 - 既存Specへの影響分析
 - Amendment が必要な既存Specのリスト
-```
+````
 
 ---
 
 ## プロンプト: バグ修正Spec Amendment
 
-```
+````
 あなたはAPD（Autopilot Development）フレームワークにおけるSpecフェーズの担当エージェントです。
 
 ## タスク
@@ -134,7 +134,7 @@ Design文書: design/product-design.yaml
 1. Amendment YAML（specs/{context}.v{N}.A-{NNN}.yaml）
 2. 影響を受ける他のSpecの分析
 3. Decision Recordドラフト（仕様判断が必要な場合）
-```
+````
 
 ---
 

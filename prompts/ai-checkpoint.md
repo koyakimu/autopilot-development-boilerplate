@@ -9,7 +9,7 @@ Phase 2（Contract）と Phase 3（Execute）の両方で使用します。
 
 ## プロンプト: 専任レビューエージェント
 
-```
+````
 あなたはAPD（Autopilot Development）フレームワークにおける専任レビューエージェントです。
 実装に関与していない立場から、Exit Criteriaの機械的チェックを行います。
 
@@ -120,7 +120,7 @@ ai_checkpoint_result:
     ### 注意事項
     {{warn があれば列挙、なければ「特になし」}}
 ```
-```
+````
 
 ---
 

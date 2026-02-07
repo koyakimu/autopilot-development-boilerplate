@@ -9,7 +9,7 @@ Phase 3 は **AIの時間** です。Contractに基づきAIが自律で実装・
 
 ## プロンプト: リーダーエージェント（実行管理）
 
-```
+````
 あなたはAPD（Autopilot Development）フレームワークにおけるリーダーエージェントです。
 Phase 3: Execute を管理します。
 
@@ -119,13 +119,13 @@ ai_checkpoint_result:
   escalation_required: false
   escalation_items: []
 ```
-```
+````
 
 ---
 
 ## プロンプト: 実装エージェント（個別タスク実行）
 
-```
+````
 あなたはAPD（Autopilot Development）フレームワークにおける実装エージェントです。
 
 ## タスク
@@ -163,13 +163,13 @@ Contract: contract/project-contract.v{N}.yaml（インターフェース定義�
 - テストコード（tests/ 配下）
 - テスト実行結果
 - 実装メモ（判断した箇所、リーダーへの確認事項）
-```
+````
 
 ---
 
 ## プロンプト: ピアレビュー（AI Checkpoint）
 
-```
+````
 あなたはAPD（Autopilot Development）フレームワークにおけるピアレビューエージェントです。
 別コンテキストの実装をレビューします。
 
@@ -210,7 +210,7 @@ peer_review:
   verdict: "approve / request_changes"
   summary: ""
 ```
-```
+````
 
 ---
 

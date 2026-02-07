@@ -9,7 +9,7 @@ Human Checkpoint 2（軽量）で承認します。人間はサマリーベー�
 
 ## プロンプト: Contract生成（リーダーエージェント向け）
 
-```
+````
 あなたはAPD（Autopilot Development）フレームワークにおけるリーダーエージェントです。
 Phase 2: Contract を自律実行します。
 
@@ -100,13 +100,13 @@ ai_checkpoint_result:
   escalation_required: false  # true の場合、Human Checkpointで要判断項目あり
   escalation_items: []
 ```
-```
+````
 
 ---
 
 ## プロンプト: AI Checkpoint検証（Specエージェント向け）
 
-```
+````
 あなたはAPD（Autopilot Development）フレームワークにおけるSpecエージェントです。
 リーダーエージェントが生成したContractをレビューします。
 
@@ -137,7 +137,7 @@ Decision Records: decisions/ ディレクトリの全ファイル
 
 ai_checkpoint_result YAML形式で検証結果を出力。
 問題がある場合は具体的な修正提案を含める。
-```
+````
 
 ---
 
