@@ -6,24 +6,15 @@ Autopilot Development（APD）は、AIエージェントが自律的にソフト
 
 ## リポジトリ構成
 
-### ドキュメント
+### スクリプト (`scripts/`)
 
-| ファイル | 役割 |
+| ファイル | 用途 |
 |---------|------|
-| `CLAUDE.template.md` | **AIエージェント向け設定ファイル（ボイラープレート）**。フレームワークの実行ルール + プロジェクト固有設定のテンプレート。`init.sh` でプロジェクトルートに `CLAUDE.md` としてコピーされ、プロジェクトレベル設定をカスタマイズして使う |
-| `APD-FRAMEWORK.md` | **フレームワークの原理原則**。APDの設計哲学、各フェーズの詳細な進め方、AI Checkpointのパターン、Decision Recordの形式などを網羅した理論書。フレームワークを深く理解したいときに参照する |
-| `QUICKREF.md` | **クイックリファレンス**。フェーズ早見表、Skills使用フロー、人間がやることの一覧、ファイル命名規則など、日常的に参照するチートシート |
+| `scripts/init.sh` | プロジェクト初期化スクリプト。新規プロジェクトに必要なディレクトリ構成と `CLAUDE.md`、Skills、Agentsをコピーする |
 
-> **ドキュメント間の関係**: `CLAUDE.template.md` が「何をするか」のルールブック、`APD-FRAMEWORK.md` が「なぜそうするのか」の理論書、`QUICKREF.md` が「今すぐ何をするか」の実行ガイドです。基本ルール（フェーズ定義、エスカレーションポリシー等）は意図的に複数ファイルで重複しており、それぞれの文脈で参照できるようにしています。
+### `CLAUDE.template.md`
 
-### 参考資料 (`examples/`)
-
-Skills として組み込み済みのため、通常は直接使用する必要はありません。フレームワークの設計意図やYAML成果物のフォーマットを理解したいときに参照してください。
-
-| ディレクトリ | 内容 |
-|------------|------|
-| `examples/prompts/` | 各フェーズのプロンプト原文（`phase-0-design.md` 〜 `phase-3-execute.md`, `cycle-trigger.md`, `ai-checkpoint.md`） |
-| `examples/templates/` | YAML成果物のフォーマット定義（`design.yaml`, `spec.yaml`, `contract.yaml`, `cycle.yaml`, `decision.yaml`, `amendment.yaml`, `cross-context-scenarios.yaml`） |
+**AIエージェント向け設定ファイル（ボイラープレート）**。フレームワークの実行ルール + プロジェクト固有設定のテンプレート。`init.sh` でプロジェクトルートに `CLAUDE.md` としてコピーされ、プロジェクトレベル設定をカスタマイズして使う。
 
 ### Claude Code Skills (`.claude/skills/`)
 
@@ -47,17 +38,21 @@ Skills から自動的に委譲されるカスタムサブエージェントで�
 | `apd-checkpoint` | Phase 2/3のAIチェックポイント専任レビュアー |
 | `apd-peer-review` | Phase 3のクロスコンテキストピアレビュー |
 
-### スクリプト (`scripts/`)
+### ドキュメント
 
-| ファイル | 用途 |
+| ファイル | 役割 |
 |---------|------|
-| `scripts/init.sh` | プロジェクト初期化スクリプト。新規プロジェクトに必要なディレクトリ構成と `CLAUDE.md`、Skills、Agentsをコピーする |
+| `QUICKREF.md` | **クイックリファレンス**。フェーズ早見表、Skills使用フロー、人間がやることの一覧、ファイル命名規則など、日常的に参照するチートシート |
+| `APD-FRAMEWORK.md` | **フレームワークの原理原則**。APDの設計哲学、各フェーズの詳細な進め方、AI Checkpointのパターン、Decision Recordの形式などを網羅した理論書。フレームワークを深く理解したいときに参照する |
 
-### その他
+### 参考資料 (`examples/`)
 
-| ファイル | 用途 |
-|---------|------|
-| `LICENSE` | MITライセンス |
+Skills として組み込み済みのため、通常は直接使用する必要はありません。フレームワークの設計意図やYAML成果物のフォーマットを理解したいときに参照してください。
+
+| ディレクトリ | 内容 |
+|------------|------|
+| `examples/prompts/` | 各フェーズのプロンプト原文（`phase-0-design.md` 〜 `phase-3-execute.md`, `cycle-trigger.md`, `ai-checkpoint.md`） |
+| `examples/templates/` | YAML成果物のフォーマット定義（`design.yaml`, `spec.yaml`, `contract.yaml`, `cycle.yaml`, `decision.yaml`, `amendment.yaml`, `cross-context-scenarios.yaml`） |
 
 ## 使い方
 
