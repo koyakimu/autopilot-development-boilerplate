@@ -1,0 +1,42 @@
+# コンテキスト間シナリオテンプレート
+# 複数コンテキストにまたがるデータフロー・連携シナリオを定義
+
+version: 1
+cycle_ref: "C-{{NNN}}"
+created_at: "YYYY-MM-DDTHH:MM:SSZ"
+
+scenarios:
+  - scenario_id: "XC-001"
+    title: "{{シナリオタイトル}}"
+    description: "{{シナリオの概要}}"
+    
+    # 関与するコンテキスト
+    contexts:
+      - "{{コンテキスト1}}"
+      - "{{コンテキスト2}}"
+    
+    # データフロー（時系列順）
+    flow:
+      - step: 1
+        context: "{{コンテキスト名}}"
+        action: "{{アクション}}"
+        data_out:
+          destination: "{{送信先コンテキスト}}"
+          payload: "{{データの説明}}"
+      
+      - step: 2
+        context: "{{コンテキスト名}}"
+        action: "{{アクション}}"
+        data_in:
+          source: "{{受信元コンテキスト}}"
+          payload: "{{データの説明}}"
+    
+    # 関連するSpec
+    spec_refs:
+      - "{{SPEC_ID_1}}"
+      - "{{SPEC_ID_2}}"
+    
+    # 検証ポイント
+    verification:
+      - "{{検証項目1}}"
+      - "{{検証項目2}}"

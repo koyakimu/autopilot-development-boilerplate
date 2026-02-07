@@ -1,0 +1,35 @@
+# Amendment（差分ドキュメント）テンプレート
+# 既存ドキュメントを上書きせず、差分として発行する
+
+amendment_id: "A-{{NNN}}"
+target_document: "{{修正対象のドキュメントパス}}"
+  # 例: specs/order-management.v1.yaml
+cycle_ref: "C-{{NNN}}"
+created_at: "YYYY-MM-DDTHH:MM:SSZ"
+
+reason: "{{修正理由の概要}}"
+decision_ref: "D-{{NNN}}"  # 判断が発生した場合
+
+# ─────────────────────────────────
+# 変更内容
+# ─────────────────────────────────
+changes:
+  - section: "{{変更対象のセクション}}"
+    type: "{{add / modify / remove}}"
+    before: |
+      {{変更前の内容（modify / remove の場合）}}
+    after: |
+      {{変更後の内容（add / modify の場合）}}
+
+# ─────────────────────────────────
+# 影響範囲
+# ─────────────────────────────────
+impact:
+  affected_specs: []
+    # - "OM-001"
+  affected_contracts: []
+    # - "project-contract.v1"
+  affected_tests: []
+    # - "tests/unit/order-management.test.ts"
+  requires_cascade_amendment: false
+    # true の場合、他ドキュメントのAmendmentも必要

@@ -1,0 +1,98 @@
+# Contractテンプレート
+
+contract_id: "project-contract"
+version: 1
+cycle_ref: "C-{{NNN}}"
+created_at: "YYYY-MM-DDTHH:MM:SSZ"
+spec_refs:
+  - "{{SPEC_ID_1}}"
+  - "{{SPEC_ID_2}}"
+
+# ─────────────────────────────────
+# 技術アーキテクチャ
+# ─────────────────────────────────
+architecture:
+  tech_stack:
+    language: "{{言語}}"
+    framework: "{{フレームワーク}}"
+    database: "{{データベース}}"
+    infrastructure: "{{インフラ}}"
+
+  directory_structure: |
+    src/
+    ├── {{ディレクトリ構成を記述}}
+    └── ...
+
+  design_patterns:
+    - pattern: "{{パターン名}}"
+      usage: "{{適用箇所と理由}}"
+
+# ─────────────────────────────────
+# コンテキスト間インターフェース定義
+# ─────────────────────────────────
+interfaces:
+  - name: "{{インターフェース名}}"
+    from_context: "{{発信元コンテキスト}}"
+    to_context: "{{受信先コンテキスト}}"
+    spec_ref: "{{対応するSpec ID}}"
+    definition: |
+      {{インターフェース定義（TypeScript型定義 / OpenAPI / etc.）}}
+
+# ─────────────────────────────────
+# 実装タスク分解
+# ─────────────────────────────────
+tasks:
+  - task_id: "T-001"
+    context: "{{コンテキスト名}}"
+    title: "{{タスクタイトル}}"
+    spec_refs: ["{{SPEC_ID}}"]
+    description: "{{タスクの詳細}}"
+    inputs:
+      - "{{入力・依存するもの}}"
+    outputs:
+      - "{{成果物}}"
+    completion_criteria:
+      - "{{完了条件1}}"
+      - "{{完了条件2}}"
+    parallelizable: true  # 他タスクと並列実行可能か
+
+# ─────────────────────────────────
+# テスト戦略
+# ─────────────────────────────────
+test_strategy:
+  # Spec AC → テスト対応表
+  ac_coverage:
+    - spec_id: "{{SPEC_ID}}"
+      ac_id: "AC-001"
+      test_type: "unit / integration / e2e"
+      test_description: "{{テスト内容}}"
+
+  unit_tests:
+    scope: "{{単体テストの範囲}}"
+    guidelines:
+      - "{{ガイドライン1}}"
+
+  integration_tests:
+    scope: "{{統合テストの範囲}}"
+    guidelines:
+      - "{{ガイドライン1}}"
+
+  e2e_tests:
+    scope: "{{E2Eテストの範囲}}"
+    guidelines:
+      - "{{ガイドライン1}}"
+
+# ─────────────────────────────────
+# 並列実行計画
+# ─────────────────────────────────
+parallel_execution:
+  groups:
+    - group_id: "G-001"
+      tasks: ["T-001", "T-002"]  # 同時実行可能なタスク
+      stub_strategy: "{{スタブ/モック戦略}}"
+
+  integration_phase:
+    trigger: "全グループ完了後"
+    verification:
+      - "{{結合検証項目1}}"
+      - "{{結合検証項目2}}"
