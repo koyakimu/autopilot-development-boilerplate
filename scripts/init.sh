@@ -18,7 +18,7 @@ mkdir -p "${PROJECT_DIR}"/{design,specs,contract,decisions,cycles,src,tests}
 
 # CLAUDE.md コピー
 if [ ! -f "${PROJECT_DIR}/CLAUDE.md" ]; then
-  cp "${SCRIPT_DIR}/CLAUDE.md" "${PROJECT_DIR}/CLAUDE.md"
+  cp "${SCRIPT_DIR}/templates/CLAUDE.md" "${PROJECT_DIR}/CLAUDE.md"
   # プロジェクト名を置換
   sed -i "s/{{プロジェクト名}}/${PROJECT_NAME}/g" "${PROJECT_DIR}/CLAUDE.md"
   echo "✅ CLAUDE.md を作成しました"
