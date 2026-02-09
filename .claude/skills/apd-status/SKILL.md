@@ -17,11 +17,11 @@ APDフレームワークのプロジェクト状態を成果物の有無から�
 
 以下のディレクトリをGlobでスキャンし、存在するファイルを一覧化する:
 
-- `cycles/*.yaml` — サイクル定義
-- `design/*.yaml` — Design文書
-- `specs/*.yaml` — Spec文書
-- `contract/*.yaml` — Contract文書
-- `decisions/*.yaml` — Decision Records
+- `docs/apd/cycles/*.yaml` — サイクル定義
+- `docs/apd/design/*.yaml` — Design文書
+- `docs/apd/specs/*.yaml` — Spec文書
+- `docs/apd/contract/*.yaml` — Contract文書
+- `docs/apd/decisions/*.yaml` — Decision Records
 - `src/` — 実装コード
 - `tests/` — テストコード
 
@@ -31,16 +31,16 @@ APDフレームワークのプロジェクト状態を成果物の有無から�
 
 | 状態 | 判定基準 |
 |------|---------|
-| 未開始 | cycles/ が空、design/ が空 |
-| Phase 0 進行中 | cycles/ にサイクルあり、design/ が空 |
-| Phase 0 完了 | design/product-design.yaml が存在 |
-| Phase 1 完了 | specs/ にファイルが存在 |
-| Phase 2 完了 | contract/ にファイルが存在 |
+| 未開始 | docs/apd/cycles/ が空、docs/apd/design/ が空 |
+| Phase 0 進行中 | docs/apd/cycles/ にサイクルあり、docs/apd/design/ が空 |
+| Phase 0 完了 | docs/apd/design/product-design.yaml が存在 |
+| Phase 1 完了 | docs/apd/specs/ にファイルが存在 |
+| Phase 2 完了 | docs/apd/contract/ にファイルが存在 |
 | Phase 3 完了 | src/ と tests/ にファイルが存在し、テストがパス |
 
 ### 3. アクティブサイクルの確認
 
-`cycles/` の最新ファイルを読み込み、トリガー種別と対象フェーズを確認する。
+`docs/apd/cycles/` の最新ファイルを読み込み、トリガー種別と対象フェーズを確認する。
 
 ### 4. 状態レポートの出力
 

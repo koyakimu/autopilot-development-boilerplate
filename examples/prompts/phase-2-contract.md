@@ -20,10 +20,10 @@ Phase 2: Contract を自律実行します。
 ## インプット
 
 CLAUDE.md: プロジェクトルートの CLAUDE.md を参照
-Design文書: design/product-design.yaml
-承認済みSpec: specs/ ディレクトリの全ファイル
-Decision Records: decisions/ ディレクトリの全ファイル
-サイクル定義: cycles/C-{{NNN}}.yaml
+Design文書: docs/apd/design/product-design.yaml
+承認済みSpec: docs/apd/specs/ ディレクトリの全ファイル
+Decision Records: docs/apd/decisions/ ディレクトリの全ファイル
+サイクル定義: docs/apd/cycles/C-{{NNN}}.yaml
 
 ## Contract必須項目
 
@@ -59,7 +59,7 @@ Decision Records: decisions/ ディレクトリの全ファイル
 
 ## 出力フォーマット
 
-contract/project-contract.v{N}.yaml として保存可能な YAML 形式で出力。
+docs/apd/contract/project-contract.v{N}.yaml として保存可能な YAML 形式で出力。
 
 ## AI Checkpoint
 
@@ -116,9 +116,9 @@ ai_checkpoint_result:
 
 ## インプット
 
-Contract: contract/project-contract.v{N}.yaml
-承認済みSpec: specs/ ディレクトリの全ファイル
-Decision Records: decisions/ ディレクトリの全ファイル
+Contract: docs/apd/contract/project-contract.v{N}.yaml
+承認済みSpec: docs/apd/specs/ ディレクトリの全ファイル
+Decision Records: docs/apd/decisions/ ディレクトリの全ファイル
 
 ## 検証観点
 

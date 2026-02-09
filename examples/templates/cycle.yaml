@@ -3,13 +3,13 @@
 cycle_id: "C-{{NNN}}"
 trigger: "{{new_product / feature_addition / bug_fix / tech_change}}"
 title: "{{変更のタイトル}}"
-design_ref: "design/product-design.yaml"
+design_ref: "docs/apd/design/product-design.yaml"
 started_at: "YYYY-MM-DDTHH:MM:SSZ"
-completed_at: null  # 完了時に記入
+completed_at: null # 完了時に記入
 
 # フェーズ通過記録
 phases:
-  design:    # new_product のみ
+  design: # new_product のみ
     status: "{{skipped / completed}}"
     checkpoint_at: null
   spec:
@@ -25,15 +25,15 @@ phases:
 # Spec変更
 spec_changes:
   - type: "{{new_spec / amendment}}"
-    id: "{{SPEC_ID}}"                # new_spec の場合
-    target: "{{既存SPEC_ID}}"        # amendment の場合
-    amendment_id: "A-{{NNN}}"        # amendment の場合
+    id: "{{SPEC_ID}}" # new_spec の場合
+    target: "{{既存SPEC_ID}}" # amendment の場合
+    amendment_id: "A-{{NNN}}" # amendment の場合
     context: "{{コンテキスト名}}"
 
 # Contract変更
 contract_changes:
   - type: "{{new / amendment}}"
-    amendment_id: "C-{{NNN}}"        # amendment の場合
+    amendment_id: "C-{{NNN}}" # amendment の場合
     change: "{{変更概要}}"
 
 # 判断記録（サイクル中に追加される）

@@ -18,7 +18,7 @@ Design文書（Phase 0の成果物）を基に、AIがSpecドラフトを生成�
 
 ## インプット
 
-Design文書: design/product-design.yaml を参照してください
+Design文書: docs/apd/design/product-design.yaml を参照してください
 {{または、Design文書の内容をここに直接貼り付け}}
 
 サイクルのトリガー:
@@ -41,7 +41,7 @@ Design文書: design/product-design.yaml を参照してください
 ## 出力形式
 
 ### 1. Specファイル群
-specs/ ディレクトリに配置可能な YAML 形式で出力。
+docs/apd/specs/ ディレクトリに配置可能な YAML 形式で出力。
 フォーマットはCLAUDE.mdのデフォルトスペックフォーマットに従う。
 
 ### 2. Exit Criteriaチェックリスト（必須）
@@ -67,7 +67,7 @@ specs/ ディレクトリに配置可能な YAML 形式で出力。
 ```
 
 ### 4. Decision Recordドラフト（判断が発生した場合）
-decisions/ ディレクトリに配置可能な YAML 形式で出力。
+docs/apd/decisions/ ディレクトリに配置可能な YAML 形式で出力。
 AIが選択肢を提示し、人間が選ぶ形にする。
 ````
 
@@ -84,9 +84,9 @@ AIが選択肢を提示し、人間が選ぶ形にする。
 
 ## インプット
 
-Design文書: design/product-design.yaml
-既存Spec: specs/ ディレクトリの全ファイルを参照
-サイクル定義: cycles/C-{{NNN}}.yaml
+Design文書: docs/apd/design/product-design.yaml
+既存Spec: docs/apd/specs/ ディレクトリの全ファイルを参照
+サイクル定義: docs/apd/cycles/C-{{NNN}}.yaml
 
 追加機能の概要:
 {{機能の概要を記述}}
@@ -121,7 +121,7 @@ Design文書: design/product-design.yaml
 バグ報告:
 {{バグの内容、再現手順、期待動作}}
 
-関連Spec: specs/{{対象spec}}.yaml
+関連Spec: docs/apd/specs/{{対象spec}}.yaml
 
 ## トリアージ
 
@@ -131,7 +131,7 @@ Design文書: design/product-design.yaml
 
 ## Spec起因の場合の出力
 
-1. Amendment YAML（specs/{context}.v{N}.A-{NNN}.yaml）
+1. Amendment YAML（docs/apd/specs/{context}.v{N}.A-{NNN}.yaml）
 2. 影響を受ける他のSpecの分析
 3. Decision Recordドラフト（仕様判断が必要な場合）
 ````

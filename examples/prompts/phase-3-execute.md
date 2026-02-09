@@ -20,9 +20,9 @@ Phase 3: Execute を管理します。
 ## インプット
 
 CLAUDE.md: プロジェクトルートの CLAUDE.md を参照
-Contract: contract/project-contract.v{N}.yaml
-承認済みSpec: specs/ ディレクトリの全ファイル
-Decision Records: decisions/ ディレクトリの全ファイル
+Contract: docs/apd/contract/project-contract.v{N}.yaml
+承認済みSpec: docs/apd/specs/ ディレクトリの全ファイル
+Decision Records: docs/apd/decisions/ ディレクトリの全ファイル
 
 ## 実行手順
 
@@ -141,8 +141,8 @@ CLAUDE.md: プロジェクトルートの CLAUDE.md を参照
   spec_refs: [{{参照するSpec ID}}]
   description: "{{タスク概要}}"
 
-Contract: contract/project-contract.v{N}.yaml（インターフェース定義を参照）
-関連Spec: specs/{{context}}.v{N}.yaml
+Contract: docs/apd/contract/project-contract.v{N}.yaml（インターフェース定義を参照）
+関連Spec: docs/apd/specs/{{context}}.v{N}.yaml
 
 ## 実装ルール
 
@@ -180,8 +180,8 @@ Contract: contract/project-contract.v{N}.yaml（インターフェース定義�
 ## インプット
 
 レビュー対象: {{対象タスクID / ファイルパス}}
-対応Spec: specs/{{context}}.v{N}.yaml
-Contract: contract/project-contract.v{N}.yaml
+対応Spec: docs/apd/specs/{{context}}.v{N}.yaml
+Contract: docs/apd/contract/project-contract.v{N}.yaml
 
 ## レビュー観点
 

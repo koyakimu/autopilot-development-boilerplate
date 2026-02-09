@@ -20,10 +20,10 @@ Phase 3は「AIの時間」である。Contractに基づきAIが自律で実装�
 以下のファイルを全て読み込む:
 
 1. **CLAUDE.md** — プロジェクト設定（技術スタック、コーディング規約、テスト戦略）
-2. **`contract/` の最新Contractファイル** — タスク分解、インターフェース定義、テスト戦略
-3. **`specs/*.yaml`** — 承認済みSpecファイル全て
-4. **`decisions/*.yaml`** — Decision Records全て
-5. **アクティブサイクル** — `cycles/` の最新ファイル
+2. **`docs/apd/contract/` の最新Contractファイル** — タスク分解、インターフェース定義、テスト戦略
+3. **`docs/apd/specs/*.yaml`** — 承認済みSpecファイル全て
+4. **`docs/apd/decisions/*.yaml`** — Decision Records全て
+5. **アクティブサイクル** — `docs/apd/cycles/` の最新ファイル
 
 ## Step 1: 実装タスクの実行
 
@@ -70,7 +70,7 @@ TodoWriteツールを使って各タスクの進捗を管理する。
 全タスク完了後:
 
 1. コンテキスト間のインターフェースが正しく接続されているか検証
-2. `specs/_cross-context-scenarios.yaml` の各シナリオを実行（存在する場合）
+2. `docs/apd/specs/_cross-context-scenarios.yaml` の各シナリオを実行（存在する場合）
 3. 統合テスト / E2Eテストを実行
 4. 全テストがパスすることを確認
 

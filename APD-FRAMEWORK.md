@@ -225,7 +225,7 @@ Contractに基づき、AIが自律的に実装とテストを行う。
 cycle_id: C-003
 trigger: "feature_addition"
 title: "注文の一括出荷機能"
-design_ref: "design/product-design.yaml"
+design_ref: "docs/apd/design/product-design.yaml"
 
 spec_changes:
   - type: "new_spec"
@@ -258,7 +258,7 @@ contract_changes:
 人間の意思決定を記録する軽量フォーマット。「なぜこの仕様になったか」「なぜこの案を却下したか」を残す。
 
 ```yaml
-# decisions/D-001.yaml
+# docs/apd/decisions/D-001.yaml
 id: D-001
 phase: spec
 date: 2025-07-10
@@ -320,46 +320,54 @@ impact: [OM-001]
 
 ```
 project/
-├── CLAUDE.md                           ← フレームワークルール + プロジェクト固有設定
-├── design/
-│   └── product-design.yaml             ← 北極星（滅多に変わらない）
-├── specs/
-│   ├── order-management.v1.yaml        ← イミュータブル
-│   ├── order-management.v1.A-005.yaml  ← Amendment
-│   ├── _cross-context-scenarios.yaml
-│   └── ...
-├── contract/
-│   ├── project-contract.v1.yaml        ← イミュータブル
-│   ├── project-contract.v1.C-003.yaml  ← Amendment
-│   └── ...
-├── decisions/
-│   ├── D-001.yaml
-│   ├── D-002.yaml
-│   └── ...                             ← 時系列で積み上がる
-├── cycles/
-│   ├── C-001.yaml                      ← 初回フルサイクル
-│   ├── C-002.yaml                      ← 機能追加サイクル
-│   └── ...
-└── src/ + tests/                       ← Git管理
+├── CLAUDE.md                               ← プロジェクト固有設定
+├── .claude/
+│   └── rules/apd/                          ← APDフレームワーク方針（自動ロード）
+├── docs/apd/
+│   ├── design/
+│   │   └── product-design.yaml             ← 北極星（滅多に変わらない）
+│   ├── specs/
+│   │   ├── order-management.v1.yaml        ← イミュータブル
+│   │   ├── order-management.v1.A-005.yaml  ← Amendment
+│   │   ├── _cross-context-scenarios.yaml
+│   │   └── ...
+│   ├── contract/
+│   │   ├── project-contract.v1.yaml        ← イミュータブル
+│   │   ├── project-contract.v1.C-003.yaml  ← Amendment
+│   │   └── ...
+│   ├── decisions/
+│   │   ├── D-001.yaml
+│   │   ├── D-002.yaml
+│   │   └── ...                             ← 時系列で積み上がる
+│   └── cycles/
+│       ├── C-001.yaml                      ← 初回フルサイクル
+│       ├── C-002.yaml                      ← 機能追加サイクル
+│       └── ...
+└── src/ + tests/                           ← Git管理
 ```
 
 ---
 
-## CLAUDE.mdの構成
+## 設定ファイルの構成
 
-CLAUDE.mdはフレームワークのボイラープレートからコピーし、プロジェクト固有の設定を追加する。フレームワークの全ルールがこのファイルに含まれる。
+APDフレームワークの設定は、Claude Codeの `.claude/rules/` 機能を活用して2層に分離する。
 
-### フレームワークレベル（ボイラープレートに含まれる）
+### フレームワーク方針（`.claude/rules/apd/`）
 
-- フェーズ定義とフロー
-- Checkpointの役割と原則
-- エスカレーションポリシー（デフォルト）
-- イミュータブルなドキュメント管理ルール
-- 判断のエスカレーションフロー（CLAUDE.md → リーダー → Human Checkpoint）
-- デフォルトのスペックフォーマット
-- デフォルトのテスト方針
+`.claude/rules/` に置かれた `.md` ファイルはClaude Codeが自動的にプロジェクトメモリとして読み込む。フレームワーク方針をここに格納することで、`CLAUDE.md` を圧迫せず、既存プロジェクトへの導入も容易になる。
 
-### プロジェクトレベル（プロジェクトごとにカスタマイズ）
+```
+.claude/rules/apd/
+├── 00-principles.md   ← 基本原則・エスカレーションフロー
+├── 01-phases.md       ← フェーズ定義・Checkpoint原則・エスカレーションポリシー
+├── 02-cycle-flow.md   ← サイクル型統一フロー・バグトリアージ
+├── 03-documents.md    ← ドキュメント管理・ツリー・スペックフォーマット
+└── 04-testing.md      ← テスト方針
+```
+
+### プロジェクト固有設定（`CLAUDE.md`）
+
+プロジェクトごとにカスタマイズする設定は従来通り `CLAUDE.md` に記述する。既存の `CLAUDE.md` がある場合はそこに追記する形で導入できる。
 
 - エスカレーションポリシーの追加・変更
 - スペックフォーマットのカスタマイズ

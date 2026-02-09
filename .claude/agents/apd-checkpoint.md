@@ -33,21 +33,21 @@ color: yellow
 
 成果物の状態からレビュー対象を判定する:
 
-- `contract/*.yaml` が存在し、`src/` が空 → **Phase 2（Contract）レビュー**
+- `docs/apd/contract/*.yaml` が存在し、`src/` が空 → **Phase 2（Contract）レビュー**
 - `src/` にコードが存在 → **Phase 3（Execute）レビュー**
 
 ### 2. インプットの読み込み
 
 **Phase 2の場合:**
-- `contract/` の最新Contractファイル
-- `specs/` ディレクトリの全Specファイル
-- `decisions/` ディレクトリの全Decision Records
+- `docs/apd/contract/` の最新Contractファイル
+- `docs/apd/specs/` ディレクトリの全Specファイル
+- `docs/apd/decisions/` ディレクトリの全Decision Records
 
 **Phase 3の場合:**
 - `src/` ディレクトリの実装コード
 - `tests/` ディレクトリのテストコード
-- `contract/` の最新Contractファイル
-- `specs/` ディレクトリの全Specファイル
+- `docs/apd/contract/` の最新Contractファイル
+- `docs/apd/specs/` ディレクトリの全Specファイル
 
 ### 3. チェックリストの実行
 
