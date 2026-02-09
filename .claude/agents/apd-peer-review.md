@@ -35,9 +35,9 @@ color: cyan
 
 - **対象コンテキストの実装コード** — `src/` 配下の関連ファイル
 - **対象コンテキストのテストコード** — `tests/` 配下の関連ファイル
-- **対応Spec** — `specs/` ディレクトリから関連するSpecファイル
-- **Contract** — `contract/` の最新ファイル（特にインターフェース定義とタスク分解）
-- **クロスコンテキストシナリオ** — `specs/_cross-context-scenarios.yaml`（存在する場合）
+- **対応Spec** — `docs/apd/specs/` ディレクトリから関連するSpecファイル
+- **Contract** — `docs/apd/contract/` の最新ファイル（特にインターフェース定義とタスク分解）
+- **クロスコンテキストシナリオ** — `docs/apd/specs/_cross-context-scenarios.yaml`（存在する場合）
 
 ### 2. レビュー観点
 

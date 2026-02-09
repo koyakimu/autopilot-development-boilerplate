@@ -1,29 +1,25 @@
 #!/bin/bash
 # APD Boilerplate — プロジェクト初期化スクリプト
-# Usage: ./scripts/init.sh /path/to/project "プロジェクト名"
+# Usage: ./scripts/init.sh /path/to/project
 
 set -euo pipefail
 
-PROJECT_DIR="${1:?Usage: $0 <project-dir> <project-name>}"
-PROJECT_NAME="${2:?Usage: $0 <project-dir> <project-name>}"
+PROJECT_DIR="${1:?Usage: $0 <project-dir>}"
 SCRIPT_DIR="$(cd "$(dirname "$0")/.." && pwd)"
 
 echo "🚀 APD Boilerplate — プロジェクト初期化"
-echo "   プロジェクト: ${PROJECT_NAME}"
 echo "   ディレクトリ: ${PROJECT_DIR}"
 echo ""
 
 # ディレクトリ作成
-mkdir -p "${PROJECT_DIR}"/{design,specs,contract,decisions,cycles,src,tests}
+mkdir -p "${PROJECT_DIR}"/docs/apd/{design,specs,contract,decisions,cycles}
+mkdir -p "${PROJECT_DIR}"/{src,tests}
 
-# CLAUDE.md コピー
-if [ ! -f "${PROJECT_DIR}/CLAUDE.md" ]; then
-  cp "${SCRIPT_DIR}/CLAUDE.template.md" "${PROJECT_DIR}/CLAUDE.md"
-  # プロジェクト名を置換
-  sed -i "s/{{プロジェクト名}}/${PROJECT_NAME}/g" "${PROJECT_DIR}/CLAUDE.md"
-  echo "✅ CLAUDE.md を作成しました"
-else
-  echo "⚠️  CLAUDE.md は既に存在します（スキップ）"
+# Rules をコピー（APDフレームワーク方針 — 自動ロードされる）
+if [ -d "${SCRIPT_DIR}/.claude/rules" ]; then
+  mkdir -p "${PROJECT_DIR}/.claude/rules"
+  cp -r "${SCRIPT_DIR}/.claude/rules/"* "${PROJECT_DIR}/.claude/rules/"
+  echo "✅ Rules を .claude/rules/ にコピーしました"
 fi
 
 # Skills をコピー（Claude Code スラッシュコマンド）
@@ -57,8 +53,11 @@ echo ""
 echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
 echo "✅ 初期化完了！"
 echo ""
+echo "コピーされたもの:"
+echo "  - .claude/rules/apd/  — APDフレームワーク方針（自動ロード）"
+echo "  - .claude/skills/     — APDスキル（スラッシュコマンド）"
+echo "  - .claude/agents/     — APDサブエージェント"
+echo ""
 echo "次のステップ:"
-echo "  1. CLAUDE.md のプロジェクトレベル設定を編集"
-echo "  2. /apd-design でDesign文書を作成（または /apd-cycle で開始）"
-echo "  3. git init && git add -A && git commit -m 'Initial APD setup'"
+echo "  /apd-design でDesign文書を作成（または /apd-cycle で開始）"
 echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"

@@ -23,10 +23,10 @@ APDフレームワークにおけるリーダーエージェントとして、�
 
 以下をGlob/Readで確認する:
 
-- `cycles/*.yaml` — 既存サイクル一覧（次のサイクルIDを採番するため）
-- `design/product-design.yaml` — Design文書の有無
-- `specs/*.yaml` — 既存Specの有無
-- `contract/*.yaml` — 既存Contractの有無
+- `docs/apd/cycles/*.yaml` — 既存サイクル一覧（次のサイクルIDを採番するため）
+- `docs/apd/design/product-design.yaml` — Design文書の有無
+- `docs/apd/specs/*.yaml` — 既存Specの有無
+- `docs/apd/contract/*.yaml` — 既存Contractの有無
 
 ### 3. トリガー種別の判定
 
@@ -41,18 +41,18 @@ APDフレームワークにおけるリーダーエージェントとして、�
 
 ### 4. サイクルIDの採番
 
-`cycles/` ディレクトリの既存ファイルを確認し、次の連番 `C-{NNN}` を付与する。
+`docs/apd/cycles/` ディレクトリの既存ファイルを確認し、次の連番 `C-{NNN}` を付与する。
 ファイルが存在しない場合は `C-001` から開始。
 
 ### 5. サイクル定義の生成
 
-以下の形式で `cycles/C-{NNN}.yaml` を生成する:
+以下の形式で `docs/apd/cycles/C-{NNN}.yaml` を生成する:
 
 ```yaml
 cycle_id: C-{NNN}
 trigger: "{トリガー種別}"
 title: "{変更のタイトル}"
-design_ref: "design/product-design.yaml"
+design_ref: "docs/apd/design/product-design.yaml"
 started_at: "YYYY-MM-DDTHH:MM:SSZ"
 
 spec_changes:
@@ -72,7 +72,7 @@ decisions: []
 
 ### 6. 出力
 
-1. **サイクル定義YAML** を `cycles/C-{NNN}.yaml` に書き出す
+1. **サイクル定義YAML** を `docs/apd/cycles/C-{NNN}.yaml` に書き出す
 2. **トリガー種別の判定理由** を説明する
 3. **次のアクション** を案内する:
 

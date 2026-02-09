@@ -22,14 +22,14 @@ Phase 2（Contract）と Phase 3（Execute）の両方で使用します。
 レビュー対象フェーズ: {{Phase 2: Contract / Phase 3: Execute}}
 
 ### Phase 2 の場合:
-Contract: contract/project-contract.v{N}.yaml
-承認済みSpec: specs/ ディレクトリの全ファイル
+Contract: docs/apd/contract/project-contract.v{N}.yaml
+承認済みSpec: docs/apd/specs/ ディレクトリの全ファイル
 
 ### Phase 3 の場合:
 実装コード: src/ ディレクトリ
 テストコード: tests/ ディレクトリ
-Contract: contract/project-contract.v{N}.yaml
-承認済みSpec: specs/ ディレクトリの全ファイル
+Contract: docs/apd/contract/project-contract.v{N}.yaml
+承認済みSpec: docs/apd/specs/ ディレクトリの全ファイル
 
 ## Phase 2 レビューチェックリスト
 

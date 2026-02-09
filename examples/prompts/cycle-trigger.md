@@ -36,7 +36,7 @@
 
 ### 2. サイクルIDの採番
 
-既存の cycles/ ディレクトリを確認し、次の連番を付与。
+既存の docs/apd/cycles/ ディレクトリを確認し、次の連番を付与。
 
 ### 3. サイクル定義の生成
 
@@ -46,7 +46,7 @@
 cycle_id: C-{NNN}
 trigger: "{トリガー種別}"
 title: "{変更のタイトル}"
-design_ref: "design/product-design.yaml"
+design_ref: "docs/apd/design/product-design.yaml"
 started_at: "YYYY-MM-DDTHH:MM:SSZ"
 
 # 以下はトリガー種別に応じて記入

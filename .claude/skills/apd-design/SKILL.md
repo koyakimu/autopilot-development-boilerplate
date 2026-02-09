@@ -19,7 +19,7 @@ Phase 0は「人間の時間」であり、並列化しない。数往復の対�
 以下のファイルを読み込む:
 
 1. **CLAUDE.md** — プロジェクト設定を確認
-2. **アクティブサイクル** — `cycles/` の最新ファイルを読み込み、サイクル情報を確認
+2. **アクティブサイクル** — `docs/apd/cycles/` の最新ファイルを読み込み、サイクル情報を確認
 
 ## 対話の進め方
 
@@ -58,7 +58,7 @@ Phase 0は「人間の時間」であり、並列化しない。数往復の対�
 
 ## 出力
 
-Design文書を `design/product-design.yaml` にYAML形式で書き出す。
+Design文書を `docs/apd/design/product-design.yaml` にYAML形式で書き出す。
 CLAUDE.mdに定義されたフォーマットに従う。
 
 ## Human Checkpoint 0

@@ -16,22 +16,11 @@ Autopilot Development（APD）は、AIエージェントが自律的にソフト
 ### 1. プロジェクト初期化
 
 ```bash
-# 新規プロジェクトにボイラープレートをコピー
-./scripts/init.sh /path/to/your-project "プロジェクト名"
+# プロジェクトにAPDをセットアップ
+./scripts/init.sh /path/to/your-project
 ```
 
-### 2. プロジェクト設定のカスタマイズ
-
-コピーされた `CLAUDE.md` の「プロジェクトレベル設定」セクションを編集します:
-
-- プロジェクト概要
-- 技術スタック
-- コーディング規約
-- テスト戦略
-- エスカレーションポリシーの追加
-- Git規約
-
-### 3. フェーズの進め方
+### 2. フェーズの進め方
 
 Claude Codeでスラッシュコマンドを使って各フェーズを進めます:
 
@@ -46,24 +35,27 @@ Claude Codeでスラッシュコマンドを使って各フェーズを進めま
 
 詳細なフローは `QUICKREF.md` を参照してください。プロンプト原文やYAMLテンプレートは `examples/` で参照できます。
 
-### 4. 初期化後のプロジェクト構成
+### 3. 初期化後のプロジェクト構成
 
 ```
 your-project/
-├── CLAUDE.md                    ← フレームワーク + プロジェクト設定
+├── CLAUDE.md                    ← プロジェクト固有設定（任意）
 ├── .claude/
+│   ├── rules/
+│   │   └── apd/                 ← APDフレームワーク方針（自動ロード）
+│   │       ├── 00-principles.md
+│   │       ├── 01-phases.md
+│   │       ├── 02-cycle-flow.md
+│   │       ├── 03-documents.md
+│   │       └── 04-testing.md
 │   ├── skills/                  ← APDスラッシュコマンド
 │   └── agents/                  ← APDカスタムサブエージェント
-├── design/
-│   └── (Design文書を配置)
-├── specs/
-│   └── (Spec文書を配置)
-├── contract/
-│   └── (Contract文書を配置)
-├── decisions/
-│   └── (Decision Recordを配置)
-├── cycles/
-│   └── (サイクル定義を配置)
+├── docs/apd/
+│   ├── design/                  ← Design文書を配置
+│   ├── specs/                   ← Spec文書を配置
+│   ├── contract/                ← Contract文書を配置
+│   ├── decisions/               ← Decision Recordを配置
+│   └── cycles/                  ← サイクル定義を配置
 ├── src/
 └── tests/
 ```
@@ -74,11 +66,11 @@ your-project/
 
 | ファイル | 用途 |
 |---------|------|
-| `scripts/init.sh` | プロジェクト初期化スクリプト。新規プロジェクトに必要なディレクトリ構成と `CLAUDE.md`、Skills、Agentsをコピーする |
+| `scripts/init.sh` | プロジェクト初期化スクリプト。新規プロジェクトに必要なディレクトリ構成とRules、Skills、Agentsをコピーする |
 
-### `CLAUDE.template.md`
+### Claude Code Rules (`.claude/rules/apd/`)
 
-**AIエージェント向け設定ファイル（ボイラープレート）**。フレームワークの実行ルール + プロジェクト固有設定のテンプレート。`init.sh` でプロジェクトルートに `CLAUDE.md` としてコピーされ、プロジェクトレベル設定をカスタマイズして使う。
+APDフレームワークの方針（基本原則、フェーズ定義、サイクルフロー、ドキュメント管理、テスト方針）をモジュラーに格納。Claude Codeが自動的に読み込むため、`CLAUDE.md` に含める必要がない。これにより、既存プロジェクトへの導入が容易になる。
 
 ### Claude Code Skills (`.claude/skills/`)
 

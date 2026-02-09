@@ -20,10 +20,10 @@ Phase 2は「AIの時間」である。AIが自律でContractを生成し、AI�
 以下のファイルを全て読み込む:
 
 1. **CLAUDE.md** — プロジェクト設定（技術スタック、テスト戦略、コーディング規約、エスカレーションポリシー、インターフェースフォーマット）
-2. **`design/product-design.yaml`** — Design文書
-3. **`specs/*.yaml`** — 承認済みSpecファイル全て
-4. **`decisions/*.yaml`** — Decision Records全て
-5. **アクティブサイクル** — `cycles/` の最新ファイル
+2. **`docs/apd/design/product-design.yaml`** — Design文書
+3. **`docs/apd/specs/*.yaml`** — 承認済みSpecファイル全て
+4. **`docs/apd/decisions/*.yaml`** — Decision Records全て
+5. **アクティブサイクル** — `docs/apd/cycles/` の最新ファイル
 
 ## Contract生成
 
@@ -63,7 +63,7 @@ Phase 2は「AIの時間」である。AIが自律でContractを生成し、AI�
 
 ### 出力
 
-`contract/project-contract.v{N}.yaml` にYAML形式で書き出す。
+`docs/apd/contract/project-contract.v{N}.yaml` にYAML形式で書き出す。
 既存Contractがある場合はバージョンをインクリメントする。
 
 ## AIチェックポイント
