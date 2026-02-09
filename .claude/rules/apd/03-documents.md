@@ -11,7 +11,8 @@
 
 ```
 project/
-├── CLAUDE.md
+├── .claude/
+│   └── rules/apd/                        ← APDフレームワーク方針（自動ロード）
 ├── docs/apd/
 │   ├── design/
 │   │   └── product-design.yaml          ← 北極星（滅多に変わらない）

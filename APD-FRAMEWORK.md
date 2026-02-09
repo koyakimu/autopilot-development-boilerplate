@@ -320,7 +320,6 @@ impact: [OM-001]
 
 ```
 project/
-├── CLAUDE.md                               ← プロジェクト固有設定
 ├── .claude/
 │   └── rules/apd/                          ← APDフレームワーク方針（自動ロード）
 ├── docs/apd/

@@ -39,7 +39,6 @@ Claude Codeでスラッシュコマンドを使って各フェーズを進めま
 
 ```
 your-project/
-├── CLAUDE.md                    ← プロジェクト固有設定（任意）
 ├── .claude/
 │   ├── rules/
 │   │   └── apd/                 ← APDフレームワーク方針（自動ロード）
@@ -70,7 +69,7 @@ your-project/
 
 ### Claude Code Rules (`.claude/rules/apd/`)
 
-APDフレームワークの方針（基本原則、フェーズ定義、サイクルフロー、ドキュメント管理、テスト方針）をモジュラーに格納。Claude Codeが自動的に読み込むため、`CLAUDE.md` に含める必要がない。これにより、既存プロジェクトへの導入が容易になる。
+APDフレームワークの方針（基本原則、フェーズ定義、サイクルフロー、ドキュメント管理、テスト方針）をモジュラーに格納。Claude Codeが自動的に読み込む。既存プロジェクトにも `.claude/rules/apd/` をコピーするだけで導入できる。
 
 ### Claude Code Skills (`.claude/skills/`)
 
