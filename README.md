@@ -16,9 +16,15 @@ Autopilot Development（APD）は、AIエージェントが自律的にソフト
 ### 1. プロジェクト初期化
 
 ```bash
-# プロジェクトにAPDをセットアップ
 ./scripts/init.sh /path/to/your-project
 ```
+
+以下がプロジェクトにコピーされます:
+
+- `.claude/rules/apd/` — フレームワーク方針（Claude Codeが自動ロード）
+- `.claude/skills/` — スラッシュコマンド
+- `.claude/agents/` — カスタムサブエージェント
+- `docs/apd/` — ドキュメントツリー（design, specs, contract, decisions, cycles）
 
 ### 2. フェーズの進め方
 
@@ -33,71 +39,15 @@ Claude Codeでスラッシュコマンドを使って各フェーズを進めま
 /apd-status      → 進行状況の確認
 ```
 
-詳細なフローは `QUICKREF.md` を参照してください。プロンプト原文やYAMLテンプレートは `examples/` で参照できます。
-
-### 3. 初期化後のプロジェクト構成
-
-```
-your-project/
-├── .claude/
-│   ├── rules/
-│   │   └── apd/                 ← APDフレームワーク方針（自動ロード）
-│   │       ├── 00-principles.md
-│   │       ├── 01-phases.md
-│   │       ├── 02-cycle-flow.md
-│   │       ├── 03-documents.md
-│   │       └── 04-testing.md
-│   ├── skills/                  ← APDスラッシュコマンド
-│   └── agents/                  ← APDカスタムサブエージェント
-├── docs/apd/
-│   ├── design/                  ← Design文書を配置
-│   ├── specs/                   ← Spec文書を配置
-│   ├── contract/                ← Contract文書を配置
-│   ├── decisions/               ← Decision Recordを配置
-│   └── cycles/                  ← サイクル定義を配置
-├── src/
-└── tests/
-```
+詳細なフローは `QUICKREF.md` を参照してください。
 
 ## リポジトリ構成
 
-### スクリプト (`scripts/`)
-
-| ファイル | 用途 |
-|---------|------|
-| `scripts/init.sh` | プロジェクト初期化スクリプト。新規プロジェクトに必要なディレクトリ構成とRules、Skills、Agentsをコピーする |
-
-### Claude Code Rules (`.claude/rules/apd/`)
-
-APDフレームワークの方針（基本原則、フェーズ定義、サイクルフロー、ドキュメント管理、テスト方針）をモジュラーに格納。Claude Codeが自動的に読み込む。既存プロジェクトにも `.claude/rules/apd/` をコピーするだけで導入できる。
-
-### Claude Code Skills (`.claude/skills/`)
-
-Claude Codeのスラッシュコマンドとして各フェーズを直接実行できます。`init.sh` で新規プロジェクトに自動コピーされます。
-
-| スキル | 用途 |
-|--------|------|
-| `/apd-status` | プロジェクトの進行状況を表示し、次のアクションを提案 |
-| `/apd-cycle` | 新しいサイクルを開始。トリガー種別を判定しサイクル定義を生成 |
-| `/apd-design` | Phase 0: Design文書を対話的に作成 |
-| `/apd-spec` | Phase 1: Specを生成（full/add/bugfix の3モード） |
-| `/apd-contract` | Phase 2: Contractを自律生成 + AIチェックポイント自動実行 |
-| `/apd-execute` | Phase 3: 実装を自律実行 + ピアレビュー + AIチェックポイント |
-
-### Claude Code Agents (`.claude/agents/`)
-
-Skills から自動的に委譲されるカスタムサブエージェントです。
-
-| エージェント | 用途 |
-|------------|------|
-| `apd-checkpoint` | Phase 2/3のAIチェックポイント専任レビュアー |
-| `apd-peer-review` | Phase 3のクロスコンテキストピアレビュー |
-
-### 参考資料 (`examples/`)
-
-Skills として組み込み済みのため、通常は直接使用する必要はありません。フレームワークの設計意図やYAML成果物のフォーマットを理解したいときに参照してください。
-
-| ディレクトリ | 内容 |
-|------------|------|
-| `examples/prompts/` | 各フェーズのプロンプト原文（`phase-0-design.md` 〜 `phase-3-execute.md`, `cycle-trigger.md`, `ai-checkpoint.md`） |
-| `examples/templates/` | YAML成果物のフォーマット定義（`design.yaml`, `spec.yaml`, `contract.yaml`, `cycle.yaml`, `decision.yaml`, `amendment.yaml`, `cross-context-scenarios.yaml`） |
+| パス | 内容 |
+|------|------|
+| `scripts/init.sh` | プロジェクト初期化スクリプト |
+| `.claude/rules/apd/` | フレームワーク方針（基本原則、フェーズ定義、サイクルフロー、ドキュメント管理、テスト方針） |
+| `.claude/skills/` | スラッシュコマンド（`/apd-design`, `/apd-spec`, `/apd-contract`, `/apd-execute`, `/apd-cycle`, `/apd-status`） |
+| `.claude/agents/` | サブエージェント（`apd-checkpoint`, `apd-peer-review`） |
+| `examples/prompts/` | 各フェーズのプロンプト原文 |
+| `examples/templates/` | YAML成果物のフォーマット定義 |

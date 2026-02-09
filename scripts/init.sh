@@ -13,7 +13,6 @@ echo ""
 
 # ディレクトリ作成
 mkdir -p "${PROJECT_DIR}"/docs/apd/{design,specs,contract,decisions,cycles}
-mkdir -p "${PROJECT_DIR}"/{src,tests}
 
 # Rules をコピー（APDフレームワーク方針 — 自動ロードされる）
 if [ -d "${SCRIPT_DIR}/.claude/rules" ]; then
@@ -34,19 +33,6 @@ if [ -d "${SCRIPT_DIR}/.claude/agents" ]; then
   mkdir -p "${PROJECT_DIR}/.claude/agents"
   cp -r "${SCRIPT_DIR}/.claude/agents/"* "${PROJECT_DIR}/.claude/agents/"
   echo "✅ Agents を .claude/agents/ にコピーしました"
-fi
-
-# .gitignore に追加
-if [ ! -f "${PROJECT_DIR}/.gitignore" ]; then
-  cat > "${PROJECT_DIR}/.gitignore" << 'EOF'
-node_modules/
-.env
-.env.local
-dist/
-build/
-*.log
-EOF
-  echo "✅ .gitignore を作成しました"
 fi
 
 echo ""
