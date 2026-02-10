@@ -24,6 +24,9 @@ Phase 3は「AIの時間」である。Contractに基づきAIが自律で実装�
 3. **`docs/apd/specs/*.yaml`** — 承認済みSpecファイル全て
 4. **`docs/apd/decisions/*.yaml`** — Decision Records全て
 5. **アクティブサイクル** — `docs/apd/cycles/` の最新ファイル
+6. **Git環境のセットアップ**
+   - サイクルブランチが存在しない場合は作成する: `git checkout -b apd/C-{NNN}/{short-description}`
+   - 並列実行する場合はgit worktreeを作成する（`06-git-strategy.md` 参照）
 
 ## Step 1: 実装タスクの実行
 
@@ -73,6 +76,9 @@ TodoWriteツールを使って各タスクの進捗を管理する。
 2. `docs/apd/specs/_cross-context-scenarios.yaml` の各シナリオを実行（存在する場合）
 3. 統合テスト / E2Eテストを実行
 4. 全テストがパスすることを確認
+5. 並列実行した場合、全タスクブランチをサイクルブランチにマージする
+6. マージコンフリクトがあれば解消する
+7. worktreeをクリーンアップする
 
 ## Step 4: AIチェックポイント
 
@@ -107,6 +113,7 @@ AIチェックポイントの結果サマリー（`human_checkpoint_summary`）�
 - [ ] AI Checkpoint レビューの全項目が pass か
 - [ ] escalation_items がある場合、各項目について判断を記入したか
 - [ ] モック/UI記述がある場合、期待通りの見た目か（目視確認）
+- [ ] サイクルブランチがmainにマージ可能な状態か
 
 承認されたら「サイクル完了です」と報告する。
 差し戻しの場合は新しいバグ修正サイクル（`/apd-cycle`）として対応する。

@@ -60,6 +60,13 @@ Phase 2は「AIの時間」である。AIが自律でContractを生成し、AI�
 - 並列化の単位（どのタスクを同時実行できるか）
 - 独立性の確保方法（スタブ/モック戦略）
 - 結合検証のタイミングと方法
+- 並列化する場合のgit worktree作成計画（タスクブランチ名の命名、`06-git-strategy.md` 参照）
+
+#### 6. 成果物プレビュー（該当する場合）
+- Specの `ui_description` やコンテキスト境界の記述を元に、具体的なプレビューを生成する
+- 生成するプレビューの種類をContract内で宣言する
+- `docs/apd/contract/previews/C-{NNN}/` に配置する
+- 詳細は `05-deliverable-preview.md` 参照
 
 ### 出力
 
@@ -88,14 +95,14 @@ apd-checkpoint エージェントの結果を受け取ったら:
 - **verdict: approve** → Human Checkpoint 2を提示
 - **verdict: request_changes** → 指摘事項を修正してContractを更新し、再度チェックポイントを実行
 
-## Human Checkpoint 2（軽量）
+## Human Checkpoint 2
 
 AIチェックポイントの結果サマリー（`human_checkpoint_summary`）を提示する。
 
-通常は数分で通過する:
 - [ ] AI Checkpoint の全項目が pass になっているか
 - [ ] escalation_required が false であるか
 - [ ] escalation_items がある場合、各項目について判断を記入したか
+- [ ] 成果物プレビューがある場合、各プレビューが期待通りか
 
 承認されたら「`/apd-execute` を実行してPhase 3に進んでください」と案内する。
 差し戻しの場合は指摘に基づきContractを修正する。
