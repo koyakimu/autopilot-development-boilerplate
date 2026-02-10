@@ -13,8 +13,8 @@ Phase 1: Spec ── AIドラフト + 人間フィードバック（並列化し
   ここから先、人間は基本介入しない
 
 Phase 2: Contract ── AI自律
-  成果物: プロジェクト契約
-  AI Checkpoint → Human Checkpoint 2（軽量）
+  成果物: プロジェクト契約 + 成果物プレビュー（該当時）
+  AI Checkpoint → Human Checkpoint 2
 
 Phase 3: Execute ── AI自律・並列実行
   成果物: 実装 + テスト全パス

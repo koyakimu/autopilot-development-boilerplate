@@ -22,7 +22,9 @@ project/
 │   │   └── _cross-context-scenarios.yaml
 │   ├── contract/
 │   │   ├── project-contract.v{N}.yaml   ← イミュータブル
-│   │   └── project-contract.v{N}.C-{NNN}.yaml ← Amendment
+│   │   ├── project-contract.v{N}.C-{NNN}.yaml ← Amendment
+│   │   └── previews/
+│   │       └── C-{NNN}/                 ← 成果物プレビュー（図・モック等）
 │   ├── decisions/
 │   │   └── D-{NNN}.yaml                 ← 時系列で積み上がる
 │   └── cycles/
