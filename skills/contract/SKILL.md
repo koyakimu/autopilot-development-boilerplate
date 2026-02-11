@@ -29,11 +29,12 @@ Phase 2は「AIの時間」である。AIが自律でContractを生成し、AI�
 
 ### 必須項目
 
-以下の5セクションを含むContractを生成する:
+以下の6セクションを含むContractを生成する:
 
 #### 1. 技術アーキテクチャ
 - Specの全要件に対する技術的実現方法
-- 使用する技術スタック（CLAUDE.mdのプロジェクトレベル設定に従う）
+- 使用する技術スタック（技術選定Decision Recordsの決定結果に基づく。CLAUDE.mdの設定がある場合はそれに従う）
+- 各技術選定の根拠として対応するDecision Record ID（D-{NNN}）を参照する
 - ディレクトリ構成
 
 #### 2. コンテキスト間境界（インターフェース定義）
@@ -62,11 +63,26 @@ Phase 2は「AIの時間」である。AIが自律でContractを生成し、AI�
 - 結合検証のタイミングと方法
 - 並列化する場合のgit worktree作成計画（タスクブランチ名の命名、`06-git-strategy.md` 参照）
 
-#### 6. 成果物プレビュー（該当する場合）
-- Specの `ui_description` やコンテキスト境界の記述を元に、具体的なプレビューを生成する
-- 生成するプレビューの種類をContract内で宣言する
-- `docs/apd/contract/previews/C-{NNN}/` に配置する
-- 詳細は `05-deliverable-preview.md` 参照
+#### 6. 成果物プレビュー（必須）
+
+Specの `ui_description` やコンテキスト境界の記述を元に、具体的なプレビューを生成する。
+
+##### プレビュー種別の判定
+
+| 条件 | 必須プレビュー |
+|------|---------------|
+| UIを持つプロジェクト | HTMLモック（`screens/*.html`）|
+| APIを提供するプロジェクト | API仕様書（`api-spec.md`）|
+| 複数コンポーネントがある | アーキテクチャ図（Mermaid, `architecture.md`）|
+| データベースを使用する | データモデル図（Mermaid ER図, `data-model.md`）|
+
+**最低1つ（アーキテクチャ図）は全プロジェクトで必須。**
+
+##### 出力先・宣言
+
+- `docs/apd/contract/previews/C-{NNN}/` に配置する（`05-deliverable-preview.md` 参照）
+- Contract末尾の「Deliverable Previews」セクションで一覧を宣言する
+- AIチェックポイントに進む前にプレビューファイルが存在しなければならない
 
 ### 出力
 
@@ -102,7 +118,21 @@ AIチェックポイントの結果サマリー（`human_checkpoint_summary`）�
 - [ ] AI Checkpoint の全項目が pass になっているか
 - [ ] escalation_required が false であるか
 - [ ] escalation_items がある場合、各項目について判断を記入したか
-- [ ] 成果物プレビューがある場合、各プレビューが期待通りか
+- [ ] 成果物プレビューが期待通りか
+- [ ] 技術選定Decision Recordsの決定結果が反映されているか
 
-承認されたら「`/apd:execute` を実行してPhase 3に進んでください」と案内する。
-差し戻しの場合は指摘に基づきContractを修正する。
+### 承認処理
+
+ユーザーが承認した場合、以下を **全て** 実行する:
+
+1. **Contract のステータス更新**:
+   - `status: "draft"` → `status: "approved"`
+   - `approved_at: null` → `approved_at: "{現在のISO 8601タイムスタンプ}"`
+2. **サイクルファイルの更新**:
+   - `phases.contract.status: "completed"`
+   - `phases.contract.checkpoint_at: "{現在のISO 8601タイムスタンプ}"`
+3. 「`/apd:execute` を実行してPhase 3に進んでください」と案内する
+
+差し戻しの場合は指摘に基づきContractを修正し、再度チェックポイントから実行する。
+
+**重要: Contract の `status` が `approved` に更新されるまで、Phase 3 に進むことはできない。**

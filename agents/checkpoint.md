@@ -42,6 +42,7 @@ color: yellow
 - `docs/apd/contract/` の最新Contractファイル
 - `docs/apd/specs/` ディレクトリの全Specファイル
 - `docs/apd/decisions/` ディレクトリの全Decision Records
+- `docs/apd/contract/previews/C-{NNN}/` のプレビューファイル
 
 **Phase 3の場合:**
 - `src/` ディレクトリの実装コード
@@ -61,6 +62,9 @@ color: yellow
 | 4 | 全ACに対応するテスト計画がある | pass/warn/fail | |
 | 5 | 並列実行計画が実行可能である | pass/warn/fail | |
 | 6 | CLAUDE.mdの技術スタック設定と整合している | pass/warn/fail | |
+| 7 | 成果物プレビューが生成されている（最低1つ） | pass/warn/fail | |
+| 8 | アーキテクチャ図が存在し、Contract内容と整合している | pass/warn/fail | |
+| 9 | 技術選定のDecision Recordsが存在し、全てにユーザー判断が記録されている | pass/warn/fail | |
 
 **Phase 3 レビューチェックリスト:**
 

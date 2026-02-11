@@ -4,6 +4,10 @@
 contract_id: "project-contract"
 version: 1
 cycle_ref: "C-{NNN}"
+status: "draft"
+approved_at: null
+decision_refs:
+  - "{D-NNN}"
 created_at: "YYYY-MM-DDTHH:MM:SSZ"
 spec_refs:
   - "{SPEC_ID_1}"
@@ -20,6 +24,8 @@ spec_refs:
 | Framework | {フレームワーク} |
 | Database | {データベース} |
 | Infrastructure | {インフラ} |
+
+> 各技術選定の根拠は Decision Records を参照: {D-NNN}, {D-NNN}
 
 ### Directory Structure
 
@@ -103,3 +109,9 @@ src/
 
 - {結合検証項目1}
 - {結合検証項目2}
+
+## Deliverable Previews
+
+| Preview | Path | Status |
+|---------|------|--------|
+| {プレビュー種別} | docs/apd/contract/previews/C-{NNN}/{filename} | generated |
