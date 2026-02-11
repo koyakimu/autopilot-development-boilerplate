@@ -4,36 +4,40 @@
 
 | Phase | 誰の時間 | やること | 成果物 | Checkpoint |
 |-------|---------|---------|--------|------------|
-| **0: Design** | 人間+AI | 対話でDesign文書作成 | `docs/apd/design/product-design.yaml` | Human CP 0 |
-| **1: Spec** | 人間+AI | AIドラフト→人間FB | `docs/apd/specs/*.yaml` + `docs/apd/decisions/*.yaml` | Human CP 1 |
-| **2: Contract** | AI自律 | 技術仕様を自動生成 | `docs/apd/contract/*.yaml` | AI CP → Human CP 2（軽量）|
+| **0: Design** | 人間+AI | 対話でDesign文書作成 | `docs/apd/design/product-design.md` | Human CP 0 |
+| **1: Spec** | 人間+AI | AIドラフト→人間FB | `docs/apd/specs/*.md` + `docs/apd/decisions/*.md` | Human CP 1 |
+| **2: Contract** | AI自律 | 技術仕様を自動生成 | `docs/apd/contract/*.md` | AI CP → Human CP 2（軽量）|
 | **3: Execute** | AI自律 | 実装+テスト | `src/` + `tests/` | AI CP → Human CP 3（軽量）|
 
 ## Skills 使用フロー
 
 ```
 ① 変更が発生
-   └→ /apd-cycle でサイクル定義を作成（トリガー種別を自動判定）
+   └→ /apd:cycle でサイクル定義を作成（トリガー種別を自動判定）
 
 ② Phase 0（new_product のみ）
-   └→ /apd-design で Design 文書を対話的に作成
+   └→ /apd:design で Design 文書を対話的に作成
 
 ③ Phase 1
-   └→ /apd-spec [full|add|bugfix] で Spec ドラフトを生成
+   └→ /apd:spec [full|add|bugfix] で Spec ドラフトを生成
    └→ 確認依頼リストだけレビュー → フィードバック → 承認
 
 ④ Phase 2
-   └→ /apd-contract で AI が自律実行 + AIチェックポイント自動実行
+   └→ /apd:contract で AI が自律実行 + AIチェックポイント自動実行
    └→ AI Checkpoint 結果のサマリーだけ確認 → 承認
 
 ⑤ Phase 3
-   └→ /apd-execute で AI が自律実行 + ピアレビュー + AIチェックポイント自動実行
+   └→ /apd:execute で AI が自律実行 + ピアレビュー + AIチェックポイント自動実行
    └→ AI Checkpoint 結果のサマリーだけ確認 → 承認
 
-💡 いつでも /apd-status で現在の進行状況を確認できます
+いつでも /apd:status で現在の進行状況を確認できます
 ```
 
-> プロンプト原文やYAMLテンプレートはボイラープレートリポジトリの `examples/` で参照できます。
+## 初回セットアップ
+
+```
+/apd:init    → ルールファイルのコピー + ドキュメントディレクトリ作成
+```
 
 ## 人間がやること（だけ）
 
@@ -61,9 +65,9 @@ CLAUDE.md に書いてある？
 
 | 種類 | パターン | 例 |
 |------|---------|-----|
-| Design | `docs/apd/design/product-design.yaml` | — |
-| Spec | `docs/apd/specs/{context}.v{N}.yaml` | `docs/apd/specs/order-management.v1.yaml` |
-| Amendment | `docs/apd/specs/{context}.v{N}.A-{NNN}.yaml` | `docs/apd/specs/order-management.v1.A-005.yaml` |
-| Contract | `docs/apd/contract/project-contract.v{N}.yaml` | `docs/apd/contract/project-contract.v1.yaml` |
-| Decision | `docs/apd/decisions/D-{NNN}.yaml` | `docs/apd/decisions/D-001.yaml` |
-| Cycle | `docs/apd/cycles/C-{NNN}.yaml` | `docs/apd/cycles/C-001.yaml` |
+| Design | `docs/apd/design/product-design.md` | — |
+| Spec | `docs/apd/specs/{context}.v{N}.md` | `docs/apd/specs/order-management.v1.md` |
+| Amendment | `docs/apd/specs/{context}.v{N}.A-{NNN}.md` | `docs/apd/specs/order-management.v1.A-005.md` |
+| Contract | `docs/apd/contract/project-contract.v{N}.md` | `docs/apd/contract/project-contract.v1.md` |
+| Decision | `docs/apd/decisions/D-{NNN}.md` | `docs/apd/decisions/D-001.md` |
+| Cycle | `docs/apd/cycles/C-{NNN}.md` | `docs/apd/cycles/C-001.md` |
