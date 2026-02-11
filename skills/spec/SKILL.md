@@ -1,5 +1,5 @@
 ---
-name: apd-spec
+name: spec
 description: >
   This skill should be used when the user asks to "generate specs",
   "start Phase 1", "create specifications", "add a feature spec",
@@ -86,7 +86,7 @@ fullモードの出力に加え:
 まず原因を判定する:
 
 - **Spec起因**（仕様漏れ・曖昧さ）→ Spec Amendment を作成
-- **Execute起因**（実装がSpecと合っていない）→ 「Execute起因です。実装修正のみで対応可能です。`/apd-execute` で修正してください」と報告
+- **Execute起因**（実装がSpecと合っていない）→ 「Execute起因です。実装修正のみで対応可能です。`/apd:execute` で修正してください」と報告
 
 ### Spec起因の場合の出力
 
@@ -129,5 +129,5 @@ Specが完成したら、以下のチェックリストを提示する:
 - [ ] Decision Recordの各判断について decision と reason を記入したか
 - [ ] What Not に含まれるものがSpecに紛れ込んでいないか
 
-承認されたら「`/apd-contract` を実行してPhase 2に進んでください（ここから先、人間は基本介入しません）」と案内する。
+承認されたら「`/apd:contract` を実行してPhase 2に進んでください（ここから先、人間は基本介入しません）」と案内する。
 修正が必要な場合はフィードバックを受けてドラフトを更新する。

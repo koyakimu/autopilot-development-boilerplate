@@ -1,11 +1,11 @@
 ---
-name: apd-contract
+name: contract
 description: >
   This skill should be used when the user asks to "generate contract",
   "start Phase 2", "create implementation contract", "Contractを生成",
   "Phase 2を開始", or wants to autonomously generate the technical
   Contract from approved Specs. Automatically delegates to the
-  apd-checkpoint agent for cross-review.
+  apd:checkpoint agent for cross-review.
 tools: ["Read", "Write", "Glob", "Grep", "Bash"]
 ---
 
@@ -75,14 +75,14 @@ Phase 2は「AIの時間」である。AIが自律でContractを生成し、AI�
 
 ## AIチェックポイント
 
-Contract生成後、**apd-checkpoint エージェントに委譲して**、Spec⇔Contractのクロスレビューを実行する。
+Contract生成後、**apd:checkpoint エージェントに委譲して**、Spec⇔Contractのクロスレビューを実行する。
 
 委譲時に以下を伝える:
 - レビュー対象フェーズ: contract
 - Contract ファイルパス
 - Specs ディレクトリパス
 
-apd-checkpoint エージェントが以下の観点で検証する:
+apd:checkpoint エージェントが以下の観点で検証する:
 1. **Spec網羅性**: 全Specの全受け入れ条件がContractのどこかでカバーされているか
 2. **整合性**: タスク間の依存関係に循環がないか、インターフェース定義が双方で一致しているか
 3. **テスト妥当性**: テスト戦略がSpecの受け入れ条件を十分にカバーしているか
@@ -90,7 +90,7 @@ apd-checkpoint エージェントが以下の観点で検証する:
 
 ## チェックポイント結果の処理
 
-apd-checkpoint エージェントの結果を受け取ったら:
+apd:checkpoint エージェントの結果を受け取ったら:
 
 - **verdict: approve** → Human Checkpoint 2を提示
 - **verdict: request_changes** → 指摘事項を修正してContractを更新し、再度チェックポイントを実行
@@ -104,5 +104,5 @@ AIチェックポイントの結果サマリー（`human_checkpoint_summary`）�
 - [ ] escalation_items がある場合、各項目について判断を記入したか
 - [ ] 成果物プレビューがある場合、各プレビューが期待通りか
 
-承認されたら「`/apd-execute` を実行してPhase 3に進んでください」と案内する。
+承認されたら「`/apd:execute` を実行してPhase 3に進んでください」と案内する。
 差し戻しの場合は指摘に基づきContractを修正する。

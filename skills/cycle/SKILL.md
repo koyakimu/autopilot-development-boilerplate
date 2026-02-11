@@ -1,5 +1,5 @@
 ---
-name: apd-cycle
+name: cycle
 description: >
   This skill should be used when the user asks to "start a new cycle",
   "begin a change", "add a feature", "fix a bug", "start development",
@@ -102,7 +102,7 @@ phases:
 
 | トリガー | 次のアクション |
 |---------|-------------|
-| `new_product` | `/apd-design` を実行してDesign文書を作成 |
-| `feature_addition` | `/apd-spec add` を実行してSpecを生成 |
-| `bug_fix` | `/apd-spec bugfix` を実行してSpec Amendmentを作成 |
-| `tech_change` | `/apd-contract` を実行してContract Amendmentを作成 |
+| `new_product` | `/apd:design` を実行してDesign文書を作成 |
+| `feature_addition` | `/apd:spec add` を実行してSpecを生成 |
+| `bug_fix` | `/apd:spec bugfix` を実行してSpec Amendmentを作成 |
+| `tech_change` | `/apd:contract` を実行してContract Amendmentを作成 |

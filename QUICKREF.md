@@ -13,27 +13,31 @@
 
 ```
 ① 変更が発生
-   └→ /apd-cycle でサイクル定義を作成（トリガー種別を自動判定）
+   └→ /apd:cycle でサイクル定義を作成（トリガー種別を自動判定）
 
 ② Phase 0（new_product のみ）
-   └→ /apd-design で Design 文書を対話的に作成
+   └→ /apd:design で Design 文書を対話的に作成
 
 ③ Phase 1
-   └→ /apd-spec [full|add|bugfix] で Spec ドラフトを生成
+   └→ /apd:spec [full|add|bugfix] で Spec ドラフトを生成
    └→ 確認依頼リストだけレビュー → フィードバック → 承認
 
 ④ Phase 2
-   └→ /apd-contract で AI が自律実行 + AIチェックポイント自動実行
+   └→ /apd:contract で AI が自律実行 + AIチェックポイント自動実行
    └→ AI Checkpoint 結果のサマリーだけ確認 → 承認
 
 ⑤ Phase 3
-   └→ /apd-execute で AI が自律実行 + ピアレビュー + AIチェックポイント自動実行
+   └→ /apd:execute で AI が自律実行 + ピアレビュー + AIチェックポイント自動実行
    └→ AI Checkpoint 結果のサマリーだけ確認 → 承認
 
-💡 いつでも /apd-status で現在の進行状況を確認できます
+いつでも /apd:status で現在の進行状況を確認できます
 ```
 
-> プロンプト原文やMarkdownテンプレートはボイラープレートリポジトリの `examples/` で参照できます。
+## 初回セットアップ
+
+```
+/apd:init    → ルールファイルのコピー + ドキュメントディレクトリ作成
+```
 
 ## 人間がやること（だけ）
 

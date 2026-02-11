@@ -1,5 +1,5 @@
 ---
-name: apd-design
+name: design
 description: >
   This skill should be used when the user asks to "create a design document",
   "start Phase 0", "design a product", "Design文書を作成", "プロダクトを設計",
@@ -72,5 +72,5 @@ Design文書が完成したら、以下のチェックリストを提示する:
 - [ ] FAQ: 主要な疑問が網羅されているか（最低10問）
 - [ ] Success Criteria: 測定可能な指標があるか
 
-承認されたら「`/apd-spec full` を実行してPhase 1に進んでください」と案内する。
+承認されたら「`/apd:spec full` を実行してPhase 1に進んでください」と案内する。
 修正が必要な場合はフィードバックを受けて対話を続ける。

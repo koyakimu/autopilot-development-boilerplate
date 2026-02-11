@@ -1,5 +1,5 @@
 ---
-name: apd-status
+name: status
 description: >
   This skill should be used when the user asks to "show APD status",
   "check project progress", "what phase am I in", "APDの状態を見せて",
@@ -64,16 +64,16 @@ APDフレームワークのプロジェクト状態を成果物の有無から�
 Phase 2 完了 — Contract生成済み
 
 ### 次のアクション
-→ `/apd-execute` を実行してPhase 3（実装）を開始してください
+→ `/apd:execute` を実行してPhase 3（実装）を開始してください
 ```
 
 ### 5. 次のアクション提案
 
 フェーズ状態に応じて、適切なスキルを提案する:
 
-- 未開始 → `/apd-cycle` でサイクルを開始
-- Phase 0 未完了 → `/apd-design` でDesign文書を作成
-- Phase 0 完了 → `/apd-spec full` でSpecを生成
-- Phase 1 完了 → `/apd-contract` でContractを生成
-- Phase 2 完了 → `/apd-execute` で実装を開始
+- 未開始 → `/apd:cycle` でサイクルを開始
+- Phase 0 未完了 → `/apd:design` でDesign文書を作成
+- Phase 0 完了 → `/apd:spec full` でSpecを生成
+- Phase 1 完了 → `/apd:contract` でContractを生成
+- Phase 2 完了 → `/apd:execute` で実装を開始
 - Phase 3 完了 → サイクル完了

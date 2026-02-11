@@ -1,20 +1,20 @@
 ---
-name: apd-peer-review
+name: peer-review
 description: |
   APDフレームワークのクロスコンテキストピアレビューエージェント。Phase 3の実装を
   隣接コンテキストの視点からレビューし、インターフェース準拠・Spec準拠・テスト品質を検証する。
 
   <example>
-  Context: /apd-executeであるコンテキストの実装が完了した
+  Context: /apd:executeであるコンテキストの実装が完了した
   user: "注文管理コンテキストの実装をレビューして"
-  assistant: "apd-peer-reviewエージェントに委譲してクロスコンテキストレビューを実行します"
+  assistant: "apd:peer-reviewエージェントに委譲してクロスコンテキストレビューを実行します"
   <commentary>隣接コンテキストの視点からインターフェース整合性とSpec準拠を検証する</commentary>
   </example>
 
   <example>
   Context: Phase 3で複数のコンテキストの実装が完了した
   user: "実装のピアレビューをして"
-  assistant: "apd-peer-reviewエージェントに委譲して各コンテキスト間の整合性を検証します"
+  assistant: "apd:peer-reviewエージェントに委譲して各コンテキスト間の整合性を検証します"
   <commentary>クロスコンテキストの視点からインターフェースと統合ポイントを検証する</commentary>
   </example>
 tools: [Read, Glob, Grep, Bash]

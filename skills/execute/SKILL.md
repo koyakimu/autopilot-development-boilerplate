@@ -1,11 +1,11 @@
 ---
-name: apd-execute
+name: execute
 description: >
   This skill should be used when the user asks to "start implementation",
   "start Phase 3", "execute the contract", "implement the code",
   "実装を開始", "Phase 3を開始", or wants to autonomously implement
-  code based on the approved Contract. Delegates to apd-peer-review
-  and apd-checkpoint agents automatically.
+  code based on the approved Contract. Delegates to apd:peer-review
+  and apd:checkpoint agents automatically.
 tools: ["Read", "Write", "Edit", "Glob", "Grep", "Bash"]
 ---
 
@@ -57,7 +57,7 @@ TodoWriteツールを使って各タスクの進捗を管理する。
 
 ## Step 2: ピアレビュー
 
-各コンテキストの実装が完了したら、**apd-peer-review エージェントに委譲して**クロスコンテキストレビューを実行する。
+各コンテキストの実装が完了したら、**apd:peer-review エージェントに委譲して**クロスコンテキストレビューを実行する。
 
 委譲時に以下を伝える:
 - レビュー対象のコンテキスト/タスクID
@@ -82,7 +82,7 @@ TodoWriteツールを使って各タスクの進捗を管理する。
 
 ## Step 4: AIチェックポイント
 
-全タスクとピアレビューが完了したら、**apd-checkpoint エージェントに委譲して**最終品質検証を実行する。
+全タスクとピアレビューが完了したら、**apd:checkpoint エージェントに委譲して**最終品質検証を実行する。
 
 委譲時に以下を伝える:
 - レビュー対象フェーズ: execute
@@ -91,7 +91,7 @@ TodoWriteツールを使って各タスクの進捗を管理する。
 - Contractファイルパス
 - Specsディレクトリパス
 
-apd-checkpoint エージェントが以下を検証する:
+apd:checkpoint エージェントが以下を検証する:
 - Contract全要件の実装状況
 - テスト全パス
 - テスト品質（AC網羅、実質的アサーション、エラーケース）
@@ -100,7 +100,7 @@ apd-checkpoint エージェントが以下を検証する:
 
 ## チェックポイント結果の処理
 
-apd-checkpoint エージェントの結果を受け取ったら:
+apd:checkpoint エージェントの結果を受け取ったら:
 
 - **verdict: approve** → Human Checkpoint 3を提示
 - **verdict: request_changes** → 指摘事項を修正して再度チェックポイントを実行
@@ -116,4 +116,4 @@ AIチェックポイントの結果サマリー（`human_checkpoint_summary`）�
 - [ ] サイクルブランチがmainにマージ可能な状態か
 
 承認されたら「サイクル完了です」と報告する。
-差し戻しの場合は新しいバグ修正サイクル（`/apd-cycle`）として対応する。
+差し戻しの場合は新しいバグ修正サイクル（`/apd:cycle`）として対応する。

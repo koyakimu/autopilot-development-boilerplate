@@ -1,20 +1,20 @@
 ---
-name: apd-checkpoint
+name: checkpoint
 description: |
   APDフレームワークのAIチェックポイント専任レビュアー。Phase 2（Contract）とPhase 3（Execute）の
   成果物をExit Criteriaに照らして機械的に検証する。実装に関与していない客観的な立場からレビューする。
 
   <example>
-  Context: /apd-contractでContract生成が完了した
+  Context: /apd:contractでContract生成が完了した
   user: "Contractを生成したのでAIチェックポイントを実行して"
-  assistant: "apd-checkpointエージェントに委譲してContract⇔Specのクロスレビューを実行します"
+  assistant: "apd:checkpointエージェントに委譲してContract⇔Specのクロスレビューを実行します"
   <commentary>Phase 2のContract生成後にSpec網羅性・整合性・テスト妥当性を検証する</commentary>
   </example>
 
   <example>
-  Context: /apd-executeで実装が完了した
+  Context: /apd:executeで実装が完了した
   user: "実装が完了したので品質チェックして"
-  assistant: "apd-checkpointエージェントに委譲して最終品質検証を実行します"
+  assistant: "apd:checkpointエージェントに委譲して最終品質検証を実行します"
   <commentary>Phase 3の実装完了後にContract準拠・テスト通過・AC網羅を検証する</commentary>
   </example>
 tools: [Read, Glob, Grep, Bash]
