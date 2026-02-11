@@ -58,7 +58,7 @@ Phase 0は「人間の時間」であり、並列化しない。数往復の対�
 
 ## 出力
 
-Design文書を `docs/apd/design/product-design.yaml` にYAML形式で書き出す。
+Design文書を `docs/apd/design/product-design.md` にMarkdown形式（YAML frontmatter付き）で書き出す。
 CLAUDE.mdに定義されたフォーマットに従う。
 
 ## Human Checkpoint 0

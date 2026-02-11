@@ -21,8 +21,8 @@ Phase 3は「AIの時間」である。Contractに基づきAIが自律で実装�
 
 1. **CLAUDE.md** — プロジェクト設定（技術スタック、コーディング規約、テスト戦略）
 2. **`docs/apd/contract/` の最新Contractファイル** — タスク分解、インターフェース定義、テスト戦略
-3. **`docs/apd/specs/*.yaml`** — 承認済みSpecファイル全て
-4. **`docs/apd/decisions/*.yaml`** — Decision Records全て
+3. **`docs/apd/specs/*.md`** — 承認済みSpecファイル全て
+4. **`docs/apd/decisions/*.md`** — Decision Records全て
 5. **アクティブサイクル** — `docs/apd/cycles/` の最新ファイル
 6. **Git環境のセットアップ**
    - サイクルブランチが存在しない場合は作成する: `git checkout -b apd/C-{NNN}/{short-description}`
@@ -73,7 +73,7 @@ TodoWriteツールを使って各タスクの進捗を管理する。
 全タスク完了後:
 
 1. コンテキスト間のインターフェースが正しく接続されているか検証
-2. `docs/apd/specs/_cross-context-scenarios.yaml` の各シナリオを実行（存在する場合）
+2. `docs/apd/specs/_cross-context-scenarios.md` の各シナリオを実行（存在する場合）
 3. 統合テスト / E2Eテストを実行
 4. 全テストがパスすることを確認
 5. 並列実行した場合、全タスクブランチをサイクルブランチにマージする

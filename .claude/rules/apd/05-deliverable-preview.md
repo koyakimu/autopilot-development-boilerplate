@@ -16,7 +16,7 @@
 | シーケンス図 | Mermaid | API呼び出しフロー、処理順序 |
 | 画面遷移図 | Mermaid (stateDiagram) | ページ間のナビゲーション |
 | UIモック | HTML | 静的HTML+CSSによる画面モック |
-| API仕様 | YAML | エンドポイント、リクエスト/レスポンス例 |
+| API仕様 | Markdown | エンドポイント、リクエスト/レスポンス例 |
 
 ## 成果物の配置
 
@@ -28,7 +28,7 @@ docs/apd/contract/previews/C-{NNN}/
 ├── screens/
 │   ├── {screen-name}.html   ← HTMLモック
 │   └── ...
-└── api-spec.yaml
+└── api-spec.md
 ```
 
 ## Phase 1での方向性合意

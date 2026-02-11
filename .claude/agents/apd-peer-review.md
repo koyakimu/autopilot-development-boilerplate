@@ -37,7 +37,7 @@ color: cyan
 - **対象コンテキストのテストコード** — `tests/` 配下の関連ファイル
 - **対応Spec** — `docs/apd/specs/` ディレクトリから関連するSpecファイル
 - **Contract** — `docs/apd/contract/` の最新ファイル（特にインターフェース定義とタスク分解）
-- **クロスコンテキストシナリオ** — `docs/apd/specs/_cross-context-scenarios.yaml`（存在する場合）
+- **クロスコンテキストシナリオ** — `docs/apd/specs/_cross-context-scenarios.md`（存在する場合）
 
 ### 2. レビュー観点
 
@@ -55,7 +55,7 @@ color: cyan
 
 #### C. コンテキスト間整合性（Cross-Context Integration）
 - 自分の担当コンテキストとの接続ポイントに問題がないか
-- データフローが_cross-context-scenarios.yamlと整合しているか
+- データフローが_cross-context-scenarios.mdと整合しているか
 - 境界を超えた暗黙の依存関係がないか
 
 #### D. テスト品質（Test Quality）
@@ -73,26 +73,35 @@ color: cyan
 
 ## 出力形式
 
-以下のYAML形式でレビュー結果を出力する:
+以下のMarkdown形式（YAML frontmatter付き）でレビュー結果を出力する:
 
-```yaml
-peer_review:
-  reviewer_context: "{レビュアーが担当するコンテキスト名}"
-  target_task: "{レビュー対象タスクID}"
-  
-  findings:
-    - severity: "blocker / warning / info"
-      category: "spec_compliance / interface / cross_context / test_quality"
-      location: "ファイルパス:行番号"
-      description: "問題の具体的な説明"
-      suggestion: "修正提案"
-      related_spec: "関連するSpec ID"
-      related_ac: "関連するAC ID"
-  
-  verdict: "approve / request_changes"
-  summary: |
-    （2-3文でレビュー結果を要約）
-```
+````markdown
+---
+reviewer_context: "{レビュアーが担当するコンテキスト名}"
+target_task: "{レビュー対象タスクID}"
+verdict: "approve / request_changes"
+---
+
+## Findings
+
+### [BLOCKER] {問題の具体的な説明}
+- **Category**: spec_compliance / interface / cross_context / test_quality
+- **Location**: {ファイルパス:行番号}
+- **Suggestion**: {修正提案}
+- **Related Spec**: {Spec ID}
+- **Related AC**: {AC ID}
+
+### [WARNING] {問題の具体的な説明}
+- **Category**: {カテゴリ}
+- **Location**: {ファイルパス:行番号}
+- **Suggestion**: {修正提案}
+- **Related Spec**: {Spec ID}
+- **Related AC**: {AC ID}
+
+## Summary
+
+（2-3文でレビュー結果を要約）
+````
 
 ## 品質基準
 

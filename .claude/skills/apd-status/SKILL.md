@@ -17,11 +17,11 @@ APDフレームワークのプロジェクト状態を成果物の有無から�
 
 以下のディレクトリをGlobでスキャンし、存在するファイルを一覧化する:
 
-- `docs/apd/cycles/*.yaml` — サイクル定義
-- `docs/apd/design/*.yaml` — Design文書
-- `docs/apd/specs/*.yaml` — Spec文書
-- `docs/apd/contract/*.yaml` — Contract文書
-- `docs/apd/decisions/*.yaml` — Decision Records
+- `docs/apd/cycles/*.md` — サイクル定義
+- `docs/apd/design/*.md` — Design文書
+- `docs/apd/specs/*.md` — Spec文書
+- `docs/apd/contract/*.md` — Contract文書
+- `docs/apd/decisions/*.md` — Decision Records
 - `src/` — 実装コード
 - `tests/` — テストコード
 
@@ -33,7 +33,7 @@ APDフレームワークのプロジェクト状態を成果物の有無から�
 |------|---------|
 | 未開始 | docs/apd/cycles/ が空、docs/apd/design/ が空 |
 | Phase 0 進行中 | docs/apd/cycles/ にサイクルあり、docs/apd/design/ が空 |
-| Phase 0 完了 | docs/apd/design/product-design.yaml が存在 |
+| Phase 0 完了 | docs/apd/design/product-design.md が存在 |
 | Phase 1 完了 | docs/apd/specs/ にファイルが存在 |
 | Phase 2 完了 | docs/apd/contract/ にファイルが存在 |
 | Phase 3 完了 | src/ と tests/ にファイルが存在し、テストがパス |

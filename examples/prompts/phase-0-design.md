@@ -49,7 +49,7 @@ Phase 0 は「人間の時間」であり、並列化しません。数往復の
 
 ## 出力フォーマット
 
-docs/apd/design/product-design.yaml として保存可能な YAML 形式で出力してください。
+docs/apd/design/product-design.md として保存可能な Markdown 形式（YAML frontmatter付き）で出力してください。
 ````
 
 ---
