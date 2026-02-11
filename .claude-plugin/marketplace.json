@@ -1,0 +1,23 @@
+{
+  "name": "apd-marketplace",
+  "owner": {
+    "name": "koyakimu"
+  },
+  "metadata": {
+    "description": "APD (Autopilot Development) Framework - AI自律開発フレームワーク"
+  },
+  "plugins": [
+    {
+      "name": "apd",
+      "source": ".",
+      "description": "APD (Autopilot Development) Framework - 人間は意思決定だけ、AIが自律で完走する",
+      "version": "1.0.0",
+      "author": {
+        "name": "koyakimu"
+      },
+      "homepage": "https://github.com/koyakimu/autopilot-development-boilerplate",
+      "license": "MIT",
+      "keywords": ["apd", "autonomous", "development", "framework", "ai-driven"]
+    }
+  ]
+}

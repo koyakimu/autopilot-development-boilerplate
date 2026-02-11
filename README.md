@@ -8,10 +8,16 @@ Claude Codeプラグインとして提供され、`claude plugin install` で簡
 
 ## インストール
 
-### GitHub から直接インストール
+### 1. マーケットプレースを追加
 
 ```bash
-claude plugin install github:koyakimu/autopilot-development-boilerplate
+/plugin marketplace add koyakimu/autopilot-development-boilerplate
+```
+
+### 2. プラグインをインストール
+
+```bash
+/plugin install apd@apd-marketplace
 ```
 
 ### ローカルで開発・テスト
