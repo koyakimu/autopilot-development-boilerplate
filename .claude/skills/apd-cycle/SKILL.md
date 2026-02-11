@@ -11,7 +11,7 @@ tools: ["Read", "Write", "Glob", "Grep", "Bash"]
 # APD Cycle — サイクル開始
 
 APDフレームワークにおけるリーダーエージェントとして、新しい変更サイクルを開始する。
-ユーザーの変更内容からトリガー種別を判定し、サイクル定義YAMLを生成して適切なフェーズへ誘導する。
+ユーザーの変更内容からトリガー種別を判定し、サイクル定義を生成して適切なフェーズへ誘導する。
 
 ## 手順
 
@@ -23,10 +23,10 @@ APDフレームワークにおけるリーダーエージェントとして、�
 
 以下をGlob/Readで確認する:
 
-- `docs/apd/cycles/*.yaml` — 既存サイクル一覧（次のサイクルIDを採番するため）
-- `docs/apd/design/product-design.yaml` — Design文書の有無
-- `docs/apd/specs/*.yaml` — 既存Specの有無
-- `docs/apd/contract/*.yaml` — 既存Contractの有無
+- `docs/apd/cycles/*.md` — 既存サイクル一覧（次のサイクルIDを採番するため）
+- `docs/apd/design/product-design.md` — Design文書の有無
+- `docs/apd/specs/*.md` — 既存Specの有無
+- `docs/apd/contract/*.md` — 既存Contractの有無
 
 ### 3. トリガー種別の判定
 
@@ -46,33 +46,57 @@ APDフレームワークにおけるリーダーエージェントとして、�
 
 ### 5. サイクル定義の生成
 
-以下の形式で `docs/apd/cycles/C-{NNN}.yaml` を生成する:
+以下の形式で `docs/apd/cycles/C-{NNN}.md` を生成する:
 
-```yaml
-cycle_id: C-{NNN}
+````markdown
+---
+cycle_id: "C-{NNN}"
 trigger: "{トリガー種別}"
 title: "{変更のタイトル}"
-design_ref: "docs/apd/design/product-design.yaml"
+design_ref: "docs/apd/design/product-design.md"
 started_at: "YYYY-MM-DDTHH:MM:SSZ"
+completed_at: null
+phases:
+  design:
+    status: "{skipped / completed}"
+    checkpoint_at: null
+  spec:
+    status: "{skipped / completed}"
+    checkpoint_at: null
+  contract:
+    status: "{skipped / completed}"
+    checkpoint_at: null
+  execute:
+    status: "{pending / in_progress / completed}"
+    checkpoint_at: null
+---
 
-spec_changes:
-  - type: "new_spec / amendment"
-    id: "{SPEC_ID}"
-    target: "{既存SPEC_ID}"      # amendment の場合
-    amendment_id: "A-{NNN}"      # amendment の場合
-    context: "{コンテキスト名}"
+## Spec Changes
 
-contract_changes:
-  - type: "new / amendment"
-    amendment_id: "C-{NNN}"      # amendment の場合
-    change: "{変更概要}"
+### {new_spec / amendment}
 
-decisions: []
-```
+- **ID**: {SPEC_ID}
+- **Target**: {既存SPEC_ID} _(amendment の場合)_
+- **Amendment ID**: A-{NNN} _(amendment の場合)_
+- **Context**: {コンテキスト名}
+
+## Contract Changes
+
+### {new / amendment}
+
+- **Amendment ID**: C-{NNN} _(amendment の場合)_
+- **Change**: {変更概要}
+
+## Decisions
+
+| Decision ID | Summary |
+|-------------|---------|
+| D-{NNN} | {判断の要約} |
+````
 
 ### 6. 出力
 
-1. **サイクル定義YAML** を `docs/apd/cycles/C-{NNN}.yaml` に書き出す
+1. **サイクル定義** を `docs/apd/cycles/C-{NNN}.md` に書き出す
 2. **トリガー種別の判定理由** を説明する
 3. **次のアクション** を案内する:
 

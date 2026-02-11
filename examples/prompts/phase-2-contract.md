@@ -20,10 +20,10 @@ Phase 2: Contract を自律実行します。
 ## インプット
 
 CLAUDE.md: プロジェクトルートの CLAUDE.md を参照
-Design文書: docs/apd/design/product-design.yaml
+Design文書: docs/apd/design/product-design.md
 承認済みSpec: docs/apd/specs/ ディレクトリの全ファイル
 Decision Records: docs/apd/decisions/ ディレクトリの全ファイル
-サイクル定義: docs/apd/cycles/C-{{NNN}}.yaml
+サイクル定義: docs/apd/cycles/C-{{NNN}}.md
 
 ## Contract必須項目
 
@@ -35,7 +35,7 @@ Decision Records: docs/apd/decisions/ ディレクトリの全ファイル
 ### 2. コンテキスト間境界（インターフェース定義）
 - CLAUDE.mdの interface_format に従った形式で記述
 - 各コンテキスト間のデータフローを具体的な型/スキーマで定義
-- _cross-context-scenarios.yaml の各シナリオに対する技術的実現方法
+- _cross-context-scenarios.md の各シナリオに対する技術的実現方法
 
 ### 3. 実装タスク分解
 - Phase 3で並列実行可能な単位にタスクを分解
@@ -59,7 +59,7 @@ Decision Records: docs/apd/decisions/ ディレクトリの全ファイル
 
 ## 出力フォーマット
 
-docs/apd/contract/project-contract.v{N}.yaml として保存可能な YAML 形式で出力。
+docs/apd/contract/project-contract.v{N}.md として保存可能な Markdown 形式（YAML frontmatter付き）で出力。
 
 ## AI Checkpoint
 
@@ -116,7 +116,7 @@ ai_checkpoint_result:
 
 ## インプット
 
-Contract: docs/apd/contract/project-contract.v{N}.yaml
+Contract: docs/apd/contract/project-contract.v{N}.md
 承認済みSpec: docs/apd/specs/ ディレクトリの全ファイル
 Decision Records: docs/apd/decisions/ ディレクトリの全ファイル
 

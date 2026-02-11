@@ -21,9 +21,9 @@ Phase 1は「人間の時間」であり、AIがドラフトを生成し、人�
 以下のファイルを読み込む:
 
 1. **CLAUDE.md** — プロジェクト設定（デフォルトスペックフォーマット、エスカレーションポリシー等）を確認
-2. **`docs/apd/design/product-design.yaml`** — Design文書を読み込む
-3. **`docs/apd/specs/*.yaml`** — 既存Specがあれば読み込む
-4. **`docs/apd/decisions/*.yaml`** — 既存Decision Recordsがあれば読み込む
+2. **`docs/apd/design/product-design.md`** — Design文書を読み込む
+3. **`docs/apd/specs/*.md`** — 既存Specがあれば読み込む
+4. **`docs/apd/decisions/*.md`** — 既存Decision Recordsがあれば読み込む
 5. **アクティブサイクル** — `docs/apd/cycles/` の最新ファイルを読み込み、トリガー種別を確認
 
 ## モード判定
@@ -50,15 +50,15 @@ Phase 1は「人間の時間」であり、AIがドラフトを生成し、人�
    - 受け入れ条件（Given/When/Then形式）
    - UI記述またはモック指示（該当する場合）
    - コンテキスト境界の定義（inputs / outputs / dependencies）
-4. コンテキスト間のデータフローを特定し、`docs/apd/specs/_cross-context-scenarios.yaml` としてまとめる
+4. コンテキスト間のデータフローを特定し、`docs/apd/specs/_cross-context-scenarios.md` としてまとめる
 5. 判断が必要だった箇所は Decision Record のドラフトを作成する
 
 ### 出力
 
-1. **Specファイル群** — `docs/apd/specs/` ディレクトリにYAML形式で書き出す
+1. **Specファイル群** — `docs/apd/specs/` ディレクトリにMarkdown形式（YAML frontmatter付き）で書き出す
 2. **Exit Criteriaチェックリスト**（下記参照）
 3. **確認依頼リスト**（下記参照）
-4. **Decision Recordドラフト** — 判断が発生した場合、`docs/apd/decisions/D-{NNN}.yaml` に書き出す
+4. **Decision Recordドラフト** — 判断が発生した場合、`docs/apd/decisions/D-{NNN}.md` に書き出す
 
 ---
 
@@ -68,8 +68,8 @@ Phase 1は「人間の時間」であり、AIがドラフトを生成し、人�
 
 1. 既存Specとの整合性を確認し、矛盾があれば報告する
 2. 新規Specは新ファイルとして作成する（既存ファイルは上書きしない — Immutable原則）
-3. 既存Specの修正が必要な場合は **Amendment** として作成する（`docs/apd/specs/{context}.v{N}.A-{NNN}.yaml`）
-4. コンテキスト間データフローに影響がある場合、`_cross-context-scenarios.yaml` のAmendmentも作成する
+3. 既存Specの修正が必要な場合は **Amendment** として作成する（`docs/apd/specs/{context}.v{N}.A-{NNN}.md`）
+4. コンテキスト間データフローに影響がある場合、`_cross-context-scenarios.md` のAmendmentも作成する
 
 ### 出力
 
@@ -90,7 +90,7 @@ fullモードの出力に加え:
 
 ### Spec起因の場合の出力
 
-1. **Amendment YAML** — `docs/apd/specs/{context}.v{N}.A-{NNN}.yaml`
+1. **Amendment** — `docs/apd/specs/{context}.v{N}.A-{NNN}.md`
 2. 影響を受ける他のSpecの分析
 3. Decision Recordドラフト（仕様判断が必要な場合）
 

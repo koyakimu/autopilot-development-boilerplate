@@ -18,7 +18,7 @@ Design文書（Phase 0の成果物）を基に、AIがSpecドラフトを生成�
 
 ## インプット
 
-Design文書: docs/apd/design/product-design.yaml を参照してください
+Design文書: docs/apd/design/product-design.md を参照してください
 {{または、Design文書の内容をここに直接貼り付け}}
 
 サイクルのトリガー:
@@ -35,13 +35,13 @@ Design文書: docs/apd/design/product-design.yaml を参照してください
    - 受け入れ条件（Given/When/Then形式）
    - UI記述またはモック指示（該当する場合）
    - コンテキスト境界の定義（inputs / outputs / dependencies）
-4. コンテキスト間のデータフローを特定し、_cross-context-scenarios.yaml としてまとめる
+4. コンテキスト間のデータフローを特定し、_cross-context-scenarios.md としてまとめる
 5. 判断が必要だった箇所はDecision Recordのドラフトを作成する
 
 ## 出力形式
 
 ### 1. Specファイル群
-docs/apd/specs/ ディレクトリに配置可能な YAML 形式で出力。
+docs/apd/specs/ ディレクトリに配置可能な Markdown 形式（YAML frontmatter付き）で出力。
 フォーマットはCLAUDE.mdのデフォルトスペックフォーマットに従う。
 
 ### 2. Exit Criteriaチェックリスト（必須）
@@ -67,7 +67,7 @@ docs/apd/specs/ ディレクトリに配置可能な YAML 形式で出力。
 ```
 
 ### 4. Decision Recordドラフト（判断が発生した場合）
-docs/apd/decisions/ ディレクトリに配置可能な YAML 形式で出力。
+docs/apd/decisions/ ディレクトリに配置可能な Markdown 形式（YAML frontmatter付き）で出力。
 AIが選択肢を提示し、人間が選ぶ形にする。
 ````
 
@@ -84,9 +84,9 @@ AIが選択肢を提示し、人間が選ぶ形にする。
 
 ## インプット
 
-Design文書: docs/apd/design/product-design.yaml
+Design文書: docs/apd/design/product-design.md
 既存Spec: docs/apd/specs/ ディレクトリの全ファイルを参照
-サイクル定義: docs/apd/cycles/C-{{NNN}}.yaml
+サイクル定義: docs/apd/cycles/C-{{NNN}}.md
 
 追加機能の概要:
 {{機能の概要を記述}}
@@ -96,7 +96,7 @@ Design文書: docs/apd/design/product-design.yaml
 1. 既存Specとの整合性を確認し、矛盾があれば報告する
 2. 新規Specは新ファイルとして作成する（既存ファイルは上書きしない）
 3. 既存Specの修正が必要な場合はAmendmentとして作成する
-4. コンテキスト間データフローに影響がある場合、_cross-context-scenarios.yaml のAmendmentも作成する
+4. コンテキスト間データフローに影響がある場合、_cross-context-scenarios.md のAmendmentも作成する
 
 ## 出力形式
 
@@ -121,7 +121,7 @@ Design文書: docs/apd/design/product-design.yaml
 バグ報告:
 {{バグの内容、再現手順、期待動作}}
 
-関連Spec: docs/apd/specs/{{対象spec}}.yaml
+関連Spec: docs/apd/specs/{{対象spec}}.md
 
 ## トリアージ
 
@@ -131,7 +131,7 @@ Design文書: docs/apd/design/product-design.yaml
 
 ## Spec起因の場合の出力
 
-1. Amendment YAML（docs/apd/specs/{context}.v{N}.A-{NNN}.yaml）
+1. Amendment（docs/apd/specs/{context}.v{N}.A-{NNN}.md）
 2. 影響を受ける他のSpecの分析
 3. Decision Recordドラフト（仕様判断が必要な場合）
 ````

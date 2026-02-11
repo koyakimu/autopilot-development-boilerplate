@@ -20,7 +20,7 @@ Phase 3: Execute を管理します。
 ## インプット
 
 CLAUDE.md: プロジェクトルートの CLAUDE.md を参照
-Contract: docs/apd/contract/project-contract.v{N}.yaml
+Contract: docs/apd/contract/project-contract.v{N}.md
 承認済みSpec: docs/apd/specs/ ディレクトリの全ファイル
 Decision Records: docs/apd/decisions/ ディレクトリの全ファイル
 
@@ -41,7 +41,7 @@ Contractの実装タスク分解に従い、各タスクを実行する。
 
 全タスク完了後:
 1. コンテキスト間のインターフェースが正しく接続されているか検証
-2. _cross-context-scenarios.yaml の各シナリオを実行
+2. _cross-context-scenarios.md の各シナリオを実行
 3. 統合テスト / E2Eテストを実行
 
 ### Step 3: AI Checkpoint
@@ -141,8 +141,8 @@ CLAUDE.md: プロジェクトルートの CLAUDE.md を参照
   spec_refs: [{{参照するSpec ID}}]
   description: "{{タスク概要}}"
 
-Contract: docs/apd/contract/project-contract.v{N}.yaml（インターフェース定義を参照）
-関連Spec: docs/apd/specs/{{context}}.v{N}.yaml
+Contract: docs/apd/contract/project-contract.v{N}.md（インターフェース定義を参照）
+関連Spec: docs/apd/specs/{{context}}.v{N}.md
 
 ## 実装ルール
 
@@ -180,8 +180,8 @@ Contract: docs/apd/contract/project-contract.v{N}.yaml（インターフェー�
 ## インプット
 
 レビュー対象: {{対象タスクID / ファイルパス}}
-対応Spec: docs/apd/specs/{{context}}.v{N}.yaml
-Contract: docs/apd/contract/project-contract.v{N}.yaml
+対応Spec: docs/apd/specs/{{context}}.v{N}.md
+Contract: docs/apd/contract/project-contract.v{N}.md
 
 ## レビュー観点
 

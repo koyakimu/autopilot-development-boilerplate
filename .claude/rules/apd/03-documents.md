@@ -15,49 +15,66 @@ project/
 │   └── rules/apd/                        ← APDフレームワーク方針（自動ロード）
 ├── docs/apd/
 │   ├── design/
-│   │   └── product-design.yaml          ← 北極星（滅多に変わらない）
+│   │   └── product-design.md            ← 北極星（滅多に変わらない）
 │   ├── specs/
-│   │   ├── {context}.v{N}.yaml          ← イミュータブル
-│   │   ├── {context}.v{N}.A-{NNN}.yaml  ← Amendment
-│   │   └── _cross-context-scenarios.yaml
+│   │   ├── {context}.v{N}.md            ← イミュータブル
+│   │   ├── {context}.v{N}.A-{NNN}.md    ← Amendment
+│   │   └── _cross-context-scenarios.md
 │   ├── contract/
-│   │   ├── project-contract.v{N}.yaml   ← イミュータブル
-│   │   ├── project-contract.v{N}.C-{NNN}.yaml ← Amendment
+│   │   ├── project-contract.v{N}.md     ← イミュータブル
+│   │   ├── project-contract.v{N}.C-{NNN}.md ← Amendment
 │   │   └── previews/
 │   │       └── C-{NNN}/                 ← 成果物プレビュー（図・モック等）
 │   ├── decisions/
-│   │   └── D-{NNN}.yaml                 ← 時系列で積み上がる
+│   │   └── D-{NNN}.md                   ← 時系列で積み上がる
 │   └── cycles/
-│       └── C-{NNN}.yaml
+│       └── C-{NNN}.md
 └── src/ + tests/
 ```
 
 ## デフォルトのスペックフォーマット
 
-```yaml
+全APDドキュメントはMarkdown形式（YAML frontmatter付き）で記述する。構造化メタデータはfrontmatter、自由記述はMarkdown本文に配置する。
+
+````markdown
+---
 spec_id: "{CONTEXT_ID}-{NNN}"
 context: "{コンテキスト名}"
 version: 1
 cycle_ref: "C-{NNN}"
-
 title: ""
-user_story:
-  as_a: ""       # 誰が
-  i_want: ""     # 何を
-  so_that: ""    # なぜ
+decision_refs: []
+---
 
-acceptance_criteria:
-  - id: "AC-001"
-    given: ""
-    when: ""
-    then: ""
+## User Story
 
-ui_description: ""   # モック or UI記述（該当する場合）
+**As a** {誰が}
+**I want** {何を}
+**So that** {なぜ}
 
-context_boundary:
-  inputs: []
-  outputs: []
-  dependencies: []
+## Acceptance Criteria
 
-notes: ""
-```
+### AC-001
+- **Given**: {前提条件}
+- **When**: {トリガーとなる操作}
+- **Then**: {期待される結果}
+
+## UI Description
+
+{モック or UI記述（該当する場合）}
+
+## Context Boundary
+
+### Inputs
+- **From**: {入力元} — {データの説明}
+
+### Outputs
+- **To**: {出力先} — {データの説明}
+
+### Dependencies
+- **{依存するコンテキスト}**: {依存理由}
+
+## Notes
+
+{追加の考慮事項、制約、前提など}
+````

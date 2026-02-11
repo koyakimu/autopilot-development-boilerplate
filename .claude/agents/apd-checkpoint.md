@@ -33,7 +33,7 @@ color: yellow
 
 成果物の状態からレビュー対象を判定する:
 
-- `docs/apd/contract/*.yaml` が存在し、`src/` が空 → **Phase 2（Contract）レビュー**
+- `docs/apd/contract/*.md` が存在し、`src/` が空 → **Phase 2（Contract）レビュー**
 - `src/` にコードが存在 → **Phase 3（Execute）レビュー**
 
 ### 2. インプットの読み込み
@@ -95,53 +95,55 @@ Phase 3の場合、テストを実際に実行して結果を確認する（Bash
 
 ## 出力形式
 
-以下のYAML形式でレビュー結果を出力する:
+以下のMarkdown形式（YAML frontmatter付き）でレビュー結果を出力する:
 
-```yaml
-ai_checkpoint_result:
-  timestamp: "YYYY-MM-DDTHH:MM:SSZ"
-  phase: "contract / execute"
-  reviewer: "dedicated-reviewer"
-  
-  checklist:
-    - id: 1
-      item: "チェック項目"
-      status: "pass / warn / fail"
-      evidence: "根拠（具体的なファイルパス、Spec ID、AC IDを引用）"
-  
-  findings:
-    - severity: "blocker / warning / info"
-      description: ""
-      suggestion: ""
-      related_spec: ""
-  
-  summary:
-    pass_count: N
-    warn_count: N
-    fail_count: N
-    verdict: "approve / request_changes"
-  
-  escalation_required: false
-  escalation_items:
-    - category: ""
-      description: ""
-      options: []
-      recommendation: ""
-  
-  human_checkpoint_summary: |
-    ## Human Checkpoint サマリー
-    
-    **判定: approve / request_changes**
-    
-    ### 要約
-    （1-2文で全体状況を要約）
-    
-    ### 要判断項目
-    （escalation_items があれば列挙、なければ「なし」）
-    
-    ### 注意事項
-    （warn があれば列挙、なければ「特になし」）
-```
+````markdown
+---
+timestamp: "YYYY-MM-DDTHH:MM:SSZ"
+phase: "contract / execute"
+reviewer: "dedicated-reviewer"
+verdict: "approve / request_changes"
+escalation_required: false
+---
+
+## Checklist
+
+| # | Item | Status | Evidence |
+|---|------|--------|----------|
+| 1 | チェック項目 | pass / warn / fail | 根拠（具体的なファイルパス、Spec ID、AC IDを引用） |
+
+## Findings
+
+### [BLOCKER] {description}
+- **Suggestion**: {修正提案}
+- **Related Spec**: {Spec ID}
+
+### [WARNING] {description}
+- **Suggestion**: {修正提案}
+- **Related Spec**: {Spec ID}
+
+## Escalation Items
+
+{escalation_required が true の場合のみ記載}
+
+- **Category**: {カテゴリ}
+- **Description**: {説明}
+- **Options**: {選択肢}
+- **Recommendation**: {推奨}
+
+## Human Checkpoint Summary
+
+**判定**: approve / request_changes
+
+### 要約
+（1-2文で全体状況を要約）
+
+### 要判断項目
+（escalation_items があれば列挙、なければ「なし」）
+
+### 注意事項
+（warn があれば列挙、なければ「特になし」）
+````
 
 ## 品質基準
 

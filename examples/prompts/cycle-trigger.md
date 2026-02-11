@@ -46,7 +46,7 @@
 cycle_id: C-{NNN}
 trigger: "{トリガー種別}"
 title: "{変更のタイトル}"
-design_ref: "docs/apd/design/product-design.yaml"
+design_ref: "docs/apd/design/product-design.md"
 started_at: "YYYY-MM-DDTHH:MM:SSZ"
 
 # 以下はトリガー種別に応じて記入
