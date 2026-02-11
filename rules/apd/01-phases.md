@@ -8,13 +8,14 @@ Phase 0: Design ── 人間 + AI 対話（並列化しない）
   ─────────────── Human Checkpoint 0 ───────────────
 
 Phase 1: Spec ── AIドラフト + 人間フィードバック（並列化しない）
-  成果物: スペック集 + Decision Records
+  成果物: スペック集 + Decision Records（技術選定含む）
   ─────────────── Human Checkpoint 1 ───────────────
   ここから先、人間は基本介入しない
 
 Phase 2: Contract ── AI自律
-  成果物: プロジェクト契約 + 成果物プレビュー（該当時）
+  成果物: プロジェクト契約 + 成果物プレビュー（必須）
   AI Checkpoint → Human Checkpoint 2
+  **承認ゲート: Contract の status が approved になるまで Phase 3 に進めない**
 
 Phase 3: Execute ── AI自律・並列実行
   成果物: 実装 + テスト全パス

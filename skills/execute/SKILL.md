@@ -28,6 +28,21 @@ Phase 3は「AIの時間」である。Contractに基づきAIが自律で実装�
    - サイクルブランチが存在しない場合は作成する: `git checkout -b apd/C-{NNN}/{short-description}`
    - 並列実行する場合はgit worktreeを作成する（`06-git-strategy.md` 参照）
 
+## Contract承認状態の検証
+
+事前準備で読み込んだContractファイルの frontmatter を検証する:
+
+1. `status` フィールドが `"approved"` であること
+2. `approved_at` フィールドが null でないこと
+
+**いずれかの条件を満たさない場合、即座に停止し以下を表示する:**
+
+> ⛔ Contractが未承認です。`/apd:contract` でContract生成とHuman Checkpoint 2の承認を完了してから、再度 `/apd:execute` を実行してください。
+>
+> 現在のステータス: {status} / 承認日時: {approved_at}
+
+**承認済みの場合のみ、Step 1 以降に進む。**
+
 ## Step 1: 実装タスクの実行
 
 Contractの実装タスク分解に従い、各タスクを実行する。
