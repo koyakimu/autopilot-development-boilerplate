@@ -221,11 +221,11 @@ Contractに基づき、AIが自律的に実装とテストを行う。
 ### サイクル定義の例
 
 ```yaml
-# cycle/C-003.yaml
+# cycle/C-003.md
 cycle_id: C-003
 trigger: "feature_addition"
 title: "注文の一括出荷機能"
-design_ref: "docs/apd/design/product-design.yaml"
+design_ref: "docs/apd/design/product-design.md"
 
 spec_changes:
   - type: "new_spec"
@@ -258,7 +258,7 @@ contract_changes:
 人間の意思決定を記録する軽量フォーマット。「なぜこの仕様になったか」「なぜこの案を却下したか」を残す。
 
 ```yaml
-# docs/apd/decisions/D-001.yaml
+# docs/apd/decisions/D-001.md
 id: D-001
 phase: spec
 date: 2025-07-10
@@ -324,23 +324,23 @@ project/
 │   └── rules/apd/                          ← APDフレームワーク方針（自動ロード）
 ├── docs/apd/
 │   ├── design/
-│   │   └── product-design.yaml             ← 北極星（滅多に変わらない）
+│   │   └── product-design.md               ← 北極星（滅多に変わらない）
 │   ├── specs/
-│   │   ├── order-management.v1.yaml        ← イミュータブル
-│   │   ├── order-management.v1.A-005.yaml  ← Amendment
-│   │   ├── _cross-context-scenarios.yaml
+│   │   ├── order-management.v1.md          ← イミュータブル
+│   │   ├── order-management.v1.A-005.md    ← Amendment
+│   │   ├── _cross-context-scenarios.md
 │   │   └── ...
 │   ├── contract/
-│   │   ├── project-contract.v1.yaml        ← イミュータブル
-│   │   ├── project-contract.v1.C-003.yaml  ← Amendment
+│   │   ├── project-contract.v1.md          ← イミュータブル
+│   │   ├── project-contract.v1.C-003.md    ← Amendment
 │   │   └── ...
 │   ├── decisions/
-│   │   ├── D-001.yaml
-│   │   ├── D-002.yaml
+│   │   ├── D-001.md
+│   │   ├── D-002.md
 │   │   └── ...                             ← 時系列で積み上がる
 │   └── cycles/
-│       ├── C-001.yaml                      ← 初回フルサイクル
-│       ├── C-002.yaml                      ← 機能追加サイクル
+│       ├── C-001.md                        ← 初回フルサイクル
+│       ├── C-002.md                        ← 機能追加サイクル
 │       └── ...
 └── src/ + tests/                           ← Git管理
 ```
