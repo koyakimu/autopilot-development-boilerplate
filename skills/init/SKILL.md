@@ -49,6 +49,14 @@ cp "${CLAUDE_PLUGIN_ROOT}/rules/apd/06-git-strategy.md" .claude/rules/apd/
 mkdir -p docs/apd/{design,specs,contract/previews,decisions,cycles}
 ```
 
+さらに、ToDoファイルを初期化する（既に存在する場合はスキップ）:
+
+```bash
+if [ ! -f docs/apd/todo.md ]; then
+  cp "${CLAUDE_PLUGIN_ROOT}/templates/todo.md" docs/apd/todo.md
+fi
+```
+
 ### 4. 完了メッセージ
 
 以下を出力する:
@@ -65,6 +73,7 @@ mkdir -p docs/apd/{design,specs,contract/previews,decisions,cycles}
   - docs/apd/contract/   — Contract文書
   - docs/apd/decisions/  — Decision Records
   - docs/apd/cycles/     — サイクル定義
+  - docs/apd/todo.md     — ToDoバックログ
 
 次のステップ:
   /apd:cycle でサイクルを開始（または /apd:design でDesign文書を作成）
