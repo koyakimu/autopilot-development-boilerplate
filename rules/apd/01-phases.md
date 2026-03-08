@@ -10,24 +10,23 @@ Phase 0: Design ── 人間 + AI 対話（並列化しない）
 Phase 1: Spec ── AIドラフト + 人間フィードバック（並列化しない）
   成果物: スペック集 + Decision Records（技術選定含む）
   ─────────────── Human Checkpoint 1 ───────────────
-  ここから先、人間は基本介入しない
+  ここから先、人間は意図を決めない。完成品を確認するだけ
 
 Phase 2: Contract ── AI自律
   成果物: プロジェクト契約 + 成果物プレビュー（必須）
-  AI Checkpoint → Human Checkpoint 2
-  **承認ゲート: Contract の status が approved になるまで Phase 3 に進めない**
+  AI Checkpoint → エスカレーション時のみ人間に確認 → 自動承認
 
 Phase 3: Execute ── AI自律・並列実行
   成果物: 実装 + テスト全パス
-  AI Checkpoint → Human Checkpoint 3（軽量）
+  Peer Review + AI Checkpoint → Human Checkpoint 3（完成品確認）
 ```
 
 ## Checkpointの原則
 
-- **Human Checkpoint**: フェーズ境界に置く。方向性を確認して必要なら調整する確認ポイント
-- **AI Checkpoint**: Human Checkpointの手前に置く。エージェント間クロスチェック
-- Human Checkpointに上がる時点で、AIレビューサマリー + 要判断項目リストが付く
-- 人間は「全量レビュー」ではなく「例外レビュー」を行う
+- **Human Checkpoint**: 人間が意図を決める場（Phase 0-1）と、完成品を確認する場（Phase 3）に置く
+- **AI Checkpoint**: 品質を機械的に検証する。Phase 2では人間の介入なしで自動承認する
+- 人間はコードを読むことを求められない。完成品が意図通りに動くかを確認する
+- エスカレーションが必要な場合のみ、人間に判断を仰ぐ
 
 ## AI Checkpointエスカレーションポリシー（デフォルト）
 
