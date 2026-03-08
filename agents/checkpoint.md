@@ -135,15 +135,16 @@ escalation_required: false
 - **Options**: {選択肢}
 - **Recommendation**: {推奨}
 
-## Human Checkpoint Summary
+## Summary
 
 **判定**: approve / request_changes
 
 ### 要約
 （1-2文で全体状況を要約）
 
-### 要判断項目
+### エスカレーション項目
 （escalation_items があれば列挙、なければ「なし」）
+（Phase 2ではエスカレーション項目がある場合のみ人間に提示される。Phase 3では完成品確認と合わせて提示される）
 
 ### 注意事項
 （warn があれば列挙、なければ「特になし」）
