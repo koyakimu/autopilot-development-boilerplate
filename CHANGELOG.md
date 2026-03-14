@@ -1,5 +1,26 @@
 # Changelog
 
+## [0.4.0] - 2026-03-14
+
+### Changed
+- **Contract廃止・Phase統合** — Phase 2 (Contract) と Phase 3 (Execute) を Phase 2 (Build) に統合。Contractドキュメントを廃止し、SpecにTest StrategyとDeliverable Previewsセクションを吸収
+- **フェーズ構成を3フェーズに簡素化** — Design → Spec → Build（旧: Design → Spec → Contract → Execute）
+- **成果物プレビューの配置を変更** — `docs/apd/contract/previews/` → `docs/apd/previews/`
+- **tech_changeフローの簡素化** — Contract Amendment → Execute から Decision Record → Build に変更
+- **Checkpointエージェントを簡素化** — Phase 2 (Contract) レビューチェックリストを廃止し、Build用の統合チェックリストに変更
+- **Peer ReviewからContract/Interface Compliance観点を除去** — Spec Complianceに集約
+
+### Removed
+- `skills/contract/` — Contractスキルを廃止
+- `skills/execute/` — Executeスキルを廃止（`skills/build/` に統合）
+- `templates/contract.md` — Contractテンプレートを廃止
+- `docs/apd/contract/` — Contractディレクトリをドキュメントツリーから廃止
+
+### Added
+- `skills/build/` — Build スキル（旧Contract + Execute の統合）
+- Specテンプレートに `Test Strategy` セクション（AC Coverageテーブル）を追加
+- Specテンプレートに `Deliverable Previews` セクションを追加
+
 ## [0.3.1] - 2026-03-08
 
 ### Removed
@@ -24,7 +45,7 @@
 
 ### Added
 - **ToDo管理の仕組み** — `docs/apd/todo.md` でサイクル横断のバックログをappend-onlyで管理
-- **MVPスコーピング** — Spec (full mode) でDesignの全機能をMVP/Futureに分類し、Future機能はToDoに記録
+- **スコーピング** — Spec (full mode) でDesignの全機能を今回のスコープ/スコープ外に分類し、スコープ外の機能はToDoに記録
 - **ToDoテンプレート** — `templates/todo.md` を追加
 
 ### Changed

@@ -9,9 +9,9 @@
 - ブランチ名: `apd/C-{NNN}/{short-description}`
 - mainブランチから作成し、サイクル完了時にmainへマージする
 
-### Phase 3: 並列実行時のgit worktree
+### Phase 2 (Build): 並列実行時のgit worktree
 
-Phase 3で複数タスクを並列実行する場合、git worktreeでタスクごとに独立した作業ディレクトリを確保する。
+Phase 2で複数タスクを並列実行する場合、git worktreeでタスクごとに独立した作業ディレクトリを確保する。
 
 #### worktreeの作成
 

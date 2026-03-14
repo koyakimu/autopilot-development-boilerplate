@@ -4,8 +4,8 @@
 
 実装前に「何ができるか」を可視化し、方向性のズレを早期に検出する。
 
-- Phase 1（Spec）: テキストで完成像の方向性を合意する
-- Phase 2（Contract）: 具体的な図・モック・ダイアグラムを生成し、Human Checkpoint 2でレビューする
+- Phase 1（Spec）: テキストで完成像の方向性を合意し、生成すべきプレビュー種別を定義する
+- Phase 2（Build）: 実装開始前に具体的な図・モック・ダイアグラムを生成する
 
 **プレビュー生成は必須である。** 最低1つ（アーキテクチャ図）はどのプロジェクトでも生成する。
 プレビューが存在しない場合、AI Checkpointで fail 判定となる。
@@ -24,7 +24,7 @@
 ## 成果物の配置
 
 ```
-docs/apd/contract/previews/C-{NNN}/
+docs/apd/previews/C-{NNN}/
 ├── architecture.md          ← Mermaid図を含むMarkdown
 ├── data-model.md
 ├── sequence-{name}.md
@@ -36,19 +36,19 @@ docs/apd/contract/previews/C-{NNN}/
 
 ## Phase 1での方向性合意
 
-Specの `ui_description` フィールド（テキスト記述）で完成像の方向性を記述する。
-ここでは詳細な図は不要。「どんな画面があるか」「どんなAPIか」をテキストで合意する。
+SpecのDeliverable Previewsセクションで、生成すべきプレビュー種別と方向性を記述する。
+「どんな画面があるか」「どんなAPIか」をテキストで合意する。
 
-## Phase 2での具体的プレビュー生成
+## Phase 2（Build）でのプレビュー生成
 
-Contract生成時に、プレビューも同時に生成する。
-- 生成するプレビューの種類はContractの中で宣言する
-- プレビューファイルはContractと同じバージョン管理に従う（イミュータブル、修正はAmendment）
+Build Phase の実装開始前に、Specの記述に基づいてプレビューを生成する。
+- プレビューファイルはサイクル単位で管理する（イミュータブル、修正はAmendment）
+- AI Checkpointでプレビューの存在を検証する
 
 ## Human Checkpoint 2でのレビュー
 
 Human Checkpoint 2は以下を含む:
-- 従来のAI Checkpointサマリー確認
+- AIチェックポイントサマリー確認
 - プレビューの目視レビュー（生成された場合）
 
 チェック項目:

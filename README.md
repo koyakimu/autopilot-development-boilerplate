@@ -53,8 +53,7 @@ Claude Codeでスラッシュコマンドを使って各フェーズを進めま
 /apd:cycle       → サイクル開始（トリガー判定）
 /apd:design      → Phase 0: Design文書作成
 /apd:spec        → Phase 1: Spec生成
-/apd:contract    → Phase 2: Contract生成（AI自律）
-/apd:execute     → Phase 3: 実装（AI自律）
+/apd:build       → Phase 2: Build（AI自律）
 /apd:status      → 進行状況の確認
 ```
 
@@ -65,7 +64,7 @@ Claude Codeでスラッシュコマンドを使って各フェーズを進めま
 | パス | 内容 |
 |------|------|
 | `.claude-plugin/plugin.json` | プラグインマニフェスト |
-| `skills/` | スラッシュコマンド（`/apd:init`, `/apd:design`, `/apd:spec`, `/apd:contract`, `/apd:execute`, `/apd:cycle`, `/apd:status`） |
+| `skills/` | スラッシュコマンド（`/apd:init`, `/apd:design`, `/apd:spec`, `/apd:build`, `/apd:cycle`, `/apd:status`） |
 | `agents/` | サブエージェント（`apd:checkpoint`, `apd:peer-review`） |
 | `hooks/` | フック設定（現在は空） |
 | `rules/apd/` | フレームワーク方針（`/apd:init` でプロジェクトにコピーされる） |

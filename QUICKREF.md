@@ -6,8 +6,7 @@
 |-------|---------|---------|--------|------------|
 | **0: Design** | 人間+AI | 対話でDesign文書作成 | `docs/apd/design/product-design.md` | Human CP 0（意図を決める） |
 | **1: Spec** | 人間+AI | AIドラフト→人間FB | `docs/apd/specs/*.md` + `docs/apd/decisions/*.md` | Human CP 1（仕様を決める） |
-| **2: Contract** | AI自律 | 技術仕様を自動生成 | `docs/apd/contract/*.md` | AI CP → 自動承認 |
-| **3: Execute** | AI自律 | 実装+テスト | `src/` + `tests/` | Peer Review + AI CP → Human CP 3（完成品確認） |
+| **2: Build** | AI自律 | プレビュー生成+実装+テスト | `docs/apd/previews/` + `src/` + `tests/` | Peer Review + AI CP → Human CP 2（完成品確認） |
 
 ## Skills 使用フロー
 
@@ -22,15 +21,12 @@
 
 ③ Phase 1
    └→ /apd:spec [full|add|bugfix] で Spec ドラフトを生成
-   └→ full モードでは MVP スコーピング → Future 機能を todo.md に記録
+   └→ full モードではスコーピング → スコープ外の機能を todo.md に記録
    └→ 確認依頼リストだけレビュー → フィードバック → 承認
 
 ④ Phase 2
-   └→ /apd:contract で AI が自律実行 + AIチェックポイント自動実行
-   └→ エスカレーション項目がなければ自動承認（人間の確認不要）
-
-⑤ Phase 3
-   └→ /apd:execute で AI が自律実行 + ピアレビュー + AIチェックポイント自動実行
+   └→ /apd:build で AI が自律実行
+   └→ プレビュー生成 → 実装 → ピアレビュー + AIチェックポイント自動実行
    └→ 完成品が意図通りか確認 → 承認
 
 いつでも /apd:status で現在の進行状況を確認できます
@@ -47,17 +43,14 @@
 ### Phase 0-1: 意図を決める
 - Design文書の対話的作成
 - Specドラフトの確認依頼箇所をレビュー
-- MVPスコープの判断
+- スコープの判断
 - Decision Record の判断を記入
 
-### Phase 2: 何もしない（通常時）
-- AI Checkpointが自動検証・自動承認
-- エスカレーション項目がある場合のみ判断を記入
-
-### Phase 3: 完成品を確認する
+### Phase 2: 完成品を確認する
 - 動く成果物が期待通りの動作をするか確認
 - Success Criteria を満たしているか確認
 - テスト結果サマリーを確認
+- エスカレーション項目がある場合のみ判断を記入
 - **コードレビューは求めない**
 
 ## 判断フロー
@@ -77,7 +70,7 @@ CLAUDE.md に書いてある？
 | Design | `docs/apd/design/product-design.md` | — |
 | Spec | `docs/apd/specs/{context}.v{N}.md` | `docs/apd/specs/order-management.v1.md` |
 | Amendment | `docs/apd/specs/{context}.v{N}.A-{NNN}.md` | `docs/apd/specs/order-management.v1.A-005.md` |
-| Contract | `docs/apd/contract/project-contract.v{N}.md` | `docs/apd/contract/project-contract.v1.md` |
+| Preview | `docs/apd/previews/C-{NNN}/` | `docs/apd/previews/C-001/architecture.md` |
 | Decision | `docs/apd/decisions/D-{NNN}.md` | `docs/apd/decisions/D-001.md` |
 | Cycle | `docs/apd/cycles/C-{NNN}.md` | `docs/apd/cycles/C-001.md` |
 | ToDo | `docs/apd/todo.md` | — |
