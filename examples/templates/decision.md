@@ -29,6 +29,12 @@ impact:
 
 {選択肢C（AIが提案）}
 
+## AI Recommendation
+
+{AIが推奨するOption}: {推奨理由の概要}
+
+> 最終決定はユーザーが行う。AIの推奨は参考情報である。
+
 ## Reason
 
 {理由（一言でよい）}
