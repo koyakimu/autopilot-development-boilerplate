@@ -67,7 +67,7 @@ Claude Codeでスラッシュコマンドを使って各フェーズを進めま
 | `.claude-plugin/plugin.json` | プラグインマニフェスト |
 | `skills/` | スラッシュコマンド（`/apd:init`, `/apd:design`, `/apd:spec`, `/apd:contract`, `/apd:execute`, `/apd:cycle`, `/apd:status`） |
 | `agents/` | サブエージェント（`apd:checkpoint`, `apd:peer-review`） |
-| `hooks/` | SessionStartフック（未初期化プロジェクトの検知） |
+| `hooks/` | フック設定（現在は空） |
 | `rules/apd/` | フレームワーク方針（`/apd:init` でプロジェクトにコピーされる） |
 | `templates/` | ドキュメントテンプレート |
 

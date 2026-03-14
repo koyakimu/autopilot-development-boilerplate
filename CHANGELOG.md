@@ -1,5 +1,10 @@
 # Changelog
 
+## [0.3.1] - 2026-03-08
+
+### Removed
+- **SessionStartフック (`check-init.sh`) を削除** — 未初期化プロジェクト検知フックを廃止し、`hooks/hooks.json` を空に変更
+
 ## [0.3.0] - 2026-03-08
 
 ### Changed
