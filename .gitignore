@@ -9,5 +9,6 @@ Thumbs.db
 .vscode/
 .idea/
 
-# Claude Code (local settings)
+# Claude Code (local settings and memory)
 .claude/settings.local.json
+.claude/projects/

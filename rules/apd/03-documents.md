@@ -20,11 +20,8 @@ project/
 │   │   ├── {context}.v{N}.md            ← イミュータブル
 │   │   ├── {context}.v{N}.A-{NNN}.md    ← Amendment
 │   │   └── _cross-context-scenarios.md
-│   ├── contract/
-│   │   ├── project-contract.v{N}.md     ← イミュータブル
-│   │   ├── project-contract.v{N}.C-{NNN}.md ← Amendment
-│   │   └── previews/
-│   │       └── C-{NNN}/                 ← 成果物プレビュー（図・モック等）
+│   ├── previews/
+│   │   └── C-{NNN}/                     ← 成果物プレビュー（図・モック等）
 │   ├── decisions/
 │   │   └── D-{NNN}.md                   ← 時系列で積み上がる
 │   └── cycles/
@@ -32,7 +29,7 @@ project/
 └── src/ + tests/
 ```
 
-## デフォルトのスペックフォーマット
+## デフォルトのSpecフォーマット
 
 全APDドキュメントはMarkdown形式（YAML frontmatter付き）で記述する。構造化メタデータはfrontmatter、自由記述はMarkdown本文に配置する。
 
@@ -73,6 +70,18 @@ decision_refs: []
 
 ### Dependencies
 - **{依存するコンテキスト}**: {依存理由}
+
+## Test Strategy
+
+### AC Coverage
+
+| AC ID | Test Type | Description |
+|-------|-----------|-------------|
+| AC-001 | unit / integration / e2e | {テスト内容} |
+
+## Deliverable Previews
+
+{生成すべきプレビューの種別と説明（該当する場合）}
 
 ## Notes
 

@@ -46,7 +46,7 @@ cp "${CLAUDE_PLUGIN_ROOT}/rules/apd/06-git-strategy.md" .claude/rules/apd/
 ### 3. ドキュメントディレクトリツリーの作成
 
 ```bash
-mkdir -p docs/apd/{design,specs,contract/previews,decisions,cycles}
+mkdir -p docs/apd/{design,specs,previews,decisions,cycles}
 ```
 
 さらに、ToDoファイルを初期化する（既に存在する場合はスキップ）:
@@ -70,7 +70,7 @@ fi
 作成されたディレクトリ:
   - docs/apd/design/     — Design文書
   - docs/apd/specs/      — Spec文書
-  - docs/apd/contract/   — Contract文書
+  - docs/apd/previews/   — 成果物プレビュー
   - docs/apd/decisions/  — Decision Records
   - docs/apd/cycles/     — サイクル定義
   - docs/apd/todo.md     — ToDoバックログ

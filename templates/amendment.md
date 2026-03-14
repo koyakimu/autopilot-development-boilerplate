@@ -33,9 +33,6 @@ reason: "{修正理由の概要}"
 ### Affected Specs
 - {OM-001}
 
-### Affected Contracts
-- {project-contract.v1}
-
 ### Affected Tests
 - {tests/unit/order-management.test.ts}
 

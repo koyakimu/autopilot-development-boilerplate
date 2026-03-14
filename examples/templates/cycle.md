@@ -14,10 +14,7 @@ phases:
   spec:
     status: "{skipped / completed}"
     checkpoint_at: null
-  contract:
-    status: "{skipped / completed}"
-    checkpoint_at: null
-  execute:
+  build:
     status: "{pending / in_progress / completed}"
     checkpoint_at: null
 ---
@@ -30,13 +27,6 @@ phases:
 - **Target**: {既存SPEC_ID} _(amendment の場合)_
 - **Amendment ID**: A-{NNN} _(amendment の場合)_
 - **Context**: {コンテキスト名}
-
-## Contract Changes
-
-### {new / amendment}
-
-- **Amendment ID**: C-{NNN} _(amendment の場合)_
-- **Change**: {変更概要}
 
 ## Decisions
 

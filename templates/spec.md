@@ -1,5 +1,5 @@
 <!-- Specテンプレート: YAML frontmatter + Markdown -->
-<!-- CLAUDE.mdのデフォルトスペックフォーマットに準拠 -->
+<!-- CLAUDE.mdのデフォルトSpecフォーマットに準拠 -->
 
 ---
 spec_id: "{CONTEXT_ID}-{NNN}"   # 例: OM-001
@@ -51,6 +51,21 @@ decision_refs: []
 
 ### Dependencies
 - **{依存するコンテキスト}**: {依存理由}
+
+## Test Strategy
+
+### AC Coverage
+
+| AC ID | Test Type | Description |
+|-------|-----------|-------------|
+| AC-001 | unit / integration / e2e | {テスト内容} |
+| AC-002 | unit / integration / e2e | {テスト内容} |
+| AC-003 | unit / integration / e2e | {テスト内容} |
+
+## Deliverable Previews
+
+{生成すべきプレビューの種別と説明（該当する場合）}
+{例: アーキテクチャ図、UIモック、API仕様書、データモデル図 など}
 
 ## Notes
 

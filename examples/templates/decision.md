@@ -3,7 +3,7 @@
 
 ---
 id: "D-{NNN}"
-phase: "{design / spec / contract / execute}"
+phase: "{design / spec / build}"
 cycle_ref: "C-{NNN}"
 date: "YYYY-MM-DD"
 decision: "{A / B / C}"
