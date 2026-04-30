@@ -54,7 +54,7 @@ Claude Codeでスラッシュコマンドを使って各フェーズを進めま
 /apd:design      → Phase 0: Design文書作成
 /apd:spec        → Phase 1: Spec生成
 /apd:build       → Phase 2: Build（AI自律）
-/apd:status      → 進行状況の確認
+/apd:progress    → 進行状況の確認
 ```
 
 詳細なフローは `QUICKREF.md` を参照してください。
@@ -64,7 +64,7 @@ Claude Codeでスラッシュコマンドを使って各フェーズを進めま
 | パス | 内容 |
 |------|------|
 | `.claude-plugin/plugin.json` | プラグインマニフェスト |
-| `skills/` | スラッシュコマンド（`/apd:init`, `/apd:design`, `/apd:spec`, `/apd:build`, `/apd:cycle`, `/apd:status`） |
+| `skills/` | スラッシュコマンド（`/apd:init`, `/apd:design`, `/apd:spec`, `/apd:build`, `/apd:cycle`, `/apd:progress`） |
 | `agents/` | サブエージェント（`apd:checkpoint`, `apd:peer-review`） |
 | `hooks/` | フック設定（現在は空） |
 | `rules/apd/` | フレームワーク方針（`/apd:init` でプロジェクトにコピーされる） |

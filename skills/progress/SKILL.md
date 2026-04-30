@@ -1,13 +1,13 @@
 ---
-name: status
+name: progress
 description: >
-  This skill should be used when the user asks to "show APD status",
-  "check project progress", "what phase am I in", "APDの状態を見せて",
+  This skill should be used when the user asks to "show APD progress",
+  "check project progress", "what phase am I in", "APDの進行状況を見せて",
   or wants to know the current state of an APD project.
 tools: ["Read", "Glob", "Grep", "Bash"]
 ---
 
-# APD Status — プロジェクト進行状況の表示
+# APD Progress — プロジェクト進行状況の表示
 
 APDフレームワークのプロジェクト状態を成果物の有無から判定し、次のアクションを提案する。
 
