@@ -1,54 +1,57 @@
-# APDドキュメント管理
+# APD ドキュメント管理
 
 ## イミュータブルなドキュメント管理
 
-- ドキュメントは上書きしない。修正はAmendment（差分ドキュメント）を発行する
+- ドキュメントは上書きしない。修正は Spec Patch（差分ドキュメント）を発行する
 - 全サイクルの軌跡が時系列で参照可能
-- AIの作業記録: Gitコミットログ + AI Checkpointレビューサマリー
+- AI の作業記録: Git コミットログ + PR 履歴
 - 人間の判断記録: Decision Record
 
-## ドキュメントツリー
+## ドキュメントツリー（フラット）
 
 ```
 project/
 ├── .claude/
-│   └── rules/apd/                        ← APDフレームワーク方針（自動ロード）
+│   └── rules/apd/                ← APD フレームワーク方針（自動ロード）
 ├── docs/apd/
-│   ├── design/
-│   │   └── product-design.md            ← 北極星（滅多に変わらない）
-│   ├── specs/
-│   │   ├── {context}.v{N}.md            ← イミュータブル
-│   │   ├── {context}.v{N}.A-{NNN}.md    ← Amendment
-│   │   └── _cross-context-scenarios.md
-│   ├── previews/
-│   │   └── C-{NNN}/                     ← 成果物プレビュー（図・モック等）
-│   ├── decisions/
-│   │   └── D-{NNN}.md                   ← 時系列で積み上がる
-│   └── cycles/
-│       ├── C-{NNN}.md                   ← サイクル定義（handoff/evidenceなしの場合）
-│       └── C-{NNN}/                     ← サイクル定義 + handoff/evidenceがある場合のディレクトリ形式
-│           ├── cycle.md
-│           ├── handoffs/
-│           │   └── H-{NNN}.md           ← コンテキストリセット時の引き継ぎ（追記のみ）
-│           └── evidence/
-│               └── {review-id}/{axis-id}/   ← 動作検証の証跡（スクショ・ログ等）
+│   ├── design.md                 ← 北極星（滅多に変わらない）
+│   ├── spec-{slug-or-issue}.md   ← Spec 本体
+│   ├── spec-{slug}-patch-{NNN}.md ← Spec の差分修正
+│   ├── decision-{NNN}.md         ← Decision Record（時系列で積み上がる）
+│   └── preview-{slug}/           ← 成果物プレビュー（図・モック等。任意）
 └── src/ + tests/
 ```
 
-サイクルが handoff や evidence を持つ場合は、`C-{NNN}.md` を `C-{NNN}/cycle.md` に置き換えてディレクトリ化する。持たないサイクルは従来どおり単一ファイルでよい。
+サブディレクトリは原則作らない。ファイル名の prefix で分類する。`docs/apd/` 配下のファイル数が増えて見通しが悪くなったら、その時点で構造を見直す。
 
-ディレクトリ化への移行はサイクル開始時にリーダーが先回りで行う必要はない。最初は単一ファイルで開始し、handoff または evidence が初めて発生する時点でリーダーがディレクトリ形式に変換する（既存 `C-{NNN}.md` を `C-{NNN}/cycle.md` にリネームし、空の `handoffs/` `evidence/` を作成）。
+### 命名の指針
 
-## デフォルトのSpecフォーマット
+- `spec-{...}.md` の `{...}` 部分は GitHub issue 番号があれば issue 番号、なければ短い slug を使う
+- Spec ID は frontmatter で別途定義する（`spec_id: "AUTH-042"` 等）
+- ファイル名は人間がディレクトリ一覧で意味を把握できる形にする
 
-全APDドキュメントはMarkdown形式（YAML frontmatter付き）で記述する。構造化メタデータはfrontmatter、自由記述はMarkdown本文に配置する。
+## 成果物の場所と参照
+
+| 種類 | 場所 | 備考 |
+|------|------|------|
+| Design | `docs/apd/design.md` | 全サイクル共通 |
+| Spec | `docs/apd/spec-{slug}.md` | サイクル単位 |
+| Spec Patch | `docs/apd/spec-{slug}-patch-{NNN}.md` | Spec の差分 |
+| Decision Record | `docs/apd/decision-{NNN}.md` | 時系列 |
+| 成果物プレビュー | `docs/apd/preview-{slug}/` | 任意 |
+| Handoff（試し方） | PR 本文の「試し方」セクション | ファイル化しない |
+| 進行中の todo | GitHub issue（あれば）or `docs/apd/todo.md`（フォールバック） | — |
+
+## Spec フォーマット
+
+Markdown 形式（YAML frontmatter付き）。
 
 ````markdown
 ---
 spec_id: "{CONTEXT_ID}-{NNN}"
 context: "{コンテキスト名}"
 version: 1
-cycle_ref: "C-{NNN}"
+issue_ref: "{GitHub issue 番号、なければ null}"
 title: ""
 decision_refs: []
 ---
@@ -68,7 +71,7 @@ decision_refs: []
 
 ## UI Description
 
-{モック or UI記述（該当する場合）}
+{モック or UI 記述（該当する場合）}
 
 ## Context Boundary
 
@@ -80,22 +83,6 @@ decision_refs: []
 
 ### Dependencies
 - **{依存するコンテキスト}**: {依存理由}
-
-## Evaluation Rubric
-
-Build Phaseの評価ループが反復で参照する**品質軸**の集合。**ACの再掲ではなく、ACで表現しきれない品質軸**（パフォーマンス、エラーハンドリング、UI完成度、アクセシビリティ、AI出力品質など、テスト化が困難な軸）を書く。
-
-> 三層の役割分担:
-> - **Acceptance Criteria（AC）**: 機能要件の Given/When/Then。「何が動けば合格か」
-> - **Test Strategy**: ACをテストでどうカバーするか。「テスト全パス = AC全充足」を保証する
-> - **Evaluation Rubric**: ACを超えた品質軸。「テスト全パスの上で、さらに何をもって良しとするか」を保証する。動作検証（実成果物を動かす）で確認する
-
-### R-001: {評価軸の名前}
-- **criteria**: {何を満たせば合格か}
-- **verification**:
-  - **method**: {どう検証するか — 例: Playwright MCPで実ブラウザ操作 / curl でAPI叩く / pytest 実行}
-  - **evidence_required**: [{保存すべき証跡 — 例: screenshot, operation_log, test_output}]
-  - **note**: {自動検証不可な場合の代替手段や前提条件}
 
 ## Test Strategy
 
@@ -114,47 +101,11 @@ Build Phaseの評価ループが反復で参照する**品質軸**の集合。**
 {追加の考慮事項、制約、前提など}
 ````
 
-## handoff documentのフォーマット
+## Handoff（試し方）の場所
 
-Build Phaseで長時間化したサイクルがコンテキストリセットを行う場合、リーダーエージェントが書き出す。追記のみ（H-001, H-002 と積み上がる）。新セッションは最新の handoff から再開する。
+Build が完了したら、PR 本文に「## 試し方」セクションを記載する。各 AC を人間が実機で検証できる手順として書く。
 
-**揮発する情報のみを書く**。サイクル目的・Spec/Designへの参照・Decision Records一覧などはサイクル定義（`cycle.md`）から辿れるので handoff には書かない。
-
-````markdown
----
-handoff_id: "H-{NNN}"
-cycle_id: "C-{NNN}"
-created_at: "YYYY-MM-DD"
-reason: "{なぜリセットしたか}"
-boundary: "{どの作業単位の完了境界で切ったか}"
-prev_handoff: "{H-{NNN-1} があれば。なければ null}"
----
-
-## Completed Work Units
-
-- [x] {完了済みの作業単位}
-
-## Remaining Tasks
-
-- [ ] {次セッションが取り組むタスク}
-
-## Open Questions
-
-{未解決の問い、エスカレーション候補、リーダーが保留にした判断}
-
-## Test Status
-
-- 通過: {状況}
-- 失敗中: {あれば具体的に}
-````
-
-新セッションの起動手順:
-
-1. `.claude/rules/apd/` 自動ロード
-2. CLAUDE.md 自動ロード
-3. 最新の handoff を読む
-4. `cycle_id` から サイクル定義（`cycle.md`）を読み、Spec / Design / Decision Records にたどる
-
-## evidence の保存
-
-Build Phaseの動作検証で残す証跡。配置先は `docs/apd/cycles/C-{NNN}/evidence/{review-id}/{axis-id}/`。ファイル名は内容を表す自由記述でよい（例: `screenshot-login.png`、`api-response.json`）。レビューサマリーから「軸ID → evidenceパス」を引けるようにする。
+ファイル化はしない。理由:
+- PR 本文は人間が次に見る場所
+- レビュー時に diff と並べて確認できる
+- 同じ機能の再 build 時に PR が新しく作られるので、Handoff も自然に最新になる

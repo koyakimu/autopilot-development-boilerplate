@@ -1,48 +1,22 @@
-# APD Git運用戦略
+# APD Git 運用戦略
 
 ## ブランチ戦略
 
-### サイクルブランチ
+各サイクルは専用ブランチで作業する。命名は以下のいずれかを推奨:
 
-各APDサイクルは専用ブランチで作業する:
+- GitHub issue がある: `feat/{issue#}-{slug}` / `fix/{issue#}-{slug}` / `chore/{slug}`
+- issue がない: `{type}/{slug}`（type は feat / fix / chore / refactor 等）
 
-- ブランチ名: `apd/C-{NNN}/{short-description}`
-- mainブランチから作成し、サイクル完了時にmainへマージする
+`main` から作成し、サイクル完了時に PR 経由でマージする。
 
-### Phase 2 (Build): 並列実行時のgit worktree
+## 並列実行と worktree
 
-Phase 2で複数タスクを並列実行する場合、git worktreeでタスクごとに独立した作業ディレクトリを確保する。
+Build フェーズで複数タスクを並列実行する場合は git worktree を使う。Claude Code の subagent は `isolation: "worktree"` でファイル隔離込みで起動できるので、APD 独自の worktree 管理スクリプトは持たない。
 
-#### worktreeの作成
-
-```bash
-# サイクルブランチからタスクブランチを作成
-git worktree add ../project-task-{N} -b apd/C-{NNN}/task-{N}
-```
-
-#### worktreeの統合
-
-全タスク完了後、サイクルブランチに統合する:
-
-```bash
-# サイクルブランチに各タスクブランチをマージ
-git checkout apd/C-{NNN}/{short-description}
-git merge apd/C-{NNN}/task-{N}
-```
-
-#### worktreeのクリーンアップ
-
-統合後にworktreeを削除する:
-
-```bash
-git worktree remove ../project-task-{N}
-```
-
-### 並列実行しない場合
-
-タスクが少数で並列化不要の場合は、サイクルブランチ上で直接作業してよい。worktreeは必須ではない。
+並列が不要な小規模サイクルでは worktree を作らずブランチ上で直接作業してよい。
 
 ## コミット規約
 
-- コミットメッセージにタスクIDを含める: `[C-{NNN}/task-{N}] 実装内容の説明`
-- 1タスク = 1つ以上のコミット（意味のある単位でコミットする）
+- コミットメッセージは Conventional Commits に準拠する（`feat:`, `fix:`, `refactor:` 等）
+- 関連する Spec ID / issue 番号を本文か footer に含める（例: `Refs: spec-42 / Closes: #42`）
+- 1 タスク = 1 つ以上のコミット（意味のある単位でコミットする）

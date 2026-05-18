@@ -2,62 +2,58 @@
 name: init
 description: >
   This skill should be used when the user asks to "initialize APD",
-  "set up APD", "start APD in this project", "APDを初期化",
-  "APDをセットアップ", or wants to set up the APD framework
-  in their project. Copies rules and creates the document directory tree.
+  "set up APD", "start APD in this project", "APD を初期化",
+  "APD をセットアップ", or wants to set up the APD framework
+  in their project. Copies rules and creates the document directory.
 tools: ["Read", "Write", "Glob", "Grep", "Bash"]
 ---
 
 # APD Init — プロジェクト初期化
 
-APDフレームワークをプロジェクトに初期化する。ルールファイルのコピーとドキュメントディレクトリツリーの作成を行う。
+APD フレームワークをプロジェクトに初期化する。ルールファイルのコピーとドキュメントディレクトリの作成を行う。
 
 ## 手順
 
 ### 1. 既存状態の確認
 
 以下を確認する:
+
 - `.claude/rules/apd/` が既に存在するか
 - `docs/apd/` が既に存在するか
+- `gh auth status` が成功するか（GitHub issue を一次 backlog として使うか判定）
 
-既に存在する場合はユーザーに確認する:
-- 「既にAPDが初期化されています。ルールファイルを最新版に更新しますか？」
+既に APD が初期化されている場合は「ルールファイルを最新版に更新しますか？」とユーザーに確認する。
 
 ### 2. ルールファイルのコピー
 
-プラグインに同梱されているルールファイルをプロジェクトにコピーする。
-
-以下のBashコマンドを実行する:
+プラグインに同梱されているルールファイルをプロジェクトにコピーする:
 
 ```bash
-# ルールディレクトリの作成
 mkdir -p .claude/rules/apd
-
-# プラグインからルールファイルをコピー
-cp "${CLAUDE_PLUGIN_ROOT}/rules/apd/00-principles.md" .claude/rules/apd/
-cp "${CLAUDE_PLUGIN_ROOT}/rules/apd/01-phases.md" .claude/rules/apd/
-cp "${CLAUDE_PLUGIN_ROOT}/rules/apd/02-cycle-flow.md" .claude/rules/apd/
-cp "${CLAUDE_PLUGIN_ROOT}/rules/apd/03-documents.md" .claude/rules/apd/
-cp "${CLAUDE_PLUGIN_ROOT}/rules/apd/04-testing.md" .claude/rules/apd/
-cp "${CLAUDE_PLUGIN_ROOT}/rules/apd/05-deliverable-preview.md" .claude/rules/apd/
-cp "${CLAUDE_PLUGIN_ROOT}/rules/apd/06-git-strategy.md" .claude/rules/apd/
+cp "${CLAUDE_PLUGIN_ROOT}/rules/apd/"*.md .claude/rules/apd/
 ```
 
-### 3. ドキュメントディレクトリツリーの作成
+### 3. ドキュメントディレクトリの作成
+
+フラット構造で `docs/apd/` を作成する。サブディレクトリは作らない（必要になった時点で作る）:
 
 ```bash
-mkdir -p docs/apd/{design,specs,previews,decisions,cycles}
+mkdir -p docs/apd
 ```
 
-さらに、ToDoファイルを初期化する（既に存在する場合はスキップ）:
+### 4. backlog の初期化
+
+`gh auth status` が成功した環境では GitHub issue を一次 backlog として使う方針なので `docs/apd/todo.md` は作らない。`gh` が使えない環境ではフォールバックとして `todo.md` を作成する:
 
 ```bash
-if [ ! -f docs/apd/todo.md ]; then
-  cp "${CLAUDE_PLUGIN_ROOT}/templates/todo.md" docs/apd/todo.md
+if ! gh auth status >/dev/null 2>&1; then
+  if [ ! -f docs/apd/todo.md ]; then
+    cp "${CLAUDE_PLUGIN_ROOT}/templates/todo.md" docs/apd/todo.md
+  fi
 fi
 ```
 
-### 4. 完了メッセージ
+### 5. 完了メッセージ
 
 以下を出力する:
 
@@ -65,22 +61,26 @@ fi
 ## APD 初期化完了
 
 コピーされたもの:
-  - .claude/rules/apd/  — APDフレームワーク方針（Claude Codeが自動ロード）
+  - .claude/rules/apd/  — APD フレームワーク方針（Claude Code が自動ロード）
 
-作成されたディレクトリ:
-  - docs/apd/design/     — Design文書
-  - docs/apd/specs/      — Spec文書
-  - docs/apd/previews/   — 成果物プレビュー
-  - docs/apd/decisions/  — Decision Records
-  - docs/apd/cycles/     — サイクル定義
-  - docs/apd/todo.md     — ToDoバックログ
+作成されたもの:
+  - docs/apd/           — APD ドキュメントの置き場所（フラット構造）
+  {gh が使えない場合: }
+  - docs/apd/todo.md    — ToDo backlog（フォールバック。gh が使える場合は GitHub issue を使う）
+
+backlog の運用:
+  {gh 検出時: }
+  - GitHub issue を一次 backlog として使う
+  - 起票時に apd:todo / apd:scope-out などのラベルを付けて分類する
+  {gh 不在時: }
+  - docs/apd/todo.md に append-only で追記する
 
 次のステップ:
-  /apd:cycle でサイクルを開始（または /apd:design でDesign文書を作成）
+  /apd:design で Design 文書を作成（既にあれば /apd:spec へ）
 ```
 
 ## 注意事項
 
-- ルールファイルは `.claude/rules/apd/` にコピーされ、Claude Codeが自動でコンテキストにロードする
-- `docs/apd/` は空のディレクトリツリーが作成される（既存ファイルは上書きしない）
-- 次回のセッションからAPDフレームワークのルールが自動適用される
+- ルールファイルは `.claude/rules/apd/` にコピーされ、Claude Code が自動でコンテキストにロードする
+- `docs/apd/` はフラット構造。サブディレクトリは「必要になったら作る」原則
+- 次回のセッションから APD フレームワークのルールが自動適用される

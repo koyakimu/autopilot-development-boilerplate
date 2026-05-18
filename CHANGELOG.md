@@ -1,5 +1,31 @@
 # Changelog
 
+## [0.7.0] - 2026-05-18
+
+### Changed
+- **用語**: `Amendment` → `Spec Patch` に変更（差分ドキュメントの呼称）
+- **ディレクトリ構造**: `docs/apd/` をフラット化。`design/` `specs/` `decisions/` `cycles/` `previews/` サブディレクトリを廃止し、prefix 命名で分類する方針へ（`design.md`, `spec-{slug}.md`, `decision-{NNN}.md`, `preview-{slug}/`）
+- **rules/apd/*.md** を新方針に全面改訂:
+  - `Human Checkpoint 2` → `Acceptance` に用語変更
+  - `AI Checkpoint` 機構を廃止し、Build の収束判定を Claude Code の `/goal` 評価器に委譲
+  - handoff document（コンテキストリセット引き継ぎ用ファイル）の規定を削除
+  - 3 点突合（評価軸 × evidence × toolcall）の規定を削除
+  - サイクル別ディレクトリ構造（`cycles/C-{NNN}/{handoffs,evidence}/`）を廃止
+  - サイクル ID（C-{NNN}）採番規定を削除、issue 番号や slug を推奨
+  - ブランチ命名規約を `apd/C-{NNN}/*` から Conventional Commits 系（`feat/{issue#}-{slug}` 等）へ
+  - 並列実行は Claude Code の subagent / agent teams / `/batch` を使う旨を明記
+- **Handoff の場所**: ファイル化せず PR 本文の「## 試し方」セクションに記載する方針に変更
+- **skills/init**: フラット構造で `docs/apd/` のみ作成。`gh` 検出時は `todo.md` をスキップして GitHub issue を一次 backlog として案内
+- **skills/design**: 出力先を `docs/apd/design/product-design.md` → `docs/apd/design.md` に変更、`Human Checkpoint 0` 用語を削除
+- **skills/spec**: パスを新フラット構造に対応、`Amendment` → `Spec Patch` に変更、最終案内を `/apd:build` → `/apd:start` に変更、issue 番号からの Spec 生成サポート追加（`gh issue view`）
+
+### Removed
+- `templates/amendment.md` → `templates/spec-patch.md` にリネーム
+
+### Notes
+- 旧スキル `/apd:build` `/apd:cycle` `/apd:progress` および `apd:checkpoint` agent は本 PR では削除せず、PR-3 でまとめて整理する
+- `README.md` `QUICKREF.md` `APD-FRAMEWORK.md` の改訂も PR-3 で実施（旧スキル削除と同時の方が記述に一貫性が出るため）
+
 ## [0.6.0] - 2026-05-18
 
 ### Added
