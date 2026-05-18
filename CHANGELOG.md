@@ -1,5 +1,16 @@
 # Changelog
 
+## [1.0.2] - 2026-05-19
+
+### Added
+- `skills/migrate/` — `/apd:migrate` スキル。AI 主導で 0.x → 1.x マイグレーションを行う。frontmatter 解釈・本文参照置換・手動レビュー仕分けを AI 判断で実施。`--dry-run` 引数対応
+- `scripts/verify-migration.sh` — マイグレーション結果の検証スクリプト。旧サブディレクトリ・旧命名・旧 frontmatter・旧パス参照の残存を機械的にチェック。書き換えは一切行わない (チェックのみ)
+- `MIGRATION.md` — 旧→新マイグレーションガイド。AI 主導の `/apd:migrate` を主、`verify-migration.sh` を検証手段として位置づけ。手順・ロールバック・トラブルシューティングを記載
+
+### Notes
+- 一括 shell スクリプトでの自動移行ではなく **AI に判断させる** 方針を採用 (frontmatter の値・本文中の参照・命名規約に合わないファイルの扱いは文脈判断が要るため)
+- スクリプトは検証専門に責務分離
+
 ## [1.0.1] - 2026-05-19
 
 ### Changed
