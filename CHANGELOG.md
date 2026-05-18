@@ -1,5 +1,10 @@
 # Changelog
 
+## [0.6.0] - 2026-05-18
+
+### Added
+- `skills/start/` — `/apd:start` スキルを追加。Spec の Acceptance Criteria から Claude Code の `/goal` コマンド向け condition を組み立て、自律 build ループを `/goal` に委譲する薄いラッパー。既存の `/apd:build` と並存させた状態で新方針 (`/goal` 中心化) の動作を実環境で検証するプロトタイプ
+
 ## [0.4.0] - 2026-03-14
 
 ### Changed
