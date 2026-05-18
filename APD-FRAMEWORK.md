@@ -1,520 +1,222 @@
 # Autopilot Development (APD)
 
-> **人間は意思決定だけ、AIが自律で完走する**
+> **人間は意思決定だけ、AI が自律で完走する**
 
-Autopilot Development（APD）は、AIエージェントが自律的にソフトウェアを開発し、人間はCheckpoint（確認ポイント）でのみ意思決定を注入する開発フレームワークである。自動運転のメタファーに基づき、人間が目的地とルートを決め、AIがAutopilotで走る。
+Autopilot Development（APD）は、AI エージェントが自律的にソフトウェアを開発し、人間が「意図を決める」と「動く成果物を受け入れる」の2点のみで関わる開発フレームワークである。自動運転のメタファーに基づき、人間が目的地とルートを決め、AI が Autopilot で走り、到着時に人間が「ここで合っている」と確認する。
 
 ---
 
 ## 設計原則
 
-### AIに任せられる部分を限りなく増やす
+### AI に任せられる部分を限りなく増やす
 
-AIフェーズの途中では人間の介入をゼロにする。モック・ユーザーストーリー・テストを含め、人間が意図した通りの機能実装がAIで完走する。人間の介入が必要で実装が止まるということを避ける。
+AI フェーズの途中では人間の介入をゼロにする。モック・ユーザーストーリー・テストを含め、人間が意図した通りの機能実装が AI で完走する。人間の介入が必要で実装が止まることを避ける。
 
-### 「人間の時間」と「AIの時間」の分離
+### 「人間の時間」と「AI の時間」の分離
 
-- **Phase 0〜1（Design〜Spec）= 人間の時間**: 人間とAIが対話し、意思決定を注入する
-- **Phase 2（Build）= AIの時間**: AI自律実行。人間はエスカレーション対応と完成品確認のみ
+- **Intent / Spec = 人間の時間**: 対話し、意思決定を注入する
+- **Build = AI の時間**: 自律実行
+- **Acceptance = 人間の時間（軽量）**: 動く成果物を実機で触り、受け入れる
 
-### 人間は意図を決め、完成品を確認する
+### 人間は意図を決め、動く成果物を受け入れる
 
-「How to Kill the Code Review」の思想を取り入れ、人間の役割を明確に定義する:
+- **上流（Intent / Spec）**: 意図を決める — プロダクトビジョン、仕様、技術選定を判断する
+- **下流（Acceptance）**: 動く成果物が意図通りかを実機で確認する
+- **コードレビューは求めない** — 品質検証は AI 自身のループ（`/goal` 評価器、subagent、テスト）が担保する
 
-- **上流（Phase 0-1）**: 意図を決める — プロダクトビジョン、仕様、技術選定を判断する
-- **下流（Phase 2）**: 完成品を確認する — 動く成果物が意図通りかを確認する
-- **コードレビューは求めない** — 品質検証はAI Checkpoint・Peer Review・テストで担保する
+### 薄い規約レイヤに留まる
 
-```mermaid
-graph LR
-    subgraph "人間の時間"
-        A[Phase 0: Design] -->|HC0: 意図を決める| B[Phase 1: Spec]
-    end
-    B -->|HC1: 仕様を決める| C
-    subgraph "AIの時間"
-        C[Phase 2: Build] -->|Peer Review + AI CP| D[HC2: 完成品を確認する]
-    end
-```
+APD は **Design / Spec / Patch / Decision の規約と最小限のスキル** だけを提供する。Claude Code 本体に存在する機能は再実装しない:
 
-### スコーピングによる段階的開発
-
-Design文書で完成形のビジョンを描きつつ、各サイクルではスコープを絞って実装する:
-
-```mermaid
-graph TD
-    A[Design: 完成形のビジョン] --> B[Spec: スコーピング]
-    B -->|今回のスコープ| C[Build]
-    B -->|スコープ外| D[ToDo に記録]
-    C --> E[完成品確認]
-    D -->|次のサイクル| F["/apd:cycle で取り組む"]
-```
-
-- Design文書は完成形を描く（北極星）
-- Specフェーズで全機能を今回のスコープ / スコープ外に分類
-- スコープ外の機能はToDoとして記録し、次のサイクルで取り組む
-
-### Human Checkpoint / AI Checkpoint の2層構造
-
-- **Human Checkpoint**: 人間が意図を決める場（Phase 0-1）と、完成品を確認する場（Phase 2）に置く
-- **AI Checkpoint**: 品質を機械的に検証する。Build Phase内で実装完了後に実行
-- 人間はコードを読むことを求められない。完成品が意図通りに動くかを確認する
-- エスカレーションが必要な場合のみ、人間に判断を仰ぐ
-
-### AI Checkpointのパターン
-
-| パターン | 役割 | 強み |
-|---|---|---|
-| ピアレビュー（コンテキスト横断） | 別コンテキスト担当エージェントがレビュー | 仕様の曖昧さ・コンテキスト間整合性の発見 |
-| 対立的検証（Adversarial Testing） | 積極的に壊しにいく視点でレビュー | 想定外の障害ケース・境界条件の発見 |
-| 専任レビューエージェント | 実装に関与しないレビュー専任 | Exit Criteriaの機械的チェック |
-| 組み合わせ | ピア + 対立的検証 + 専任 | 全方位の品質担保 |
-
-### イミュータブルなドキュメント管理
-
-- ドキュメントは上書きしない。修正が必要な場合はAmendment（差分ドキュメント）を発行する
-- 全サイクルの軌跡が時系列で参照可能
-- AIの作業記録: Gitコミットログ + AI Checkpointレビューサマリー（自動生成）
-- 人間の判断記録: Decision Record（第一級成果物）
-
-### 判断のエスカレーション
-
-フレームワーク全体を通じて、以下の判断フローに従う。
-
-1. CLAUDE.mdに明記されている → それに従う
-2. CLAUDE.mdに書かれていない → リーダーエージェントに判断を仰ぐ
-3. リーダーエージェントが判断できない → Human Checkpointにエスカレーション
-
-判断に迷ったら自己判断せずリーダーに聞く。聞きすぎるほうが暴走するより安全。頻出の判断はCLAUDE.mdに昇格させて自律範囲を広げていく。
+| やりたいこと | 使う Claude Code 機能 |
+|------|-----------|
+| Build の自律ループ | `/goal`（session-scoped、condition 達成までターン継続） |
+| サイドタスク分離 | subagent（`isolation: "worktree"` でファイル隔離可） |
+| 複数セッション協調 | agent teams |
+| 大規模並列化 | `/batch` |
+| in-session todo | `TaskCreate` |
+| 累積知識 | auto memory |
+| ファイル変更追跡・rewind | checkpointing |
+| GitHub 連携 | `gh` CLI + GitHub Actions + routines |
+| backlog | GitHub issue（一次）/ `docs/apd/todo.md`（フォールバック） |
 
 ---
 
-## フェーズ構成
-
-```mermaid
-graph TD
-    P0["Phase 0: Design<br/>人間 + AI 対話"] -->|"Human Checkpoint 0<br/>意図を決める"| P1
-    P1["Phase 1: Spec<br/>AIドラフト + 人間FB"] -->|"Human Checkpoint 1<br/>仕様を決める"| P2
-    P2["Phase 2: Build<br/>AI自律・並列実行"] -->|"Peer Review + AI Checkpoint"| HC2
-    HC2["Human Checkpoint 2<br/>完成品確認"]
-
-    style P0 fill:#e1f5fe
-    style P1 fill:#e1f5fe
-    style P2 fill:#fff3e0
-    style HC2 fill:#e8f5e9
-```
+## フェーズ
 
 ```
-Phase 0: Design ── 人間 + AI 対話（並列化しない）
-  成果物: プロジェクトデザイン文書（北極星）
-  性質: 対話的・創造的
-  ─────────────── Human Checkpoint 0 ───────────────
+Intent     ── 人間 + AI 対話
+  成果物: Design 文書（北極星、滅多に変わらない）
 
-Phase 1: Spec ── AIドラフト + 人間フィードバック（並列化しない）
-  成果物: Spec集（AC + 評価軸rubric + verification + テスト戦略 + 成果物プレビュー記述）+ Decision Records（技術選定含む）
-  性質: AIが叩き台を出し、人間が方向修正
-  ─────────────── Human Checkpoint 1 ───────────────
-  ここから先、人間は意図を決めない。完成品を確認するだけ
+Spec       ── AI ドラフト + 人間レビュー
+  成果物: Spec（AC + 検証方針 + 成果物プレビュー記述）+ Decision Records
 
-Phase 2: Build ── AI自律・並列実行
-  成果物: 成果物プレビュー + 実装 + テスト全パス
-  Peer Review（対立的検証含む）+ AI Checkpoint
-  ─────────────── Human Checkpoint 2（完成品確認）──────
-  動く成果物が意図通りか確認する。コードレビューは求めない。
+Build      ── AI 自律
+  成果物: 実装 + テスト全パス + PR（試し方記載済み）
+  実装: Claude Code の /goal に委譲
+
+Acceptance ── 人間
+  人間が PR の「試し方」に沿って実機で触り、受け入れ判断する
 ```
+
+### Intent (Design)
+
+プロダクトのビジョン・誰のための何か・スコープ外を Amazon PR/FAQ 形式で文書化する。「北極星」として全サイクル共通で参照される。
+
+- 場所: `docs/apd/design.md`
+- スキル: `/apd:design`
+- 進め方: ヒアリング → ドラフト → 信頼度明示 → フィードバックループ
+- 制約: 技術選定を含めない、What Not を最低 5 項目、FAQ 最低 10 問
+
+### Spec
+
+Design を実装可能な単位に分割し、各機能について受け入れ条件（AC）と検証方針を定める。
+
+- 場所: `docs/apd/spec-{slug}.md`（`{slug}` は issue 番号や短い名前）
+- スキル: `/apd:spec [full|add|bugfix]`
+- 3 モード:
+  - **full**: 初回フル Spec 生成（Design スコーピング込み）
+  - **add**: 機能追加 Spec（既存 Design 参照）
+  - **bugfix**: バグ修正用の Spec Patch
+- 各 Spec の構成: User Story、Acceptance Criteria（Given/When/Then）、UI 記述、Context Boundary、Test Strategy（AC Coverage）、Deliverable Previews
+
+### Build
+
+Spec から実装する。Claude Code の `/goal` に処理を委譲し、APD は condition 組み立て役に徹する。
+
+- スキル: `/apd:start <spec ファイル>`
+- 動作:
+  1. Spec を読み、AC・テスト戦略・成果物プレビュー要件を抽出
+  2. `/goal` 用 condition を組み立てる（AC 全充足 + テスト pass + PR に「試し方」記載）
+  3. ユーザーに condition を提示
+  4. ユーザーが `/goal` を実行 → 評価器が毎ターン後に達成判定
+- 並列化: 必要なら subagent / agent teams / `/batch` を選ぶ（APD は強制しない）
+- 収束判定: 評価器は会話に surface された情報のみ判定するため、AI が turn 内でテスト実行ログ・PR diff を会話に出すことが前提
+
+### Acceptance
+
+PR の「試し方」セクションに沿って人間が実機で触る。
+
+- OK → PR merge → issue 自動 close（GitHub 環境）
+- NG → コメントで返す → 次サイクル（Spec Patch、Decision Record 追加など）
+- AI が自動検証できない AC（実機限定、人間の主観評価等）は Acceptance で判定する
 
 ---
 
-## Phase 0: Design
+## ドキュメント管理
 
-### 目的
+### イミュータブル原則
 
-プロダクトの存在理由を定義する。「北極星」であり、毎回作り直すものではない。
+ドキュメントは上書きしない。修正は **Spec Patch（差分ドキュメント）** を発行する。全サイクルの軌跡が時系列で参照可能になる。
 
-### Design文書の構造
+### フラット構造
 
-Amazon PR/FAQ を参考にした構成:
+```
+docs/apd/
+├── design.md                        ← 北極星
+├── spec-{slug}.md                   ← Spec 本体
+├── spec-{slug}-patch-{NNN}.md       ← Spec 差分
+├── decision-{NNN}.md                ← Decision Record（時系列で積み上がる）
+└── preview-{slug}/                  ← 成果物プレビュー（任意）
+```
 
-- **Who**: 誰のためのプロダクトか
-- **Why**: なぜ今これを作るのか
-- **What**: 何ができるようになるか（ユーザー視点）
-- **What Not**: 何をやらないか（スコープ外の明示）← 特に重要
-- **FAQ**: 想定される疑問と回答
-- **Success Criteria**: 何をもって成功とするか
+サブディレクトリは作らない。ファイル名 prefix で分類する。ファイル数が増えて見通しが悪くなったら、その時点で構造を見直す。
 
-### ガードレール
+### Handoff（試し方）はファイル化しない
 
-- **技術選定はDesign文書に含めない** — Phase 1以降の責務
-- ユーザーから技術スタック情報が提供された場合は「Phase 1で技術選定として扱います」と伝える
-- セクション構成はテンプレートに厳密に従い、独自セクション（例: ホスティング構成）を追加しない
+Build が完了したら PR 本文の「## 試し方」セクションに記載する。理由:
+- PR 本文は人間が次に見る場所
+- レビュー時に diff と並べて確認できる
+- 同じ機能の再 build で PR が新しく作られると Handoff も自然に最新化
 
-### 進め方
+### Backlog
 
-人間とAIが対話的にDesign文書を作成する。このフェーズは創造的な作業であり、並列化しない。
+`gh auth status` が成功する環境では **GitHub issue を一次 backlog** として使う。1 issue = 1 サイクルが基本。issue 番号と Spec / PR が相互リンクされることでサイクルの trail が自動で残る。
 
-### Design文書に戻るとき
-
-枠を超える変更が来たときだけDesignに戻る。通常の機能追加やバグ修正ではDesignには触れない。
+`gh` が使えない環境では `docs/apd/todo.md` をフォールバックとして使う（append-only）。
 
 ---
 
-## Phase 1: Spec
+## エスカレーション
 
-### 目的
+判断が発生したとき:
 
-Design文書に基づき、実装可能な詳細仕様を定義する。
+1. **CLAUDE.md に明記されている** → それに従う
+2. **CLAUDE.md に書かれていない** → リーダーエージェントが判断する
+3. **リーダーエージェントが判断できない** → Acceptance として人間にエスカレーション
 
-### スコーピング（fullモード）
+頻出の判断は CLAUDE.md に昇格させて自律範囲を広げていく。
 
-新規プロダクト開発時は、Design文書の全機能から今回のサイクルのスコープを決定する:
+### Build 中のエスカレーションポリシー（デフォルト）
 
-```mermaid
-graph LR
-    A["Design: What セクションの全機能"] --> B{スコーピング}
-    B -->|今回のスコープ| C["Spec生成"]
-    B -->|スコープ外| D["docs/apd/todo.md に記録"]
-```
-
-1. 全機能を一覧化し、今回のスコープ / スコープ外に分類する提案を行う
-2. ユーザーの判断を仰ぎ、スコープを確定する
-3. スコープ外の機能は `docs/apd/todo.md` にToDoとして記録する
-4. スコープ内の機能についてのみSpecを生成する
-
-### 進め方
-
-1. 人間がサイクルのトリガーを与える（機能概要、バグ報告等）
-2. AIがDesign文書 + 既存Specを読み、Specのドラフトを一気に生成する
-3. AIはExit Criteriaの充足状況サマリーと、自信のない箇所（「ここは推論で埋めました、確認してください」）を提示する
-4. 人間がドラフトを見て「ここが違う」「これを追加」とフィードバック
-5. 数往復で収束
-6. Human Checkpoint 1で承認
-
-人間はドラフト全体を精読する必要はなく、AIが提示したサマリーと確認依頼箇所だけ見ればよい。
-
-### Exit Criteria
-
-- 全機能にSpecが存在する
-- 各Specに以下が含まれる:
-  - ユーザーストーリー（誰が・何を・なぜ）
-  - 受け入れ条件（Given/When/Then形式）
-  - モック or UI記述（該当する場合）
-  - コンテキスト境界の定義
-  - **評価軸rubric**（Build Phaseの評価ループで使う基準。各軸に `verification.method` と `evidence_required` を含む。自動検証不可な軸は `note` で代替手段を明記）
-  - テスト戦略（AC Coverageテーブル）
-  - 成果物プレビュー記述（該当する場合）
-- コンテキスト間のデータフローが特定されている
-- Decision Recordが作成されている（判断が発生した場合）
-- 技術選定Decision Recordsに全てユーザー判断が記録されている
-
-### Specフォーマット
-
-フレームワークとしてフォーマットは固定しない。Exit Criteriaを満たせばよい。ボイラープレートのCLAUDE.mdにデフォルトのフォーマット指定を含め、プロジェクトごとにカスタマイズする。
-
----
-
-## Phase 2: Build
-
-### 目的
-
-承認済みSpecに基づき、AIが自律的にプレビュー生成・実装・テストを行う。
-
-### BDDテスト自動生成
-
-SpecのGiven/When/Then形式の受け入れ条件（AC）から直接テストコードを生成する。ACがそのままテストケースになる。
-
-### 進め方
-
-```mermaid
-graph TD
-    A[プレビュー生成] --> B[タスク計画]
-    B --> C[実装 + テスト]
-    C --> D[Peer Review]
-    D -->|approve| E[結合検証]
-    D -->|request_changes| C
-    E --> F[AI Checkpoint]
-    F -->|approve| G[Human Checkpoint 2]
-    F -->|request_changes| C
-```
-
-1. **成果物プレビュー生成**: Specの記述に基づき、アーキテクチャ図・UIモック等を生成（最低1つ必須）
-2. **タスク計画**: Specの要件を分析し、実装タスクを内部的に計画する（ドキュメントとしては永続化しない）
-3. **実装**: Specの ACに基づき実装・テストを実行
-4. **Peer Review**: クロスコンテキストレビュー
-5. **AI Checkpoint**: Exit Criteriaの機械的チェック
-6. **Human Checkpoint 2**: 完成品確認
-
-### 並列実行の原則
-
-1. コンテキスト間の境界はSpecで定義されていること
-2. 並列実行する各エージェントは、他コンテキストの実装に直接依存せずに開発・テストできること
-3. 全エージェントの実装完了後、結合検証を行うこと
-
-並列化の単位、独立性の確保方法、結合検証の方法はリーダーエージェントが決定する。
-
-### AI Checkpoint
-
-2段階の自動検証を行う:
-
-1. **Peer Review（対立的検証含む）**: 別コンテキストの視点 + 積極的に壊しにいく視点でレビュー
-2. **専任Checkpoint**: Exit Criteriaの機械的チェック
-
-### 評価ループと動作検証
-
-評価軸（rubric）に沿ってPeer Review / 専任Checkpointが反復し、**実成果物を動作させて検証する**（コード読みだけで済ませない）。evidenceをファイル保存し、リーダーが収束判定前に**評価軸 × evidence × 実toolcall記録の3点突合**で未検証軸を弾く。
-
-**テストはACのカバーを保証し、動作検証はrubric軸を保証する。** 両者は別レイヤで併存する。
-
-詳細運用（リセット境界、handoff、フォールバック、worktreeとの両立など）は `rules/apd/01-phases.md` を参照。
-
-### Human Checkpoint 2（完成品確認）
-
-人間に求めるのは「動く成果物が意図通りか」の確認であり、コードレビューではない。
-
-- [ ] 成果物プレビュー（UI/CLI/API等）が期待通りの動作をするか
-- [ ] Design文書の Success Criteria を満たしているか
-- [ ] 全テストがパスしているか（サマリーのみ確認）
-
-**コードを読むかどうかは人間の判断に任せる。フレームワークとしては求めない。**
-
-### Exit Criteria
-
-- Specに定義された全要件が実装されている
-- テストが全パスしている（AC全充足を保証）
-- 全rubric軸が verification 済みで evidence が保存されている（rubric軸の品質を保証）
-- AI Checkpointレビューが完了している
-- 成果物プレビューが生成されている
-
-### テスト戦略
-
-フレームワークとしてテスト戦略は固定しない。「テストが全パスしていること」のみ必須。何をどうテストするかはSpecのTest StrategyセクションとCLAUDE.mdのプロジェクト固有の方針で定義する。
-
----
-
-## ToDo管理
-
-サイクル横断でアイデアやバックログを記録する仕組み。
-
-### 特徴
-
-- **append-only**: 項目は追加・status更新のみ。削除しない（イミュータブル思想）
-- **どのフェーズからでも追記OK**: Design対話中でもBuild中でも、思いついた時に記録
-- **status管理**: `open` → `done`（resolved_by でどのサイクルで解決したか記録）
-
-### ToDo記録の流れ
-
-```mermaid
-graph TD
-    A["Phase 0: Design対話中<br/>スコープ外のアイデア"] -->|追記| T["docs/apd/todo.md"]
-    B["Phase 1: Spec生成中<br/>スコープ外の機能"] -->|追記| T
-    C["Phase 2: Build中<br/>発見した改善点"] -->|追記| T
-    T -->|"次のサイクル開始時<br/>/apd:cycle で参照"| D["未着手ToDoを提示<br/>次の作業を提案"]
-```
-
-### ファイル形式
-
-`docs/apd/todo.md` に以下の形式で蓄積する:
-
-```markdown
-## T-001: {タイトル}
-- **status**: open / done
-- **起源**: Phase 0 Design対話中 / Phase 1 Spec生成中 / Phase 2 Build中
-- **経緯**: {なぜこのToDoが生まれたか。対話や作業の中での文脈}
-- **resolved_by**: null / C-002
-```
-
----
-
-## サイクル型統一フロー
-
-すべての変更を「サイクル」として統一し、トリガーの種類によって通過するフェーズが決まる。修正は新しいサイクルで行う（出戻りではなく前進）。
-
-```mermaid
-graph TD
-    T["サイクルのトリガー<br/>（人間が起点を与える）"]
-    T -->|新プロダクト / 大きな方向転換| F["Design → Spec → Build<br/>（フルサイクル）"]
-    T -->|新機能追加| A["Spec → Build"]
-    T -->|バグ修正 / 小さな改善| B["Spec Amendment → Build"]
-    T -->|技術的変更| C["Decision Record → Build"]
-    T -->|ToDo消化| D["todo.md から選択 → 適切なフローへ"]
-```
-
-### サイクル定義の例
-
-```yaml
-# cycle/C-003.md
-cycle_id: C-003
-trigger: "feature_addition"
-title: "注文の一括出荷機能"
-design_ref: "docs/apd/design/product-design.md"
-
-spec_changes:
-  - type: "new_spec"
-    id: OM-003
-    context: order-management
-  - type: "amendment"
-    target: OM-001
-    amendment_id: A-005
-
-decisions:
-  - D-012: "一括選択の上限は100件。パフォーマンス観点。"
-  - D-013: "一括出荷時のエラーは個別スキップ方式。UX観点。"
-```
-
-### バグのトリアージ（AI Checkpoint委譲）
-
-バグ報告・テスト失敗が来たとき、AIがまず原因を判定する:
-
-- **Spec起因**（仕様漏れ・仕様の曖昧さ）→ 人間にエスカレーション。Spec Amendmentサイクルへ
-- **Build起因**（実装がSpecと合っていない）→ AI自律で修正。人間に上げない
-
----
-
-## Decision Record
-
-人間の意思決定を記録する軽量フォーマット。「なぜこの仕様になったか」「なぜこの案を却下したか」を残す。
-
-```yaml
-# docs/apd/decisions/D-001.md
-id: D-001
-phase: spec
-date: 2025-07-10
-context: "注文ダッシュボードのフィルタ方式"
-options:
-  - "A: サーバーサイドフィルタ（AIが提案）"
-  - "B: クライアントサイドフィルタ（AIが提案）"
-decision: "A"
-reason: "データ量が10万件超になる想定。人間判断。"
-impact: [OM-001]
-```
-
-- AIが選択肢を生成し、人間が選んだ結果と理由だけ記録する
-- 理由は一言でよい
-- 修正サイクルでは新しいDecision Recordが追加される（上書きしない）
-
----
-
-## AI Checkpointエスカレーションポリシー
-
-デフォルト: AI Checkpointで完結。以下に該当する場合のみ人間に確認する。
-
-### 人間への確認が必要
-
-- 新しいビジネスルール（既存Specにないドメインロジック）
+**Acceptance で人間に渡す:**
+- 新しいビジネスルール（既存 Spec にないドメインロジック）
 - 外部システムとのインターフェース変更
 - セキュリティ・認証に関わる変更
 - データモデルの破壊的変更
 - パフォーマンス要件の緩和
 
-### AI Checkpoint完結
-
-- UI調整（Design文書の範囲内）
+**Build 内で完結してよい:**
+- UI 調整（Design の範囲内）
 - 既存ビジネスルール内のバリエーション追加
 - リファクタリング（振る舞い変更なし）
 - テストカバレッジ補強
 - ドキュメント文言修正
 
-このポリシーはプロジェクトのCLAUDE.mdに記載する。プロジェクト固有の追加・変更がある場合はCLAUDE.mdを編集し、変更理由はDecision Recordに残す。
+---
+
+## サイクル型統一フロー
+
+すべての変更を「サイクル」として統一する。修正は新しいサイクルで行う（出戻りではなく前進）。
+
+| トリガー | フロー |
+|---------|--------|
+| 新プロダクト / 大きな方向転換 | Intent → Spec → Build → Acceptance |
+| 新機能追加 | Spec（既存 Design 参照）→ Build → Acceptance |
+| バグ修正 / 小さな改善 | Spec Patch → Build → Acceptance |
+| 技術的変更（リファクタ等）| Decision Record → Build → Acceptance |
+
+### バグのトリアージ
+
+バグ報告・テスト失敗が来たとき、AI がまず原因を判定する:
+
+- **Spec 起因**（仕様漏れ・曖昧さ）→ 人間にエスカレーション → Spec Patch サイクルへ
+- **Build 起因**（実装が Spec と合っていない）→ AI 自律で修正 → 人間に上げない
 
 ---
 
-## リーダーエージェント
+## Git 運用
 
-### 位置づけ
+### ブランチ
 
-プロジェクト全体のコンテキストを持ち、フレームワークのルールとプロジェクトのDesign/Specを踏まえて判断を下すエージェント。Phase 2において、各作業エージェントの上位に立つ。
+- GitHub issue がある: `feat/{issue#}-{slug}` / `fix/{issue#}-{slug}` / `chore/{slug}`
+- issue がない: `{type}/{slug}`
 
-### 責務
+`main` から作成し、サイクル完了時に PR 経由でマージする。
 
-- フレームワークに規定がない判断を行う
-- 自身で判断できない場合はHuman Checkpointにエスカレーションする
-- Build Phaseの実行計画を策定する（並列化の単位、境界の表現方法、結合検証の方法等）
-- テスト品質を評価し、Specの受け入れ条件との対応が不十分な場合は差し戻す
+### 並列実行
 
----
+Build で複数タスクを並列実行する場合は git worktree を使う。Claude Code の subagent は `isolation: "worktree"` でファイル隔離込みで起動できるので、APD 独自の worktree 管理スクリプトは持たない。
 
-## ドキュメントツリー
+### コミット規約
 
-```
-project/
-├── .claude/
-│   └── rules/apd/                          ← APDフレームワーク方針（自動ロード）
-├── docs/apd/
-│   ├── design/
-│   │   └── product-design.md               ← 北極星（滅多に変わらない）
-│   ├── specs/
-│   │   ├── order-management.v1.md          ← イミュータブル
-│   │   ├── order-management.v1.A-005.md    ← Amendment
-│   │   ├── _cross-context-scenarios.md
-│   │   └── ...
-│   ├── previews/
-│   │   └── C-{NNN}/                        ← 成果物プレビュー
-│   ├── decisions/
-│   │   ├── D-001.md
-│   │   ├── D-002.md
-│   │   └── ...                             ← 時系列で積み上がる
-│   ├── cycles/
-│   │   ├── C-001.md                        ← 初回フルサイクル（単純な場合）
-│   │   ├── C-002/                          ← handoff/evidenceを持つサイクルはディレクトリ化
-│   │   │   ├── cycle.md
-│   │   │   ├── handoffs/
-│   │   │   │   └── H-001.md                ← コンテキストリセット時の引き継ぎ
-│   │   │   └── evidence/
-│   │   │       └── {review-id}/{axis-id}/  ← 動作検証の証跡
-│   │   └── ...
-│   └── todo.md                             ← ToDoバックログ（append-only）
-└── src/ + tests/                           ← Git管理
-```
+- Conventional Commits 準拠（`feat:`, `fix:`, `refactor:` 等）
+- 関連する Spec ID / issue 番号を本文か footer に含める（例: `Refs: spec-42 / Closes: #42`）
 
 ---
 
-## 設定ファイルの構成
+## テスト方針
 
-APDフレームワークの設定は、Claude Codeの `.claude/rules/` 機能を活用して2層に分離する。
+- テストが全パスしていることが必須
+- 何をどうテストするかは Spec の Test Strategy セクションと AC Coverage テーブルで定義する
+- 自動検証できない品質軸（実機限定、人間の主観評価等）は Acceptance で人間が確認する
 
-### フレームワーク方針（`.claude/rules/apd/`）
+### Build の収束は `/goal` 評価器が判定する
 
-`.claude/rules/` に置かれた `.md` ファイルはClaude Codeが自動的にプロジェクトメモリとして読み込む。フレームワーク方針をここに格納することで、`CLAUDE.md` を圧迫せず、既存プロジェクトへの導入も容易になる。
+`/goal` 評価器は会話に surface された情報のみで判定するため、AI は turn 内で:
 
-```
-.claude/rules/apd/
-├── 00-principles.md       ← 基本原則・エスカレーションフロー
-├── 01-phases.md           ← フェーズ定義・Checkpoint原則・エスカレーションポリシー
-├── 02-cycle-flow.md       ← サイクル型統一フロー・バグトリアージ
-├── 03-documents.md        ← ドキュメント管理・ツリー・Specフォーマット
-├── 04-testing.md          ← テスト方針
-├── 05-deliverable-preview.md ← 成果物プレビュー
-└── 06-git-strategy.md     ← Git戦略
-```
+- テスト実行ログを出力する
+- 実装変更内容を要約する
+- PR diff や PR 本文を surface する
 
-### プロジェクト固有設定（`CLAUDE.md`）
-
-プロジェクトごとにカスタマイズする設定は従来通り `CLAUDE.md` に記述する。既存の `CLAUDE.md` がある場合はそこに追記する形で導入できる。
-
-- エスカレーションポリシーの追加・変更
-- Specフォーマットのカスタマイズ
-- テスト戦略の詳細
-- 技術スタック固有のルール
-- コーディング規約
-
-CLAUDE.mdの変更はGitコミットログで追跡する。ポリシー変更の「なぜ」はDecision Recordに残す。
-
----
-
-## ハーネスの再評価
-
-APDフレームワーク自体が「AIエージェントを動かすためのハーネス」である以上、Claudeモデルの進化に応じて構造の簡素化を継続的に再評価する。
-
-**見直しのリズム:** モデルのメジャーバージョン更新（例: Claude X.Y → X.(Y+1)）のたびに、以下の観点で各規定の必要性を再評価する。
-
-| 規定 | 見直しの問い |
-|---|---|
-| Phase分割（0/1/2） | 新モデルの計画能力で Phase 0 と 1 の境界は依然として必要か |
-| 並列実行とworktree | コンテキスト管理が改善されたら単一セッションで足りるか |
-| コンテキストリセット運用 | context anxiety が解消されたら handoff document は不要か |
-| 評価ループの反復 | 自己評価バイアスが減ったら Peer Review / 専任Checkpoint の二段構成は冗長か |
-| 3点突合 | toolcall 偽装の心配が下がったら2点突合 or evidenceのみで十分か |
-
-過剰な構造はモデルの能力を活かしきれず、形骸化を招く。新規追加には常に「いま本当に必要か」を問う。**現時点で取り込んだ規定は、現行モデルで顕在化している以下の事象への対処として残す**。これらが解消されたら段階的に削減する。
-
-- **context anxiety**: 長時間タスクでコンテキストが膨らむと、モデルが過剰に慎重になり進行が止まる現象。コンテキストリセットと handoff document が対処
-- **自己評価バイアス**: モデルが自身の生成物を肯定的に評価する傾向。Peer Review / 専任Checkpoint の独立化と「実装エージェントによる自己検証の禁止」が対処
-- **嘘つき動作検証**: 実際にツールを呼ばずに「動作検証しました」と申告する動作。3点突合（評価軸 × evidence × 実toolcall記録）が対処
+これにより評価器が AC 達成・テスト pass・Handoff 記載を判定できる。

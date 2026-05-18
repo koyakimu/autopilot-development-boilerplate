@@ -1,20 +1,20 @@
 ---
 name: peer-review
 description: |
-  APDフレームワークのクロスコンテキストピアレビューエージェント。Phase 2（Build）の実装を
-  隣接コンテキストの視点からレビューし、Spec準拠・テスト品質を検証する。
+  APD フレームワークのクロスコンテキストピアレビューエージェント。Build 中の実装を
+  隣接コンテキストの視点からレビューし、Spec 準拠・テスト品質を検証する。
 
   <example>
-  Context: /apd:buildであるコンテキストの実装が完了した
+  Context: Build 中にあるコンテキストの実装が一段落した
   user: "注文管理コンテキストの実装をレビューして"
-  assistant: "apd:peer-reviewエージェントに委譲してクロスコンテキストレビューを実行します"
-  <commentary>隣接コンテキストの視点からSpec準拠を検証する</commentary>
+  assistant: "apd:peer-review エージェントに委譲してクロスコンテキストレビューを実行します"
+  <commentary>隣接コンテキストの視点から Spec 準拠を検証する</commentary>
   </example>
 
   <example>
-  Context: Phase 2で複数のコンテキストの実装が完了した
+  Context: 複数のコンテキストの実装が完了した
   user: "実装のピアレビューをして"
-  assistant: "apd:peer-reviewエージェントに委譲して各コンテキスト間の整合性を検証します"
+  assistant: "apd:peer-review エージェントに委譲して各コンテキスト間の整合性を検証します"
   <commentary>クロスコンテキストの視点から統合ポイントを検証する</commentary>
   </example>
 tools: [Read, Glob, Grep, Bash]
@@ -35,8 +35,8 @@ color: cyan
 
 - **対象コンテキストの実装コード** — `src/` 配下の関連ファイル
 - **対象コンテキストのテストコード** — `tests/` 配下の関連ファイル
-- **対応Spec** — `docs/apd/specs/` ディレクトリから関連するSpecファイル
-- **クロスコンテキストシナリオ** — `docs/apd/specs/_cross-context-scenarios.md`（存在する場合）
+- **対応 Spec** — `docs/apd/spec-*.md` から関連する Spec ファイル
+- **クロスコンテキストシナリオ** — `docs/apd/spec-cross-context.md`（存在する場合）
 
 ### 2. レビュー観点
 
@@ -49,7 +49,7 @@ color: cyan
 
 #### B. コンテキスト間整合性（Cross-Context Integration）
 - 自分の担当コンテキストとの接続ポイントに問題がないか
-- データフローが_cross-context-scenarios.mdと整合しているか
+- データフローが `spec-cross-context.md` と整合しているか
 - 境界を超えた暗黙の依存関係がないか
 
 #### C. テスト品質（Test Quality）

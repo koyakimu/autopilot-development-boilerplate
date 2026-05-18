@@ -95,7 +95,7 @@ warning は提示するだけで、ユーザーの判断を待つ。skill 側で
 
 - 自前のループ実装 — `/goal` が担当
 - peer-review の起動 — Build 中に必要なら Claude が `apd:peer-review` subagent を呼ぶ。skill 側で強制しない
-- AI checkpoint 機械検証 — `/goal` の評価器が収束を判定する
+- 機械的な品質ゲート — `/goal` の評価器が会話に surface された情報から収束を判定する
 - Handoff doc のファイル生成 — PR 本文に書く方針なのでファイルは作らない
 - サイクル定義の更新 — GH issue + PR の link で trail が残る前提
 

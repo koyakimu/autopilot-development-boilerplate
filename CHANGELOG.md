@@ -1,5 +1,29 @@
 # Changelog
 
+## [1.0.0] - 2026-05-18
+
+### Removed (Breaking)
+- `skills/build/` — `/apd:build` スキルを廃止（Build フェーズは `/apd:start` + Claude Code `/goal` に移行）
+- `skills/cycle/` — `/apd:cycle` スキルを廃止（サイクル開始は会話 + `gh issue create` で十分）
+- `skills/progress/` — `/apd:progress` スキルを廃止（`gh issue list` + `ls docs/apd/` + `/memory` で代替）
+- `agents/checkpoint.md` — `apd:checkpoint` agent を廃止（Build の収束判定は `/goal` 評価器が担当）
+- `templates/cycle.md` `examples/templates/cycle.md` — サイクル定義ファイルが廃止のためテンプレも削除
+
+### Changed
+- **README.md** を新方針で書き直し（4 スキル構成、Acceptance 用語、Claude Code 機能との分担を明記）
+- **QUICKREF.md** を新方針で書き直し（Intent / Spec / Build / Acceptance の 4 フェーズ早見表、フラットファイル命名）
+- **APD-FRAMEWORK.md** を全面改訂（薄い規約レイヤとして Claude Code 機能に委譲する設計原則を明記）
+- **agents/peer-review.md** のパス参照を新フラット構造に更新
+
+### Migration Notes
+旧 APD を使っているプロジェクト:
+
+1. `/apd:build` → `/apd:start <spec ファイル>` に置き換え + `/goal` で実行
+2. `/apd:cycle` → 会話で「新機能追加します」等で十分、issue があれば `gh issue create`
+3. `/apd:progress` → `gh issue list` + `ls docs/apd/` + `/memory`
+4. `apd:checkpoint` agent → 不要（`/goal` 評価器が担う）
+5. ドキュメントツリーは PR-1 で flat 化済み（`docs/apd/{sub}/` → `docs/apd/*.md`）
+
 ## [0.7.0] - 2026-05-18
 
 ### Changed
