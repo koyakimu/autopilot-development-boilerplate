@@ -43,6 +43,18 @@ Read で Spec ファイル全体を読む。以下を抽出する:
 - `CLAUDE.md` — テスト実行コマンド、コーディング規約の手がかり
 - `docs/apd/design.md` — Success Criteria の確認
 
+#### テスト実行コマンドの解決順序
+
+1. `CLAUDE.md` に test コマンドが明記されている → それを採用
+2. プロジェクト直下の設定ファイルから推測 (優先順):
+   - `package.json` の `scripts.test` → `npm test`
+   - `Package.swift` または `*.xcodeproj` → `xcodebuild test -scheme <scheme>`
+   - `pyproject.toml` / `pytest.ini` / `setup.cfg[tool:pytest]` → `pytest`
+   - `Cargo.toml` → `cargo test`
+   - `go.mod` → `go test ./...`
+   - `Gemfile` + `spec/` → `bundle exec rspec`
+3. いずれも検出できない → condition に「プロジェクトの慣習に従ってテストを実行する」と書き、AI に判断を委ねる
+
 ### 3. /goal condition を組み立てる
 
 以下の構造で condition を作る (4000字以内に収める):
@@ -57,14 +69,20 @@ Read で Spec ファイル全体を読む。以下を抽出する:
 ...
 
 【検証】
-- すべての自動テストが pass する ({CLAUDE.mdから検出したテストコマンド、例: npm test})
+- すべての自動テストが pass する ({解決したテストコマンド、例: npm test})
 - ユニット/結合テストの実装が AC Coverage テーブルの方針に沿っている
 - 既存テストを壊していない
+- **テスト実行ログ・PR diff・実装変更内容を turn の出力に surface する**
+  (`/goal` 評価器はツールを呼ばないため、会話に現れた情報からのみ判定する)
 
 【Handoff (人間に渡す準備)】
-- PR を作成または更新し、PR 本文に「## 試し方」セクションを記載する
+- `gh pr list --head $(git branch --show-current)` で既存 PR を確認し、
+  なければ `gh pr create`、あれば `gh pr edit` で PR 本文を更新する
+- PR 本文に「## 試し方」セクションを記載する
 - 「## 試し方」には各 AC を人間が実機で検証できる手順を記述する
   (例: 「Simulator起動 → ログイン画面で X を入力 → Y が表示される (AC-001)」)
+- **AI が自動検証できない AC** (実機限定、Apple ID 必須、外部サービス連携等) は
+  「実装と試し方ドキュメント化をもって完了とみなす」と condition に明記する
 - PR 本文の最後に `Spec: docs/apd/{spec_path}` のリンクを記載する
 
 【制約】
