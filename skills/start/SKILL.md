@@ -13,129 +13,94 @@ tools: ["Read", "Glob", "Grep", "Bash"]
 
 このスキルは APD の Phase 2 (Build) のエントリーポイント。**自前で実装ループを回さず、Claude Code の `/goal` 機能に処理を委譲する**。
 
-`/goal` は v2.1.139+ で導入された session-scoped な「条件達成までターン継続」機能。haiku ベースの評価器が毎ターン後に条件達成を判定する。APD はこの評価器に渡す condition の組み立て役に徹する。
+`/goal` は session-scoped な「条件達成までターン継続」機能。小型評価モデルが毎ターン後に condition 達成を判定する。APD はこの評価器に渡す condition の組み立て役に徹する。
 
-## 手順
+## 責務
 
-### 1. 対象 Spec を特定する
+このスキルは以下だけを行う:
 
-ユーザーが引数で指定:
-- `spec-{issue#}.md` のような file path
-- issue 番号のみ (`123`)
-- 何も指定なし → `docs/apd/` を Glob して候補を提示
+1. 対象 Spec を特定する
+2. Spec を読み、condition の素材を抽出する
+3. condition を組み立ててユーザーに提示する
+4. 必要なら事前チェックの warning を伝える
 
-優先順位:
-1. ユーザーの明示指定
-2. 直近に更新された `docs/apd/spec-*.md` ファイル
-3. ユーザーに確認
+`/goal` 自体の送信はユーザーアクションに残す (slash command は user input channel からのみ発火する)。
 
-### 2. Spec を読み込み、condition 構築素材を抽出する
+## 1. 対象 Spec を特定する
 
-Read で Spec ファイル全体を読む。以下を抽出する:
+ユーザーの引数を優先する。引数がなければ `docs/apd/` を Glob して候補を提示する。
+Spec ファイルの命名規約はプロジェクトのルール (`.claude/rules/apd/`) に従う。
 
-- **spec_id** (frontmatter)
-- **title** (frontmatter)
-- **Acceptance Criteria セクション** の AC ID 一覧 (AC-001, AC-002, ...)
-- **Test Strategy / AC Coverage テーブル** から想定テスト種別
-- **Deliverable Previews** セクション (該当する場合)
+## 2. Spec を読み、素材を抽出する
 
-並行して以下も読む (存在する場合のみ):
-- `CLAUDE.md` — テスト実行コマンド、コーディング規約の手がかり
-- `docs/apd/design.md` — Success Criteria の確認
+Read で Spec ファイル全体を読む。以下を condition 構築用に抽出する:
 
-#### テスト実行コマンドの解決順序
+- spec_id, title (frontmatter)
+- Acceptance Criteria の AC ID と Given/When/Then の要約
+- AC Coverage テーブルから想定テスト種別
+- Deliverable Previews の有無
+- Decision Records への参照
 
-1. `CLAUDE.md` に test コマンドが明記されている → それを採用
-2. プロジェクト直下の設定ファイルから推測 (優先順):
-   - `package.json` の `scripts.test` → `npm test`
-   - `Package.swift` または `*.xcodeproj` → `xcodebuild test -scheme <scheme>`
-   - `pyproject.toml` / `pytest.ini` / `setup.cfg[tool:pytest]` → `pytest`
-   - `Cargo.toml` → `cargo test`
-   - `go.mod` → `go test ./...`
-   - `Gemfile` + `spec/` → `bundle exec rspec`
-3. いずれも検出できない → condition に「プロジェクトの慣習に従ってテストを実行する」と書き、AI に判断を委ねる
+副次的に `CLAUDE.md` と `docs/apd/design.md` を読み、テストの実行方法・コーディング規約・Success Criteria の手がかりを得る。**テストコマンドや実行手順を skill 側で推測する fallback table は持たない。AI がプロジェクトを観察して判断する**。
 
-### 3. /goal condition を組み立てる
+## 3. condition を組み立てる
 
-以下の構造で condition を作る (4000字以内に収める):
+condition は `/goal` の制約 (4000 字以内) に収めつつ、以下の責務カテゴリを必ず含める。具体の文言は Spec とプロジェクトに合わせて AI が組み立てる:
 
-```
-{spec_id}: {title} を完了する。具体的に:
+### 受け入れ条件
+- Spec の全 AC を ID 付きで列挙する
+- Given/When/Then の要約を添える
 
-【受け入れ条件 (すべて満たす)】
-- AC-001: {Given/When/Then 要約}
-- AC-002: {同上}
-- AC-003: {同上}
-...
-
-【検証】
-- すべての自動テストが pass する ({解決したテストコマンド、例: npm test})
-- ユニット/結合テストの実装が AC Coverage テーブルの方針に沿っている
+### 検証
+- 自動テストが pass する (テストコマンドはプロジェクトから AI が解決)
+- AC Coverage テーブルの方針に沿ったテストが実装されている
 - 既存テストを壊していない
-- **テスト実行ログ・PR diff・実装変更内容を turn の出力に surface する**
+- **テスト実行ログ・実装変更内容・成果物の確認結果を turn の出力に surface する**
   (`/goal` 評価器はツールを呼ばないため、会話に現れた情報からのみ判定する)
 
-【Handoff (人間に渡す準備)】
-- `gh pr list --head $(git branch --show-current)` で既存 PR を確認し、
-  なければ `gh pr create`、あれば `gh pr edit` で PR 本文を更新する
-- PR 本文に「## 試し方」セクションを記載する
-- 「## 試し方」には各 AC を人間が実機で検証できる手順を記述する
-  (例: 「Simulator起動 → ログイン画面で X を入力 → Y が表示される (AC-001)」)
-- **AI が自動検証できない AC** (実機限定、Apple ID 必須、外部サービス連携等) は
-  「実装と試し方ドキュメント化をもって完了とみなす」と condition に明記する
-- PR 本文の最後に `Spec: docs/apd/{spec_path}` のリンクを記載する
+### Handoff (人間に渡す準備)
+- 該当する PR を作成または更新し、PR 本文に「試し方」セクションを記載する
+- 「試し方」は各 AC を人間が実機で検証できる手順として書く
+- AI が自動検証できない AC (実機限定・外部サービス連携・人間の主観評価等) は、実装と試し方ドキュメント化をもって完了とみなす旨を明記する
+- Spec ファイルへの参照を PR 本文に含める
 
-【制約】
+### 制約
 - Spec に書かれていない新ビジネスルールを足さない
 - Spec 範囲外のリファクタリングをしない
+- Decision Records があればそれに従う
 - 判断に迷ったら Human Checkpoint にエスカレーション
-- 同一論点を 3 ラウンド連続で議論したら一旦停止して報告
-```
+- 同一論点でループしたら停止して報告
+- 過大な turn / token 消費を防ぐ上限を condition に含める
 
-condition は箇条書きで具体的に書く。**「Claude の出力に現れる証拠で判定できる」表現**にすること。`/goal` の評価器はツールを呼ばないため、Claude が turn 内で test 実行ログや PR diff を surface する必要がある。
+### condition 書き方の原則
 
-### 4. ユーザーに condition を提示する
+- **会話に現れる証拠で評価器が判定できる**表現にする。評価器はツールを呼ばないので、AI が turn 内で結果を surface することが前提
+- 抽象的すぎる表現 ("良い品質で実装") は評価器が永遠に no を返すので避ける
+- Spec の表現を可能な限り引用し、独自解釈を加えない
 
-組み立てた condition を以下の形式で出力する:
+## 4. ユーザーに提示する
 
-````markdown
-## /apd:start — Build 準備完了
+組み立てた condition と、それを `/goal` で送信するための文面をユーザーに渡す。並列化 (agent team) や worktree 隔離が必要な場合はその選択肢も補足として伝える。
 
-**Spec**: `docs/apd/spec-XXX.md` ({title})
+## 5. 事前チェックの warning (任意)
 
-以下の `/goal` コマンドを次のメッセージで送信してください:
+condition 提示の前に、以下が観測されたら warning する:
 
-```
-/goal {組み立てた condition}
-```
+- Spec の `decision_refs` に対応する Decision Record が見つからない
+- Spec に `Deliverable Previews` が記載されているが該当成果物が未生成
 
-### 補足
-- このコマンドを送ると Claude Code が自律 build ループに入ります
-- 進捗確認: `/goal` (引数なし) で現在の状態を表示
-- 中断: `/goal clear`
-- 並列化したい場合: コマンド送信前に **agent team** を要求してください (例: "3 つの teammate で並列に進めて")
-- worktree 隔離が必要な場合: コマンド送信前に worktree で session を起動してください
-````
-
-**重要**: スキル自身は `/goal` を実行できない (slash command は user input チャネルから発火する)。スキルは condition を組み立てて提示するところまで責任を持ち、`/goal` 送信は user action として残す。
-
-### 5. (Optional) Decision Records / Previews の事前チェック
-
-condition 提示の前に、以下を warning として伝える:
-
-- Spec に `decision_refs` が記載されているが `docs/apd/decision-*.md` が存在しない → 「Decision Record が見つかりません。Spec の前提と矛盾しないか確認してください」
-- Spec に `Deliverable Previews` セクションがあるが該当ファイルが未生成 → 「Preview が未生成です。/goal condition に preview 生成を含めるか確認してください」
+warning は提示するだけで、ユーザーの判断を待つ。skill 側で自動修復しない。
 
 ## このスキルが意図的にやらないこと
 
-- **自前のループ実装** — `/goal` が担当
-- **peer-review の起動** — Build 中に必要なら Claude が `apd:peer-review` subagent を呼ぶ。スキル側で強制しない
-- **AI checkpoint 機械検証** — `/goal` の評価器が収束を判定する
-- **Handoff doc のファイル生成** — PR 本文に書く方針なのでファイルは作らない
-- **サイクル定義の更新** — GH issue が一次。issue 番号と PR を link することで自動で trail が残る
+- 自前のループ実装 — `/goal` が担当
+- peer-review の起動 — Build 中に必要なら Claude が `apd:peer-review` subagent を呼ぶ。skill 側で強制しない
+- AI checkpoint 機械検証 — `/goal` の評価器が収束を判定する
+- Handoff doc のファイル生成 — PR 本文に書く方針なのでファイルは作らない
+- サイクル定義の更新 — GH issue + PR の link で trail が残る前提
 
-## トラブルシューティング
+## 失敗時の手がかり
 
-- **`/goal` が無いと言われる** → Claude Code v2.1.139 以上が必要。`claude --version` で確認
-- **評価器が永遠に no を返す** → condition が抽象的すぎる可能性。AC を引用するなど具体化する
-- **token 消費が膨大** → condition に turn 上限を含める (例: 「20 turn 以内に達成、超過時は中断して報告」)
+- 評価器が永遠に no を返す → condition が抽象的すぎる。AC の文言を引用するなど具体化する
+- token 消費が膨大 → condition に turn / 時間の上限を含める
+- `/goal` が利用できない → Claude Code のバージョンが要件を満たしているか確認する (要件は公式ドキュメント参照)
