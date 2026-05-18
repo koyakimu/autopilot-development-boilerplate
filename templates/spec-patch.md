@@ -1,12 +1,12 @@
-<!-- Amendment（差分ドキュメント）テンプレート -->
+<!-- Spec Patch（差分ドキュメント）テンプレート -->
 <!-- 既存ドキュメントを上書きせず、差分として発行する -->
 
 ---
-amendment_id: "A-{NNN}"
+patch_id: "P-{NNN}"
 target_document: "{修正対象のドキュメントパス}"
-cycle_ref: "C-{NNN}"
+issue_ref: "{関連 GitHub issue 番号、なければ null}"
 created_at: "YYYY-MM-DDTHH:MM:SSZ"
-decision_ref: "D-{NNN}"
+decision_ref: "{関連 Decision Record、なければ null}"
 reason: "{修正理由の概要}"
 ---
 
@@ -31,11 +31,11 @@ reason: "{修正理由の概要}"
 ## Impact
 
 ### Affected Specs
-- {OM-001}
+- {spec-{issue#}.md}
 
 ### Affected Tests
-- {tests/unit/order-management.test.ts}
+- {tests/unit/{name}.test.ts}
 
-### Cascade Amendment Required
+### Cascade Patch Required
 
-{true / false — true の場合、他ドキュメントのAmendmentも必要}
+{true / false — true の場合、他ドキュメントの patch も必要}
