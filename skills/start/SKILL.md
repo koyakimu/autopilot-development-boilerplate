@@ -1,12 +1,11 @@
 ---
 name: start
 description: >
-  This skill should be used when the user asks to "start build",
-  "start implementation", "実装を開始", "ビルドを開始",
-  "/apd:start", or wants to begin autonomous build from an
-  approved Spec. Constructs a /goal condition from the Spec's
-  Acceptance Criteria and hands off to Claude Code's /goal loop.
-tools: ["Read", "Glob", "Grep", "Bash"]
+  Builds a /goal condition from a Spec's Acceptance Criteria, then
+  hands off Build to Claude Code's /goal loop. Use when the user
+  asks to start build, begin implementation, or run /apd:start
+  ("実装を開始", "ビルドを開始").
+argument-hint: "<spec-file or issue#>"
 ---
 
 # APD Start — Spec から /goal condition を組み立てて自律 build に入る

@@ -87,4 +87,5 @@ docs/apd/
 | in-session todo | `TaskCreate` |
 | 累積知識 | auto memory |
 | backlog | GitHub issue（`gh` 環境）or `docs/apd/todo.md` |
+| GitHub 連携 | ローカルの `gh` CLI で十分。GitHub Actions/routines は任意 |
 | Handoff（試し方） | PR 本文 |

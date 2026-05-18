@@ -1,11 +1,10 @@
 ---
 name: design
 description: >
-  This skill should be used when the user asks to "create a design document",
-  "design a product", "Design 文書を作成", "プロダクトを設計", or wants to
-  create or refine the product Design document (the north star) through
-  interactive dialogue.
-tools: ["Read", "Write", "Glob", "Grep"]
+  Creates the product Design document (the north star) through
+  interactive dialogue. Writes to `docs/apd/design.md`. Use when
+  the user asks to create a design document, design a product,
+  or run /apd:design ("Design 文書を作成", "プロダクトを設計").
 ---
 
 # APD Design — Design 文書の対話的作成

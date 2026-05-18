@@ -1,11 +1,11 @@
 ---
 name: init
 description: >
-  This skill should be used when the user asks to "initialize APD",
-  "set up APD", "start APD in this project", "APD を初期化",
-  "APD をセットアップ", or wants to set up the APD framework
-  in their project. Copies rules and creates the document directory.
-tools: ["Read", "Write", "Glob", "Grep", "Bash"]
+  Initializes APD in this project. Copies framework rules to
+  `.claude/rules/apd/` and creates the `docs/apd/` document
+  directory. Use when the user asks to initialize APD, set up
+  APD, or run /apd:init ("APD を初期化", "APD をセットアップ").
+disable-model-invocation: true
 ---
 
 # APD Init — プロジェクト初期化
