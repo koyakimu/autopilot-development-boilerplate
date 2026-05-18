@@ -1,12 +1,12 @@
 ---
 name: spec
 description: >
-  This skill should be used when the user asks to "generate specs",
-  "create specifications", "add a feature spec", "fix a bug spec",
-  "Spec を生成", "仕様書を作成", "機能追加の Spec", "バグ修正の Patch",
-  or wants to generate Spec documents from the Design document.
-  Supports three modes: full generation, feature addition, and bugfix patch.
-tools: ["Read", "Write", "Glob", "Grep", "Bash"]
+  Generates Spec drafts from the Design document. Supports three
+  modes: full (initial generation), add (feature addition), and
+  bugfix (Spec Patch). Use when the user asks to generate specs,
+  add a feature spec, fix a bug spec, or run /apd:spec
+  ("Spec を生成", "仕様書を作成", "機能追加の Spec", "バグ修正の Patch").
+argument-hint: "[full|add|bugfix] [issue#?]"
 ---
 
 # APD Spec — 仕様書の生成

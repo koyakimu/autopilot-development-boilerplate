@@ -1,5 +1,18 @@
 # Changelog
 
+## [1.0.1] - 2026-05-19
+
+### Changed
+- **Skill frontmatter を Anthropic 公式規約に整合**:
+  - `tools:` フィールドを全 4 skill から削除（skills には `allowed-tools` が正規。`tools:` は subagent 用フィールドで no-op だった）
+  - `description` を「[What it does]. Use when ...」順に書き換え（公式ベストプラクティス: 主要ユースケースを先頭に）
+  - `skills/init` に `disable-model-invocation: true` を追加（FS 書き込みの副作用があるため自動起動を抑制）
+  - `skills/spec` に `argument-hint: "[full|add|bugfix] [issue#?]"` を追加
+  - `skills/start` に `argument-hint: "<spec-file or issue#>"` を追加
+- **GitHub Actions の必須印象を軽減**:
+  - `APD-FRAMEWORK.md` / `QUICKREF.md` で「ローカルの `gh` CLI で十分。Actions/routines は任意」と明記
+  - 個人開発・少人数チームでは GitHub Actions を立てる必要がない旨を追加
+
 ## [1.0.0] - 2026-05-18
 
 ### Removed (Breaking)
