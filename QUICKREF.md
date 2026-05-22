@@ -5,7 +5,7 @@
 | フェーズ | 誰の時間 | やること | 成果物 | 完了の合図 |
 |---------|---------|---------|--------|------------|
 | **Intent** | 人間+AI | 対話で Design 文書作成 | `docs/apd/design.md` | 人間の合意 |
-| **Spec** | 人間+AI | AI ドラフト → 人間確認 | `docs/apd/spec-*.md` + `docs/apd/decision-*.md` | 人間の合意 |
+| **Spec** | 人間+AI | AI ドラフト → 人間確認 | `docs/apd/spec-*.md` + `docs/apd/decisions.md` | 人間の合意 |
 | **Build** | AI 自律 | 実装 + テスト + PR | `src/` + `tests/` + PR（試し方記載済み） | `/goal` 評価器の収束 |
 | **Acceptance** | 人間 | 実機で触る | merge or 差し戻し | 人間の判断 |
 
@@ -30,7 +30,7 @@
 ④ Acceptance
    └→ 人間が PR の「試し方」に沿って実機で触る
    └→ OK → merge → issue 自動 close
-   └→ NG → コメントで返す → 次サイクル（Spec Patch 等）
+   └→ NG → コメントで返す → 次サイクル（Spec 編集 等）
 ```
 
 ## 初回セットアップ
@@ -63,18 +63,19 @@ CLAUDE.md に書いてある？
               └─ No → Acceptance としてエスカレーション
 ```
 
-## ファイル命名
+## ファイル構成（3 種別）
 
 ```
 docs/apd/
-├── design.md                      ← 北極星
-├── spec-{slug}.md                 ← Spec 本体
-├── spec-{slug}-patch-{NNN}.md     ← Spec 差分修正
-├── decision-{NNN}.md              ← Decision Record
-└── preview-{slug}/                ← 成果物プレビュー（任意）
+├── design.md            ← 北極星（編集し続ける）
+├── decisions.md         ← 判断の追記ログ（単一ファイル）
+└── spec-{feature}.md    ← 機能ごと 1 枚（編集し続ける）
 ```
 
-`{slug}` は GitHub issue 番号があれば issue 番号（例: `spec-42.md`）、なければ短い slug。
+- **ドキュメントは生きた 1 枚**。差分を別ファイルで積まない。修正は既存ファイルを編集して `version` を上げる。履歴は git が正史
+- ファイルが増えるのは新機能を作るときだけ
+- 成果物プレビューを作る場合のみ `docs/apd/preview-{feature}/` を追加（任意）
+- `{feature}` は GitHub issue 番号があれば issue 番号（例: `spec-42.md`）、なければ短い slug
 
 ## Claude Code 機能の使い分け
 
@@ -89,3 +90,5 @@ docs/apd/
 | backlog | GitHub issue（`gh` 環境）or `docs/apd/todo.md` |
 | GitHub 連携 | ローカルの `gh` CLI で十分。GitHub Actions/routines は任意 |
 | Handoff（試し方） | PR 本文 |
+| 人間の確認面 | GitHub（PR + issue）。`docs/apd/` は AI の作業場で、日常的にスキャンしない |
+| ドキュメント履歴 | git log / git blame（差分ファイルを積まない） |

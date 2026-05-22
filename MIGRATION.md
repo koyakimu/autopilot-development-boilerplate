@@ -1,27 +1,34 @@
-# APD Migration Guide (0.x → 1.x)
+# APD Migration Guide
 
-APD 1.0 で導入された変更により、`docs/apd/` の構造とフレームワーク用語が変わった。既存プロジェクトをアップグレードする手順をまとめる。
+既存 APD プロジェクトを現行の「生きたドキュメント」モデルへ移行する手順。0.x（サブディレクトリ構造）からでも、1.0.x（フラット + Patch ファイル）からでも、同じ `/apd:migrate` で現行モデルに揃う。
+
+現行モデルの要点:
+- ドキュメントは生きた 1 枚（差分を別ファイルで積まない、git が正史）
+- 3 ファイル種別: `design.md` / `decisions.md` / `spec-{feature}.md`
+- Patch ファイル廃止 → 親 Spec に畳む。Decision は単一 `decisions.md` に集約。Preview は任意
+- 人間の確認面は GitHub（PR + issue）
 
 ## アプローチ
 
 **AI 主導の `/apd:migrate` スキルで移行する**。スクリプトでの一括置換ではなく、AI が個々のファイルを読んで文脈を踏まえて変換する。検証は `scripts/verify-migration.sh` で行う。
 
 理由:
+- Patch ファイルの畳み込みは内容理解が要る (どの AC に対応する差分かを読んで統合)
 - frontmatter フィールドの変換は値の意味解釈が要る (`cycle_ref: "C-001"` → `issue_ref: <番号 or null>` は実 issue 確認が必要)
 - 本文中のパス参照置換は文脈依存 (リンクなのか歴史的言及なのか)
-- 命名規約に合わないファイル (`random.md` 等) の扱いは判断が要る
+- 命名規約に合わないファイルの扱いは判断が要る
 - CLAUDE.md の更新はプロジェクト固有
 
 ## 主な変更
 
-| 項目 | 旧 (0.x) | 新 (1.x) |
+| 項目 | 旧 (0.x / 1.0.x) | 新（生きたドキュメント） |
 |------|---------|---------|
-| ディレクトリ | `docs/apd/{design,specs,decisions,cycles,previews}/` | `docs/apd/` フラット |
+| ディレクトリ | `docs/apd/{design,specs,decisions,cycles,previews}/` (0.x) | `docs/apd/` フラット、3 種別のみ |
 | Design | `docs/apd/design/product-design.md` | `docs/apd/design.md` |
-| Spec | `docs/apd/specs/{name}.v{N}.md` | `docs/apd/spec-{name}.md` |
-| Spec 修正 | `docs/apd/specs/{name}.v{N}.A-{NNN}.md` (Amendment) | `docs/apd/spec-{name}-patch-{NNN}.md` (Patch) |
-| Decision | `docs/apd/decisions/D-{NNN}.md` | `docs/apd/decision-{NNN}.md` |
-| Preview | `docs/apd/previews/C-{NNN}/` | `docs/apd/preview-{slug}/` |
+| Spec | `docs/apd/specs/{name}.v{N}.md` | `docs/apd/spec-{feature}.md` |
+| Spec 修正 | Amendment / Patch を別ファイルで積む | **既存 Spec を直接編集** (`version` を上げる)。履歴は git |
+| Decision | `decisions/D-{NNN}.md` (0.x) / `decision-{NNN}.md` (1.0.x) | `docs/apd/decisions.md` (単一の追記ログ) |
+| Preview | 原則必須 | **任意**。作る場合のみ `docs/apd/preview-{feature}/` |
 | Cycle | `docs/apd/cycles/C-{NNN}.md` | **廃止** (GitHub issue で代替) |
 | Build スキル | `/apd:build` | `/apd:start <spec>` + `/goal` |
 | サイクル開始 | `/apd:cycle` | 会話 + `gh issue create` |
@@ -29,7 +36,8 @@ APD 1.0 で導入された変更により、`docs/apd/` の構造とフレーム
 | 機械検証 agent | `apd:checkpoint` | **廃止** (`/goal` 評価器が代替) |
 | Handoff | サイクル定義ファイル | PR 本文の「## 試し方」セクション |
 | Backlog | `docs/apd/todo.md` | GitHub issue (gh 環境) / `todo.md` (フォールバック) |
-| 用語 | "Amendment" / "Human Checkpoint 2" | "Spec Patch" / "Acceptance" |
+| 人間の確認面 | docs/apd/ をスキャン | **GitHub (PR + issue)**。docs/apd/ は AI の作業場 |
+| 用語 | "Amendment" / "Human Checkpoint 2" | (廃止) / "Acceptance" |
 
 ## 移行手順
 
@@ -77,8 +85,10 @@ bash <path-to-apd-plugin>/scripts/verify-migration.sh
 
 検査項目:
 - 旧サブディレクトリ (`design/`, `specs/`, `decisions/`, `cycles/`, `previews/`) が消えているか
-- 旧命名 (`*.A-*.md`, `*.v{N}.md`, `D-*.md`) のファイルが残っていないか
-- 旧 frontmatter フィールド (`amendment_id:`, `cycle_ref:`) が残っていないか
+- 旧命名 (`*.A-*.md`, `*.v{N}.md`) が残っていないか
+- **Patch ファイル (`spec-*-patch-*.md`) が残っていないか**（親 Spec に畳み込み済みか）
+- **per-file Decision (`D-*.md` / `decision-*.md`) が残っていないか**（`decisions.md` に集約済みか）
+- 旧 frontmatter フィールド (`amendment_id:`, `patch_id:`, `cycle_ref:`) が残っていないか
 - `docs/apd/` 配下に旧パス参照がないか
 - CLAUDE.md の旧スキル言及 (`/apd:build` 等) — warning のみ
 
@@ -147,7 +157,8 @@ git checkout -- .  # frontmatter 等の Edit が staged されている場合
 `scripts/verify-migration.sh` の出力を見て、FAIL 項目を特定する。よくあるケース:
 
 - **`docs/apd/specs/` がまだ存在する**: 認識できないファイル (random.md 等) が残っているため。中身を確認して新名で配置 or 削除
-- **`amendment_id:` の frontmatter が残っている**: AI が変換漏れ。Edit で手動修正、または `/apd:migrate` を再実行
+- **Patch ファイルが残っている**: 親 Spec への畳み込みが漏れている。`/apd:migrate` を再実行するか、内容を手動で Spec に統合してから patch ファイルを削除
+- **`amendment_id:` / `patch_id:` の frontmatter が残っている**: AI が変換漏れ。Edit で手動修正、または `/apd:migrate` を再実行
 - **本文に旧パス参照が残っている**: 該当ファイルを開いて確認、コンテキスト判断して置換 or 残置
 
 ### backup から特定のファイルを救出したい

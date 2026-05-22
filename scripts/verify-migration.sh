@@ -88,12 +88,28 @@ else
   pass "No old version-suffix filenames (*.v{N}.md)"
 fi
 
-old_decision=$(find docs/apd -maxdepth 1 -name "D-*.md" -type f 2>/dev/null | wc -l | tr -d ' ')
+old_decision=$(find docs/apd -maxdepth 1 \( -name "D-*.md" -o -name "decision-*.md" \) -type f 2>/dev/null | wc -l | tr -d ' ')
 if [[ "$old_decision" -gt 0 ]]; then
-  fail "Found ${old_decision} file(s) with old decision naming (D-*.md, should be decision-*.md)"
-  find docs/apd -maxdepth 1 -name "D-*.md" -type f 2>/dev/null | sed 's/^/    /'
+  fail "Found ${old_decision} per-file Decision Record(s) (should be consolidated into decisions.md)"
+  find docs/apd -maxdepth 1 \( -name "D-*.md" -o -name "decision-*.md" \) -type f 2>/dev/null | sed 's/^/    /'
 else
-  pass "No old decision naming (D-*.md)"
+  pass "No per-file Decision Records (D-*.md / decision-*.md)"
+fi
+
+# Patch files should be folded into their parent spec
+patch_files=$(find docs/apd -maxdepth 1 -name "spec-*-patch-*.md" -type f 2>/dev/null | wc -l | tr -d ' ')
+if [[ "$patch_files" -gt 0 ]]; then
+  fail "Found ${patch_files} Patch file(s) (should be folded into the parent spec, then deleted)"
+  find docs/apd -maxdepth 1 -name "spec-*-patch-*.md" -type f 2>/dev/null | sed 's/^/    /'
+else
+  pass "No Patch files (spec-*-patch-*.md)"
+fi
+
+# decisions.md presence (informational)
+if [[ -f "docs/apd/decisions.md" ]]; then
+  pass "docs/apd/decisions.md exists (single decision log)"
+else
+  warn "docs/apd/decisions.md not found (OK if project has no recorded decisions)"
 fi
 
 echo ""
@@ -110,6 +126,14 @@ if [[ "$amendment_id_files" -gt 0 ]]; then
   grep -l "^amendment_id:" docs/apd/*.md 2>/dev/null | sed 's/^/    /'
 else
   pass "No 'amendment_id:' frontmatter"
+fi
+
+patch_id_files=$(grep -l "^patch_id:" docs/apd/*.md 2>/dev/null | wc -l | tr -d ' ')
+if [[ "$patch_id_files" -gt 0 ]]; then
+  fail "${patch_id_files} file(s) still have 'patch_id:' frontmatter (Patch files should be folded into the parent spec)"
+  grep -l "^patch_id:" docs/apd/*.md 2>/dev/null | sed 's/^/    /'
+else
+  pass "No 'patch_id:' frontmatter"
 fi
 
 cycle_ref_files=$(grep -l "^cycle_ref:" docs/apd/*.md 2>/dev/null | wc -l | tr -d ' ')
