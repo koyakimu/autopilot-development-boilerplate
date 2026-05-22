@@ -1,50 +1,48 @@
 # APD ドキュメント管理
 
-## イミュータブルなドキュメント管理
+## 生きたドキュメント + git が正史
 
-- ドキュメントは上書きしない。修正は Spec Patch（差分ドキュメント）を発行する
-- 全サイクルの軌跡が時系列で参照可能
+- ドキュメントは **作ったら同じ場所で編集し続ける**。差分を別ファイル（Amendment / Patch）で積まない
+- 「過去どうだったか」は **git log / git blame** が正史
 - AI の作業記録: Git コミットログ + PR 履歴
-- 人間の判断記録: Decision Record
+- 人間の判断記録: `decisions.md`（単一の追記ログ）
 
-## ドキュメントツリー（フラット）
+ファイルを移動・追加し続けると移動漏れや不整合が出る。**移動を前提にしない**設計にする。
+
+## ドキュメントツリー（3 ファイル種別）
 
 ```
-project/
-├── .claude/
-│   └── rules/apd/                ← APD フレームワーク方針（自動ロード）
-├── docs/apd/
-│   ├── design.md                 ← 北極星（滅多に変わらない）
-│   ├── spec-{slug-or-issue}.md   ← Spec 本体
-│   ├── spec-{slug}-patch-{NNN}.md ← Spec の差分修正
-│   ├── decision-{NNN}.md         ← Decision Record（時系列で積み上がる）
-│   └── preview-{slug}/           ← 成果物プレビュー（図・モック等。任意）
-└── src/ + tests/
+docs/apd/
+├── design.md            ← 北極星（編集し続ける、滅多に変わらない）
+├── decisions.md         ← 判断の追記ログ（単一ファイル）
+└── spec-{feature}.md    ← 機能ごと 1 枚（編集し続ける）
 ```
 
-サブディレクトリは原則作らない。ファイル名の prefix で分類する。`docs/apd/` 配下のファイル数が増えて見通しが悪くなったら、その時点で構造を見直す。
+- サブディレクトリは作らない
+- ファイルが増えるのは **新機能を作るとき** だけ（本質的な増加なので許容）
+- 機能が削除されたら、その機能の Spec も削除する（これが唯一の「削除」）
+- 成果物プレビューを作る場合のみ `docs/apd/preview-{feature}/` を追加（任意。`05-deliverable-preview.md` 参照）
 
 ### 命名の指針
 
-- `spec-{...}.md` の `{...}` 部分は GitHub issue 番号があれば issue 番号、なければ短い slug を使う
+- `spec-{feature}.md` の `{feature}` は GitHub issue 番号があれば issue 番号、なければ短い slug
 - Spec ID は frontmatter で別途定義する（`spec_id: "AUTH-042"` 等）
-- ファイル名は人間がディレクトリ一覧で意味を把握できる形にする
 
-## 成果物の場所と参照
+## 人間の確認面 = GitHub
 
-| 種類 | 場所 | 備考 |
-|------|------|------|
-| Design | `docs/apd/design.md` | 全サイクル共通 |
-| Spec | `docs/apd/spec-{slug}.md` | サイクル単位 |
-| Spec Patch | `docs/apd/spec-{slug}-patch-{NNN}.md` | Spec の差分 |
-| Decision Record | `docs/apd/decision-{NNN}.md` | 時系列 |
-| 成果物プレビュー | `docs/apd/preview-{slug}/` | 任意 |
-| Handoff（試し方） | PR 本文の「試し方」セクション | ファイル化しない |
-| 進行中の todo | GitHub issue（あれば）or `docs/apd/todo.md`（フォールバック） | — |
+`docs/apd/` の spec 群は **AI の作業材料**。人間が日常的にスキャンする想定ではない。人間が見るのは:
+
+| 知りたいこと | 見る場所 |
+|------------|---------|
+| 進行中・backlog | `gh issue list`（自動更新、同期不要） |
+| 個別の変更を受け入れたい | その PR の「試し方」セクション（Acceptance） |
+| プロダクト全体像 | `docs/apd/design.md` |
+
+`docs/apd/` 内に「人間用ダッシュボード（INDEX 等）」は置かない。同期対象が増えて移動漏れと同類のリスクになるため。GitHub（issue + PR）を人間のダッシュボードとして使う。
 
 ## Spec フォーマット
 
-Markdown 形式（YAML frontmatter付き）。
+Markdown 形式（YAML frontmatter付き）。Spec は編集し続ける生きたドキュメントなので、`version` を上げて変更を反映する。
 
 ````markdown
 ---
@@ -94,18 +92,37 @@ decision_refs: []
 
 ## Deliverable Previews
 
-{生成すべきプレビューの種別と説明（該当する場合）}
+{生成すべきプレビューの種別と説明（任意。該当する場合のみ）}
 
 ## Notes
 
 {追加の考慮事項、制約、前提など}
 ````
 
-## Handoff（試し方）の場所
+### Spec の更新
 
-Build が完了したら、PR 本文に「## 試し方」セクションを記載する。各 AC を人間が実機で検証できる手順として書く。
+バグ修正・仕様変更は **既存 Spec を直接編集** する:
 
-ファイル化はしない。理由:
-- PR 本文は人間が次に見る場所
-- レビュー時に diff と並べて確認できる
-- 同じ機能の再 build 時に PR が新しく作られるので、Handoff も自然に最新になる
+1. 該当 AC を修正 or 追加する
+2. frontmatter の `version` を上げる
+3. 変更理由は git のコミットメッセージに書く（別ファイルに差分を残さない）
+
+## decisions.md フォーマット
+
+技術選定・設計判断は単一の `docs/apd/decisions.md` に追記する。新しい判断ほど上に積む（or 下に追記、プロジェクトで統一）。
+
+````markdown
+# Decisions
+
+## D-002: {判断のタイトル}
+- **Date**: YYYY-MM-DD
+- **Context**: {なぜこの判断が必要だったか}
+- **Decision**: {何を選んだか}
+- **Reason**: {理由・トレードオフ}
+- **Refs**: {関連 spec / issue}
+
+## D-001: {判断のタイトル}
+- ...
+````
+
+Spec から特定の判断を参照したい場合は `decisions.md#d-001` のようにアンカーで引く。

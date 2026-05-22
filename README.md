@@ -46,10 +46,13 @@ Acceptance ← 人間が実機で触って受け入れ
 
 | コマンド | 役割 |
 |---------|------|
-| `/apd:init`   | プロジェクト初期化 |
-| `/apd:design` | Design 文書（北極星）の対話的作成 |
-| `/apd:spec`   | Spec ドラフト生成（full / add / bugfix モード） |
-| `/apd:start`  | Build 開始（Spec の AC から `/goal` condition を組み立てて自律ループに委譲） |
+| `/apd:init`    | プロジェクト初期化 |
+| `/apd:design`  | Design 文書（北極星）の対話的作成 |
+| `/apd:spec`    | Spec ドラフト生成・更新（full / add / bugfix モード） |
+| `/apd:start`   | Build 開始（Spec の AC から `/goal` condition を組み立てて自律ループに委譲） |
+| `/apd:migrate` | 既存プロジェクトを現行のドキュメント構造へ移行（[MIGRATION.md](MIGRATION.md) 参照） |
+
+`docs/apd/` は **生きた 3 ファイル** で構成される: `design.md`（北極星）、`decisions.md`（判断ログ）、`spec-{feature}.md`（機能ごと）。ドキュメントは編集し続け、履歴は git が持つ。人間の確認面は GitHub（PR + issue）。
 
 詳細は `QUICKREF.md`、設計原理は `APD-FRAMEWORK.md` を参照。
 

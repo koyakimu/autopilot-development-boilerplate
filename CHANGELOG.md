@@ -1,5 +1,28 @@
 # Changelog
 
+## [2.0.0] - 2026-05-22
+
+### Changed (Breaking) — 生きたドキュメントモデルへ移行
+- **Patch / Amendment 概念を廃止**。Spec 修正は別ファイルの差分を積まず、**既存 Spec を直接編集して `version` を上げる**。履歴は git が正史
+- **Decision を単一 `docs/apd/decisions.md` に集約**。per-file の `decision-{NNN}.md` を廃止
+- **Preview を任意化**。「原則必須」をやめ、必要なときだけ `docs/apd/preview-{feature}/` を作る
+- **ドキュメント種別を 3 つに**: `design.md` / `decisions.md` / `spec-{feature}.md`
+- **人間の確認面を GitHub (PR + issue) と明記**。`docs/apd/` は AI の作業材料で、人間が日常的にスキャンする場所ではないと位置づけ
+- `rules/apd/00-principles.md`: 「上書きしない」→「git が正史、編集し続ける」に転換
+- `rules/apd/03-documents.md`: 3 種別・decisions.md 集約・GitHub 確認面に全面改訂
+- `rules/apd/05-deliverable-preview.md`: Preview を任意に降格
+- `rules/apd/02-cycle-flow.md`: バグ修正フローを「既存 Spec を編集」に変更
+- `skills/spec`: bugfix モードを「既存 Spec を編集して version 上げ」に変更、decisions.md 追記方式、Patch ファイル生成を削除
+- `skills/migrate`: Patch のSpec畳み込み・Decision の decisions.md 集約に対応（0.x / 1.0.x 両方から移行可能に）
+- `scripts/verify-migration.sh`: Patch ファイル・per-file Decision・`patch_id:` frontmatter の残存チェックを追加
+- `templates/decision.md`: 単一ファイル形式から decisions.md の 1 セクション形式に変更
+
+### Removed (Breaking)
+- `templates/spec-patch.md` / `examples/templates/spec-patch.md` — Patch ファイルが不要になったため削除
+
+### Why
+pup での実投入で `docs/apd/` にファイルが増えすぎて見通しが悪化。「ファイル移動を前提にすると移動漏れが出る」「Claude が書くので人間は repo をほぼ見ない」という実感を踏まえ、**移動を前提にしない・git を正史とする・人間は GitHub を見る**モデルへ転換した。
+
 ## [1.0.2] - 2026-05-19
 
 ### Added

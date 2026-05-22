@@ -4,9 +4,10 @@
 
 - **人間の時間とAIの時間を分離する。** Intent/Spec フェーズは人間の時間（対話的）、Build は AI の時間（自律実行）
 - **AI フェーズの途中で人間の介入をゼロにする。** 人間は最初に意図を決めたら手を離す
-- **ドキュメントは上書きしない。** 修正は Spec Patch（差分ドキュメント）として発行する
+- **ドキュメントは生きた 1 枚として編集し続ける。** 差分を別ファイルで積まない。履歴は git が正史として持つ
+- **人間の確認面は GitHub（PR + issue）。** `docs/apd/` は AI の作業材料であって、人間が日常的にスキャンする場所ではない
 - **判断に迷ったら自己判断せずリーダーに聞く。** 聞きすぎるほうが暴走するより安全
-- **薄い規約レイヤに留める。** APD は Design / Spec / Patch / Decision の規約と最小限のスキルだけを提供する。ループ・並列化・タスク管理・GitHub 連携は Claude Code 本体の機能（`/goal`, agent teams, subagents, hooks, TaskCreate）に委譲する
+- **薄い規約レイヤに留める。** APD は Design / Spec / Decision の規約と最小限のスキルだけを提供する。ループ・並列化・タスク管理・GitHub 連携は Claude Code 本体の機能（`/goal`, agent teams, subagents, hooks, TaskCreate）に委譲する
 
 ## 判断のエスカレーションフロー
 

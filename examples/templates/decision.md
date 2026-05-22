@@ -1,40 +1,18 @@
-<!-- Decision Record テンプレート -->
-<!-- AIが選択肢を生成し、人間が選んだ結果と理由だけ記録する -->
+<!-- decisions.md のセクションテンプレート -->
+<!-- docs/apd/decisions.md に追記する 1 判断ぶんのブロック -->
+<!-- AIが選択肢を生成し、人間が選んだ結果と理由を記入する -->
+<!-- 新しい判断ほど上に積む -->
 
----
-id: "D-{NNN}"
-phase: "{design / spec / build}"
-cycle_ref: "C-{NNN}"
-date: "YYYY-MM-DD"
-decision: "{A / B / C}"
-impact:
-  - "{影響を受けるSpec ID}"
----
+## D-{NNN}: {判断のタイトル}
+- **Date**: YYYY-MM-DD
+- **Context**: {判断が必要になった背景}
+- **Options**:
+  - A: {選択肢A（AIが提案）}
+  - B: {選択肢B（AIが提案）}
+  - C: {選択肢C（AIが提案）}
+- **AI Recommendation**: {AIが推奨するOption}: {推奨理由の概要}
+- **Decision**: {ユーザーが選んだOption}
+- **Reason**: {理由（一言でよい）}
+- **Refs**: {関連 spec / issue}
 
-## Context
-
-{判断が必要になった背景}
-
-## Options
-
-### Option A
-
-{選択肢A（AIが提案）}
-
-### Option B
-
-{選択肢B（AIが提案）}
-
-### Option C
-
-{選択肢C（AIが提案）}
-
-## AI Recommendation
-
-{AIが推奨するOption}: {推奨理由の概要}
-
-> 最終決定はユーザーが行う。AIの推奨は参考情報である。
-
-## Reason
-
-{理由（一言でよい）}
+> 最終決定はユーザーが行う。AI の推奨は参考情報。
