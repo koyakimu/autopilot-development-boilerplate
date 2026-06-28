@@ -195,11 +195,12 @@ if [[ -f "CLAUDE.md" ]]; then
     pass "CLAUDE.md has no Spec-check Stop hook reference"
   fi
 
-  # Stale: removed v2 escalation two-list
-  if grep -qE 'エスカレーションポリシー|Build 内で完結' CLAUDE.md 2>/dev/null; then
-    fail "CLAUDE.md has the old escalation policy two-list (removed model)"
+  # Stale: removed v2 escalation two-list (APD-specific phrasing only, to avoid
+  # flagging a project's own unrelated escalation policy)
+  if grep -qE 'Build 中のエスカレーションポリシー|Build 内で完結してよい' CLAUDE.md 2>/dev/null; then
+    fail "CLAUDE.md has the old APD escalation policy two-list (removed model)"
   else
-    pass "CLAUDE.md has no old escalation policy block"
+    pass "CLAUDE.md has no old APD escalation policy block"
   fi
 
   # Deprecated commands / agents
