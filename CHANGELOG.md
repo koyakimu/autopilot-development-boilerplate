@@ -1,5 +1,15 @@
 # Changelog
 
+## [3.2.0] - 2026-06-28
+
+### Changed — Spec チェックを Stop フックから Build のステップへ移管
+
+- **Spec チェックの `type:agent` Stop フックを廃止**: Stop のたびにフルの AI エージェントを起動するため、通常のターン終わりでも毎回数十秒〜（ブロック&リトライで）最悪10分級の待ちが発生していた。`hooks/hooks.json` を削除し、apd プラグインは Stop / SessionStart フックを一切持たなくなった
+- **Spec チェックを Build の達成条件に統合**: `/apd:go` が組み立てる `/goal` の condition に「ビルド AI 自身が各 AC を Spec・Design と照合し、OK/ずれ/未実装を根拠付きで surface し、ずれは自律修正してから完了」を組み込み。チェックは Build 中＝必要な場面でのみ走り、毎 Stop の起動コストはゼロ
+- `rules/apd/01-phases.md` / `02-cycle-flow.md` / `skills/go/SKILL.md` を「Stop フックの番人」から「Build のステップ」に書き換え
+- `docs/apd-v3-redesign.md` に §6/§8 の方針変更を注記
+- トレードオフ: 「別プロセスで自己申告に頼らない」純度は下がるが、毎 Stop の遅さを解消
+
 ## [3.1.0] - 2026-06-28
 
 ### Changed — 次の一手の案内を「毎 Stop の機械的サジェスト」から「文脈を踏まえた案内」へ

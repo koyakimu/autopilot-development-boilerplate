@@ -61,7 +61,6 @@ Build      ← AI 自律完走（途中で止まらない）
 |------|------|
 | `.claude-plugin/plugin.json` | プラグインマニフェスト |
 | `skills/` | スラッシュコマンド（`init`, `design`, `spec`, `go`, `status`） |
-| `hooks/` | Spec チェック（type:agent Stop フック） |
 | `rules/apd/` | フレームワーク方針（`/apd:init` でプロジェクトにコピー） |
 | `templates/` | ドキュメントテンプレート |
 
