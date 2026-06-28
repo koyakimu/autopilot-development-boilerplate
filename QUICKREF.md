@@ -39,6 +39,14 @@
 /apd:init  → ルールファイルコピー + docs/apd/ 作成 + backlog 案内
 ```
 
+## 迷ったら
+
+```
+/apd:status  → 現在地と次の一手を案内（ファイル状態＋会話文脈から判定）
+```
+
+次の一手は基本的に AI が節目で自発的に案内する（`.claude/rules/apd/07-next-step.md`）。明示的に確認したいときだけ `/apd:status` を打つ。
+
 ## 人間がやること（だけ）
 
 ### Intent / Spec: 意図を決める
