@@ -1,5 +1,11 @@
 # Changelog
 
+## [3.0.1] - 2026-06-28
+
+### Fixed
+
+- **プラグインマニフェストの検証エラーを修正**: `plugin.json` の `"hooks": "hooks/hooks.json"` フィールドがスキーマに弾かれ（`hooks: Invalid input`）プラグイン全体がロード失敗していた。フィールドを削除し、`hooks/hooks.json` の自動検出に任せる方式（公式プラグインと同じ）に変更
+
 ## [3.0.0] - 2026-06-28
 
 ### Changed (Breaking) — APD v3: 実装中ゼロ介入の自動完走モデル
