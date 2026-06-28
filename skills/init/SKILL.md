@@ -84,3 +84,4 @@ backlog の運用:
 - ルールファイルは `.claude/rules/apd/` にコピーされ、Claude Code が自動でコンテキストにロードする
 - `docs/apd/` はフラット構造。サブディレクトリは「必要になったら作る」原則
 - 次回のセッションから APD フレームワークのルールが自動適用される
+- **CLAUDE.md は変更しない。** APD の使用宣言やバージョンを CLAUDE.md に書き込まない（APD の存在は `.claude/rules/apd/` と `docs/apd/` で判る。バージョン入りの行は腐る）。CLAUDE.md はユーザーのもの

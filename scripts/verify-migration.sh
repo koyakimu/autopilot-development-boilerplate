@@ -1,12 +1,15 @@
 #!/usr/bin/env bash
-# Verify that an APD project has been migrated from 0.x to 1.x layout.
+# Verify that an APD project matches the current model: flat docs/apd/
+# layout, a CLAUDE.md free of APD injection/duplication/stale text, and
+# up-to-date .claude/rules/apd/.
 #
 # Usage:
 #   cd /path/to/your/project
 #   bash <path-to-apd-plugin>/scripts/verify-migration.sh
+#   # (set CLAUDE_PLUGIN_ROOT to also diff rules against the installed plugin)
 #
-# Returns exit 0 if the project's docs/apd/ structure is in the expected
-# 1.x flat layout. Returns exit 1 if any issues are detected, listing them.
+# Returns exit 0 if everything is in the expected current layout.
+# Returns exit 1 if any issues are detected, listing them.
 #
 # This is a CHECK ONLY script. It does not move or rewrite anything.
 # The actual migration is done by the /apd:migrate skill (AI-driven).
@@ -36,7 +39,7 @@ warn() {
   WARNINGS+=("$1")
 }
 
-echo "=== APD 1.x Migration Verification ==="
+echo "=== APD Migration Verification ==="
 echo ""
 
 # ----------------------------------------------------------------------
@@ -162,20 +165,100 @@ fi
 
 if [[ -f "CLAUDE.md" ]]; then
   if grep -qE 'docs/apd/(design|specs|decisions|cycles|previews)/' CLAUDE.md 2>/dev/null; then
-    warn "CLAUDE.md references old subdirectory paths"
-  fi
-  if grep -qE '/apd:(build|cycle|progress)' CLAUDE.md 2>/dev/null; then
-    warn "CLAUDE.md references deprecated skills (/apd:build, /apd:cycle, /apd:progress)"
+    fail "CLAUDE.md references old subdirectory paths"
+  else
+    pass "CLAUDE.md has no old subdirectory path references"
   fi
 fi
 
 echo ""
 
 # ----------------------------------------------------------------------
-# Check 5: Backup directory exists (recommended)
+# Check 5: CLAUDE.md is free of APD injection / duplication / stale text
 # ----------------------------------------------------------------------
 
-echo "Check 5: Backup retention"
+echo "Check 5: CLAUDE.md cleanliness (APD cruft removed)"
+
+if [[ -f "CLAUDE.md" ]]; then
+  # Injected banner line: "APD ... フレームワーク x.y.z ... で開発"
+  if grep -qE 'APD.*(フレームワーク|Framework).*[0-9]+\.[0-9]+\.[0-9]+.*(で開発|powered by|built with)' CLAUDE.md 2>/dev/null \
+     || grep -qE 'フレームワーク[^\n]*[0-9]+\.[0-9]+\.[0-9]+[^\n]*で開発' CLAUDE.md 2>/dev/null; then
+    fail "CLAUDE.md still has an injected APD version banner (remove it)"
+  else
+    pass "CLAUDE.md has no injected APD version banner"
+  fi
+
+  # Stale: removed Spec-check Stop hook
+  if grep -qE 'Spec ?チェック.*Stop ?フック|Stop ?フック.*Spec ?チェック' CLAUDE.md 2>/dev/null; then
+    fail "CLAUDE.md references the removed Spec-check Stop hook (now a Build step)"
+  else
+    pass "CLAUDE.md has no Spec-check Stop hook reference"
+  fi
+
+  # Stale: removed v2 escalation two-list
+  if grep -qE 'エスカレーションポリシー|Build 内で完結' CLAUDE.md 2>/dev/null; then
+    fail "CLAUDE.md has the old escalation policy two-list (removed model)"
+  else
+    pass "CLAUDE.md has no old escalation policy block"
+  fi
+
+  # Deprecated commands / agents
+  if grep -qE '/apd:(build|start|cycle|progress)|apd:(peer-review|checkpoint)' CLAUDE.md 2>/dev/null; then
+    fail "CLAUDE.md references deprecated commands/agents (/apd:build|start|cycle|progress, apd:peer-review|checkpoint)"
+  else
+    pass "CLAUDE.md has no deprecated command/agent references"
+  fi
+
+  # Duplicated generic rule section heading
+  if grep -qE '^##+ +APD 準拠ルール' CLAUDE.md 2>/dev/null; then
+    warn "CLAUDE.md has an 'APD 準拠ルール' section — likely duplicates .claude/rules/apd/ (move generic rules out)"
+  fi
+else
+  warn "CLAUDE.md not found (skipped CLAUDE.md cleanliness checks)"
+fi
+
+echo ""
+
+# ----------------------------------------------------------------------
+# Check 6: .claude/rules/apd/ is present and not stale
+# ----------------------------------------------------------------------
+
+echo "Check 6: .claude/rules/apd/ freshness"
+
+if [[ -d ".claude/rules/apd" ]]; then
+  pass ".claude/rules/apd/ exists"
+  # Stale rule content: Stop-hook wording removed in 3.2.0
+  if grep -rqE 'Stop ?フック' .claude/rules/apd/ 2>/dev/null; then
+    fail ".claude/rules/apd/ still mentions 'Stop フック' (stale — re-copy from the plugin / run /apd:migrate)"
+  else
+    pass ".claude/rules/apd/ has no stale Stop-hook wording"
+  fi
+  # Compare against the installed plugin rules when available
+  if [[ -n "${CLAUDE_PLUGIN_ROOT:-}" && -d "${CLAUDE_PLUGIN_ROOT}/rules/apd" ]]; then
+    drift=0
+    for f in "${CLAUDE_PLUGIN_ROOT}/rules/apd/"*.md; do
+      base=$(basename "$f")
+      if [[ ! -f ".claude/rules/apd/${base}" ]] || ! diff -q ".claude/rules/apd/${base}" "$f" >/dev/null 2>&1; then
+        drift=$((drift + 1))
+      fi
+    done
+    if [[ "$drift" -gt 0 ]]; then
+      warn ".claude/rules/apd/ differs from the installed plugin in ${drift} file(s) (version drift or local customization)"
+    else
+      pass ".claude/rules/apd/ matches the installed plugin rules"
+    fi
+  fi
+else
+  warn ".claude/rules/apd/ not found (run /apd:init or /apd:migrate to install rules)"
+fi
+
+echo ""
+
+# ----------------------------------------------------------------------
+# Check 7: Backup directory exists (recommended)
+# ----------------------------------------------------------------------
+
+echo "Check 7: Backup retention"
 backup_count=$(find . -maxdepth 2 -type d -name "apd.backup-*" 2>/dev/null | wc -l | tr -d ' ')
 if [[ "$backup_count" -gt 0 ]]; then
   pass "Backup directory present (recommended to keep for several cycles)"

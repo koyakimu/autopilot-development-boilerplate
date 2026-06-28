@@ -1,5 +1,16 @@
 # Changelog
 
+## [3.3.0] - 2026-06-29
+
+### Changed — マイグレーションを完全化（CLAUDE.md 掃除・rules 最新化・3.x 刷新）
+
+- **`/apd:migrate` が CLAUDE.md を掃除するようになった**: APD 由来の注入を first-class で除去。宣伝行（`APD … フレームワーク x.y.z … で開発`）、`.claude/rules/apd/` の丸写し節、陳腐化記述（廃止済みの Spec チェック Stop フック参照・旧エスカレーション二分リスト）、旧コマンド/エージェント名（`/apd:build|start|cycle|progress`、`apd:peer-review|checkpoint`）、旧用語（Acceptance/Human Checkpoint）を対象に、**プロジェクト固有は残して**整理する
+- **`/apd:migrate` が `.claude/rules/apd/` を最新版に更新するようになった**: 差分確認の上でプラグイン同梱版へ更新（独自カスタムは手動レビューへ）。従来「`/apd:init` の責務」として委譲していたのを migrate に統合
+- **2.x → 3.x 移行パターンを追加**: 用語・コマンド・フックの刷新（Stop フック/サジェストフック廃止、`/apd:go`、完成後の実機確認）を移行対象に明記。移行は冪等
+- **`scripts/verify-migration.sh` を拡張**: CLAUDE.md の APD 汚れ（宣伝行・Stop フック参照・旧エスカレーション・旧コマンド）と `.claude/rules/apd/` の鮮度（陳腐化記述・プラグインとの差分）を検査
+- **再注入の防止**: `/apd:init` と `rules/apd/00-principles.md` に「APD はユーザーの CLAUDE.md を書き換えない」ガードを追加
+- `MIGRATION.md` を 3.x（CLAUDE.md 掃除・rules 最新化・新コマンド/用語）に更新
+
 ## [3.2.0] - 2026-06-28
 
 ### Changed — Spec チェックを Stop フックから Build のステップへ移管
