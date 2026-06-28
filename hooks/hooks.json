@@ -6,7 +6,25 @@
         "hooks": [
           {
             "type": "agent",
-            "prompt": "このプロジェクトの docs/apd/design.md（プロダクトの軸）と docs/apd/spec-*.md（承認済み Spec の受け入れ条件 AC）を読み、直近の実装差分（git diff）が AC と Design に準拠しているか検証してください。\n\n各 AC について「OK / ずれ / 未実装」を判定し、根拠をファイル:行で示してください。\n\n判定の原則:\n- これは Spec との一致だけを見る静的チェックです。実際の動作・セキュリティ実害・使い心地は保証しません（保証範囲を出力に明記）。\n- 「ずれ」が実装ミスか Spec 自体の誤りかを推定し、Spec バグが疑わしくても実装は止めず、その旨を理由に記録してください。\n- 未達（ずれ/未実装）があり、かつ実装ミス側で直せる場合は ok:false とし、reason に「どの AC が・どうずれていて・どう直すか」を具体的に書いてください。\n- すべての AC が OK、または残るずれが Spec バグ起因のみの場合は ok:true とし、reason に保証範囲と Spec バグ候補を記録してください。"
+            "prompt": "このプロジェクトの docs/apd/design.md（プロダクトの軸）と docs/apd/spec-*.md（承認済み Spec の受け入れ条件 AC）を読み、直近の実装差分（git diff）が AC と Design に準拠しているか検証してください。\n\n各 AC について「OK / ずれ / 未実装」を判定し、根拠をファイル:行で示してください。\n\n判定の原則:\n- これは Spec との一致だけを見る静的チェックです。実際の動作・セキュリティ実害・使い心地は保証しません（保証範囲を出力に明記）。\n- 「ずれ」が実装ミスか Spec 自体の誤りかを推定し、Spec バグが疑わしくても実装は止めず、その旨を理由に記録してください。\n- 未達（ずれ/未実装）があり、かつ実装ミス側で直せる場合は ok:false とし、reason に「どの AC が・どうずれていて・どう直すか」を具体的に書いてください。\n- すべての AC が OK、または残るずれが Spec バグ起因のみの場合は ok:true とし、reason に保証範囲と Spec バグ候補を記録してください。",
+            "timeout": 120
+          },
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/suggest-next.sh",
+            "timeout": 10
+          }
+        ]
+      }
+    ],
+    "SessionStart": [
+      {
+        "matcher": "startup",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/suggest-next.sh",
+            "timeout": 10
           }
         ]
       }
