@@ -8,11 +8,14 @@ if [ "$(printf '%s' "$INPUT" | jq -r '.stop_hook_active // false')" = "true" ]; 
   exit 0
 fi
 
+# 実際のイベント名（Stop / SessionStart など）を stdin から取得して返す
+EVENT=$(printf '%s' "$INPUT" | jq -r '.hook_event_name // "Stop"')
+
 PROJ="${CLAUDE_PROJECT_DIR:-.}"
 APD_DIR="$PROJ/docs/apd"
 
 suggest() {
-  jq -n --arg msg "$1" '{ "hookSpecificOutput": { "hookEventName": "Stop", "additionalContext": $msg } }'
+  jq -n --arg msg "$1" --arg ev "$EVENT" '{ "hookSpecificOutput": { "hookEventName": $ev, "additionalContext": $msg } }'
 }
 
 if [ ! -f "$APD_DIR/design.md" ]; then

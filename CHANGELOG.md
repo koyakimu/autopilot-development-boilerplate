@@ -1,5 +1,11 @@
 # Changelog
 
+## [3.0.3] - 2026-06-28
+
+### Fixed
+
+- **SessionStart フックの実行エラーを修正**: `suggest-next.sh` が `hookEventName` を `"Stop"` 固定で出力していたため、SessionStart として実行されると `Hook returned incorrect event name: expected 'SessionStart' but got 'Stop'` で失敗していた。stdin の `hook_event_name` を読み取り、実際のイベント名を返すように変更
+
 ## [3.0.2] - 2026-06-28
 
 ### Fixed
