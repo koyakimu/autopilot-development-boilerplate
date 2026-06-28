@@ -66,6 +66,7 @@ decision_refs: []
 | AC-001 | unit / integration / e2e | {テスト内容} |
 | AC-002 | unit / integration / e2e | {テスト内容} |
 | AC-003 | unit / integration / e2e | {テスト内容} |
+| AC-NFR-001 | 計測 / `/security-review` 等の委譲先 | {測定方法・委譲先の合格基準} |
 
 ## Deliverable Previews
 
