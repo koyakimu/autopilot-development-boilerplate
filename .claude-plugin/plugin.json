@@ -14,5 +14,6 @@
     "development",
     "framework",
     "ai-driven"
-  ]
+  ],
+  "hooks": "hooks/hooks.json"
 }
