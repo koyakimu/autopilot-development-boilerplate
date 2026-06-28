@@ -2,21 +2,19 @@
 
 > **人間は意思決定だけ、AI が自律で完走する**
 
-Autopilot Development（APD）は、AI エージェントが自律的にソフトウェアを開発し、人間は Acceptance（実機で動かして受け入れる場）でのみ判断を下す開発フレームワークです。Claude Code プラグインとして提供されます。
+Autopilot Development（APD）は、AI エージェントが自律的にソフトウェアを開発し、人間は「意図を決める」と「完成後の実機確認」の2点のみで関わる開発フレームワークです。Claude Code プラグインとして提供されます。
 
-## フェーズ
+## フロー
 
 ```
-Intent     ← 人間+AI（意図を固める）
+意図・Spec ← 人間+AI（意図を固め、Spec を承認）
    ↓
-Spec       ← AI ドラフト + 人間が読む
+Build      ← AI 自律完走（途中で止まらない）
    ↓
-Build      ← AI 自律（/goal に委譲）
-   ↓
-Acceptance ← 人間が実機で触って受け入れ
+実機確認   ← 人間が実機で触って受け入れ
 ```
 
-人間は **意図を決める**（Intent / Spec）と **動く成果物を受け入れる**（Acceptance）の2点のみ担当する。Build 中の進行管理・並列化・タスク追跡・品質ゲートは Claude Code 本体の機能（`/goal`、subagent、agent teams、hooks）に委譲する。APD は薄い規約レイヤに留まる。
+人間は **意図を決める**（Intent / Spec 承認）と **完成後の実機確認** の2点のみ担当する。Build 中の進行管理・並列化・タスク追跡・品質ゲートは Claude Code 本体の機能（`/goal`、subagent、agent teams、hooks）に委譲する。APD は薄い規約レイヤに留まる。
 
 ## インストール
 
@@ -49,7 +47,7 @@ Acceptance ← 人間が実機で触って受け入れ
 | `/apd:init`    | プロジェクト初期化 |
 | `/apd:design`  | Design 文書（北極星）の対話的作成 |
 | `/apd:spec`    | Spec ドラフト生成・更新（full / add / bugfix モード） |
-| `/apd:start`   | Build 開始（Spec の AC から `/goal` condition を組み立てて自律ループに委譲） |
+| `/apd:go`      | 達成条件を作り `/goal` に貼って起動（Spec の AC → condition 組み立て） |
 | `/apd:migrate` | 既存プロジェクトを現行のドキュメント構造へ移行（[MIGRATION.md](MIGRATION.md) 参照） |
 
 `docs/apd/` は **生きた 3 ファイル** で構成される: `design.md`（北極星）、`decisions.md`（判断ログ）、`spec-{feature}.md`（機能ごと）。ドキュメントは編集し続け、履歴は git が持つ。人間の確認面は GitHub（PR + issue）。
@@ -61,8 +59,8 @@ Acceptance ← 人間が実機で触って受け入れ
 | パス | 内容 |
 |------|------|
 | `.claude-plugin/plugin.json` | プラグインマニフェスト |
-| `skills/` | スラッシュコマンド（`init`, `design`, `spec`, `start`） |
-| `agents/` | サブエージェント（`apd:peer-review`） |
+| `skills/` | スラッシュコマンド（`init`, `design`, `spec`, `go`） |
+| `hooks/` | Spec チェック（type:agent Stop フック）と次コマンドのサジェスト |
 | `rules/apd/` | フレームワーク方針（`/apd:init` でプロジェクトにコピー） |
 | `templates/` | ドキュメントテンプレート |
 

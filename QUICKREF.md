@@ -7,7 +7,7 @@
 | **Intent** | 人間+AI | 対話で Design 文書作成 | `docs/apd/design.md` | 人間の合意 |
 | **Spec** | 人間+AI | AI ドラフト → 人間確認 | `docs/apd/spec-*.md` + `docs/apd/decisions.md` | 人間の合意 |
 | **Build** | AI 自律 | 実装 + テスト + PR | `src/` + `tests/` + PR（試し方記載済み） | `/goal` 評価器の収束 |
-| **Acceptance** | 人間 | 実機で触る | merge or 差し戻し | 人間の判断 |
+| **実機確認** | 人間 | 実機で触る | merge or 差し戻し | 人間の判断 |
 
 ## スキル使用フロー
 
@@ -22,12 +22,12 @@
    └→ 確認依頼箇所のみレビュー → フィードバック → 合意
 
 ③ Build
-   └→ /apd:start <spec ファイル> で /goal condition を組み立て
-   └→ ユーザーが /goal コマンドを実行 → AI 自律ループ開始
+   └→ /apd:go <spec ファイル> で /goal condition を組み立て
+   └→ ユーザーが /goal に condition を貼って実行 → AI 自律ループ開始（途中で止まらない）
    └→ 並列化が必要なら subagent / agent teams / /batch を使う
    └→ 完了時に PR 本文に「試し方」が記載される
 
-④ Acceptance
+④ 実機確認
    └→ 人間が PR の「試し方」に沿って実機で触る
    └→ OK → merge → issue 自動 close
    └→ NG → コメントで返す → 次サイクル（Spec 編集 等）
@@ -47,7 +47,7 @@
 - スコープの判断
 - Decision Record の判断を記入
 
-### Acceptance: 受け入れる
+### 実機確認: 受け入れる
 - PR 本文の「試し方」に沿って実機で触る
 - 動く成果物が期待通りか確認
 - OK なら merge、NG なら差し戻し（次サイクル）
@@ -60,7 +60,7 @@ CLAUDE.md に書いてある？
   ├─ Yes → それに従う
   └─ No → リーダーエージェントが判断できる？
               ├─ Yes → リーダーが判断
-              └─ No → Acceptance としてエスカレーション
+              └─ No → 完成後の実機確認としてエスカレーション
 ```
 
 ## ファイル構成（3 種別）

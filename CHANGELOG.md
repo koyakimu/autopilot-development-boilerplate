@@ -1,5 +1,16 @@
 # Changelog
 
+## [3.0.0] - 2026-06-28
+
+### Changed (Breaking) — APD v3: 実装中ゼロ介入の自動完走モデル
+
+- **実装中ゼロ介入の自動完走**: Build フェーズで Claude が中断なく自律的に実装を完走する設計に変更。エスカレーションポリシー（実装中の進捗確認・中断判断フロー）を廃止
+- **Spec チェック導入（`type:agent` Stop フック）**: `hooks/hooks.json` に agent Stop フックを追加し、Build 完了時に自動で Acceptance Criteria 充足を検証する
+- **`/apd:start` → `/apd:go` 改名（breaking）**: スタートコマンドを `/apd:go` に統一。既存ワークフローの `/apd:start` 呼び出しはすべて更新が必要
+- **状態サジェストフック**: 現在のサイクル状態（Design / Spec / Build / Done）を自動推定し、次のアクションをサジェストするフックを追加
+- **Acceptance を「完成後の実機確認」に再定義**: Acceptance Criteria は実装完了後の手動・自動確認手順として記述するように変更。事前仕様の羅列ではなく完成物の検証観点を書く
+- **汎用 peer-review エージェント廃止**: `apd:peer-review` エージェントを削除。レビューは `/code-review` スキルで代替
+
 ## [2.0.0] - 2026-05-22
 
 ### Changed (Breaking) — 生きたドキュメントモデルへ移行
