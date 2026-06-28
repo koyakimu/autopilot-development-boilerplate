@@ -1,12 +1,14 @@
 # APD Migration Guide
 
-既存 APD プロジェクトを現行の「生きたドキュメント」モデルへ移行する手順。0.x（サブディレクトリ構造）からでも、1.0.x（フラット + Patch ファイル）からでも、同じ `/apd:migrate` で現行モデルに揃う。
+既存 APD プロジェクトを現行モデルへ移行する手順。0.x（サブディレクトリ構造）・1.0.x（フラット + Patch ファイル）・2.x（用語/コマンド/フックが旧式）のいずれからでも、同じ `/apd:migrate` で現行モデルに揃う。移行対象は `docs/apd/` の構造だけでなく **CLAUDE.md と `.claude/rules/apd/`** も含む。
 
 現行モデルの要点:
 - ドキュメントは生きた 1 枚（差分を別ファイルで積まない、git が正史）
 - 3 ファイル種別: `design.md` / `decisions.md` / `spec-{feature}.md`
 - Patch ファイル廃止 → 親 Spec に畳む。Decision は単一 `decisions.md` に集約。Preview は任意
 - 人間の確認面は GitHub（PR + issue）
+- 用語・コマンド・フックは 3.x: **完成後の実機確認** / `/apd:go` / プラグインは Stop・SessionStart フックを持たない
+- **CLAUDE.md はプロジェクト固有のことだけ**。APD 汎用ルールの正本は `.claude/rules/apd/`（自動ロード）に一本化
 
 ## アプローチ
 
@@ -30,14 +32,17 @@
 | Decision | `decisions/D-{NNN}.md` (0.x) / `decision-{NNN}.md` (1.0.x) | `docs/apd/decisions.md` (単一の追記ログ) |
 | Preview | 原則必須 | **任意**。作る場合のみ `docs/apd/preview-{feature}/` |
 | Cycle | `docs/apd/cycles/C-{NNN}.md` | **廃止** (GitHub issue で代替) |
-| Build スキル | `/apd:build` | `/apd:start <spec>` + `/goal` |
+| Build スキル | `/apd:build` / `/apd:start` | `/apd:go <spec>` + `/goal` |
 | サイクル開始 | `/apd:cycle` | 会話 + `gh issue create` |
-| 進行確認 | `/apd:progress` | `gh issue list` + `ls docs/apd/` + `/memory` |
-| 機械検証 agent | `apd:checkpoint` | **廃止** (`/goal` 評価器が代替) |
+| 進行確認 | `/apd:progress` | `/apd:status` + `gh issue list` + `ls docs/apd/` |
+| 機械検証 agent | `apd:checkpoint` / `apd:peer-review` | **廃止** (`/goal` 評価器 + Build の Spec チェックステップ) |
+| Spec チェック | Stop フック (3.0〜3.1) | **Build の達成条件**（ビルド AI が AC を照合） |
+| 次コマンド案内 | 状態サジェストフック (3.1) | 常駐ルール `07-next-step.md` + `/apd:status` |
 | Handoff | サイクル定義ファイル | PR 本文の「## 試し方」セクション |
 | Backlog | `docs/apd/todo.md` | GitHub issue (gh 環境) / `todo.md` (フォールバック) |
 | 人間の確認面 | docs/apd/ をスキャン | **GitHub (PR + issue)**。docs/apd/ は AI の作業場 |
-| 用語 | "Amendment" / "Human Checkpoint 2" | (廃止) / "Acceptance" |
+| 用語 | "Amendment" / "Acceptance" / "Human Checkpoint" | (廃止) / **完成後の実機確認** |
+| CLAUDE.md | APD 汎用ルールを丸写し・宣伝行 | **プロジェクト固有のみ**。汎用ルールは `.claude/rules/apd/` |
 
 ## 移行手順
 
@@ -66,10 +71,10 @@ Claude Code 内で:
 
 AI が以下を実行する:
 
-1. `docs/apd/` を読んで現状を把握
-2. **移行プランを提示** (どのファイルがどう動くか、frontmatter / 本文がどう書き換わるか、手動レビューが必要な箇所はどれか)
+1. `docs/apd/`・`CLAUDE.md`・`.claude/rules/apd/` を読んで現状を把握
+2. **移行プランを提示** (ファイル移動・frontmatter / 本文の書き換え・CLAUDE.md から除く APD 由来の記述・rules の更新・手動レビューが必要な箇所)
 3. ユーザーが yes と返したら実行
-4. バックアップ → ファイル移動 → frontmatter 更新 → 本文参照更新
+4. バックアップ（docs/apd/ と CLAUDE.md）→ ファイル移動 → frontmatter 更新 → 本文参照更新 → **CLAUDE.md の掃除**（宣伝行・汎用ルールの丸写し・陳腐化記述・旧コマンド名を除去、固有は残す）→ **`.claude/rules/apd/` を最新版に更新**
 5. `scripts/verify-migration.sh` を呼んで結果を検証
 6. レポート出力 (何をしたか・手動レビュー残項目)
 
@@ -89,18 +94,15 @@ bash <path-to-apd-plugin>/scripts/verify-migration.sh
 - **Patch ファイル (`spec-*-patch-*.md`) が残っていないか**（親 Spec に畳み込み済みか）
 - **per-file Decision (`D-*.md` / `decision-*.md`) が残っていないか**（`decisions.md` に集約済みか）
 - 旧 frontmatter フィールド (`amendment_id:`, `patch_id:`, `cycle_ref:`) が残っていないか
-- `docs/apd/` 配下に旧パス参照がないか
-- CLAUDE.md の旧スキル言及 (`/apd:build` 等) — warning のみ
+- `docs/apd/`・CLAUDE.md に旧サブディレクトリパス参照がないか
+- **CLAUDE.md の APD 汚れ**: 宣伝行（`APD … フレームワーク x.y.z … で開発`）、廃止済み「Spec チェック Stop フック」参照、旧「エスカレーションポリシー」二分リスト、旧コマンド/エージェント（`/apd:build|start|cycle|progress`、`apd:peer-review|checkpoint`）が残っていないか
+- **`.claude/rules/apd/` の鮮度**: 存在するか、`Stop フック` 等の陳腐化記述が無いか、（`CLAUDE_PLUGIN_ROOT` 設定時）インストール済みプラグインの rules と一致するか
 
 PASS / FAIL を表示し、FAIL があれば exit 1。
 
-### 5. ルールファイルを最新版に更新
+### 5. ルールファイル（`.claude/rules/apd/`）の更新
 
-```
-/apd:init
-```
-
-`.claude/rules/apd/*.md` が新方針版で上書きされる。`docs/apd/` は既に flat なので追加は発生しない。
+`/apd:migrate` が最新版へ更新する（上書き前に差分を確認し、独自カスタムがあれば手動レビューに倒す）。migrate を使わず手動で揃える場合は `/apd:init` でも `.claude/rules/apd/*.md` が最新版で上書きされる。
 
 ### 6. 残った手動レビュー項目を対応
 
@@ -108,7 +110,8 @@ PASS / FAIL を表示し、FAIL があれば exit 1。
 
 - 命名規約に合わなかったファイル (`random.md` 等): 用途を判断して新名で配置 or 削除
 - 古い version の Spec: backup から拾うか、backup のみで済ますか
-- CLAUDE.md の `/apd:build` 等の言及: 新スキル名に書き換え or 削除
+- CLAUDE.md で「汎用 APD ルールか / プロジェクト固有か」の判断が分かれた節（migrate が削除を保留したもの）
+- `.claude/rules/apd/` に独自カスタムがあったファイル（最新版で上書きするか、カスタムを残すか）
 
 ### 7. 動作確認
 
@@ -121,15 +124,16 @@ ls docs/apd/
 
 ```
 # Claude Code 内で (動作確認用、本物のサイクルでなくても)
+/apd:status   # 現在地と次の一手が出るか
 /apd:spec     # 既存 Spec が新形式で読み込めるか
-/apd:start spec-{slug}.md  # /goal condition が組み立てられるか
+/apd:go spec-{slug}.md  # /goal condition が組み立てられるか
 ```
 
 ### 8. コミット
 
 ```bash
 git add -A
-git commit -m "chore: migrate to APD 1.x"
+git commit -m "chore: migrate to current APD model"
 ```
 
 backup ディレクトリ (`docs/apd.backup-{timestamp}/`) は安全のためコミットに含めて残し、数サイクル運用して問題なければ別 PR で削除するのが安全。
@@ -141,7 +145,8 @@ backup ディレクトリ (`docs/apd.backup-{timestamp}/`) は安全のためコ
 ```bash
 rm -rf docs/apd
 mv docs/apd.backup-{timestamp} docs/apd
-git checkout -- .  # frontmatter 等の Edit が staged されている場合
+mv CLAUDE.md.apd-backup-{timestamp} CLAUDE.md   # CLAUDE.md を掃除した場合
+git checkout -- .claude/rules/apd/ .  # rules 更新や Edit が staged されている場合
 ```
 
 または `/plugin install apd@apd-marketplace --version 0.5.1` で旧プラグインに戻す。
